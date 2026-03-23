@@ -924,6 +924,7 @@ async fn open_microsoft_auth_modal(app: tauri::AppHandle) -> Result<String, Stri
 
     // Store the result
     let result = Arc::new(Mutex::new(None::<Result<String, String>>));
+    let result_nav = Arc::clone(&result);
 
     // Create a new webview window for authentication
     let auth_window = WebviewWindowBuilder::new(
@@ -938,51 +939,30 @@ async fn open_microsoft_auth_modal(app: tauri::AppHandle) -> Result<String, Stri
     .minimizable(false)
     .maximizable(true)
     .always_on_top(false)
+    .on_navigation(move |url| {
+        let url_str = url.as_str();
+        
+        // Check if URL contains code parameter or is the redirect URL
+        if url_str.contains("code=") || url_str.contains("login.live.com/oauth20_desktop.srf") {
+            if let Some(code) = url_str.split("code=").nth(1).and_then(|s| s.split('&').next()) {
+                if let Ok(mut result_guard) = result_nav.lock() {
+                    *result_guard = Some(Ok(code.to_string()));
+                }
+                return false; // cancel navigation as we're done
+            } else if url_str.contains("error=") {
+                let error = url_str.split("error=").nth(1)
+                    .and_then(|s| s.split('&').next())
+                    .unwrap_or("Authentication failed");
+                if let Ok(mut result_guard) = result_nav.lock() {
+                    *result_guard = Some(Err(format!("Microsoft authentication error: {}", error)));
+                }
+                return false;
+            }
+        }
+        true
+    })
     .build()
     .map_err(|e| format!("Failed to create auth window: {}", e))?;
-
-
-    
-    // Monitor the window URL directly using a polling approach
-    let result_check = Arc::clone(&result);
-    let window_check = auth_window.clone();
-    
-    tokio::spawn(async move {
-        loop {
-            // Get current URL from the window
-            if let Ok(current_url) = window_check.url() {
-                let url_str = current_url.as_str();
-                
-                // Check if URL contains code parameter or is the redirect URL
-                if url_str.contains("code=") || url_str.contains("login.live.com/oauth20_desktop.srf") {
-                    if let Some(code) = url_str.split("code=").nth(1).and_then(|s| s.split('&').next()) {
-                        if let Ok(mut result_guard) = result_check.lock() {
-                            *result_guard = Some(Ok(code.to_string()));
-                        }
-                        let _ = window_check.close();
-                        break;
-                    } else if url_str.contains("error=") {
-                        let error = url_str.split("error=").nth(1)
-                            .and_then(|s| s.split('&').next())
-                            .unwrap_or("Authentication failed");
-                        if let Ok(mut result_guard) = result_check.lock() {
-                            *result_guard = Some(Err(format!("Microsoft authentication error: {}", error)));
-                        }
-                        let _ = window_check.close();
-                        break;
-                    }
-                }
-            }
-            
-            // Check if window is still visible
-            if !window_check.is_visible().unwrap_or(false) {
-                break;
-            }
-            
-            // Wait 100ms before next check
-            tokio::time::sleep(Duration::from_millis(100)).await;
-        }
-    });
 
     // Wait for the result with timeout
     let start_time = std::time::Instant::now();
@@ -992,6 +972,7 @@ async fn open_microsoft_auth_modal(app: tauri::AppHandle) -> Result<String, Stri
         // Check if we have a result
         if let Ok(result_guard) = result.lock() {
             if let Some(auth_result) = result_guard.as_ref() {
+                let _ = auth_window.close();
                 return auth_result.clone();
             }
         }

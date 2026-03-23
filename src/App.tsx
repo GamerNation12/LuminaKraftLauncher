@@ -26,6 +26,7 @@ import { SetupWizard } from './components/Onboarding/SetupWizard';
 import { OfflineBanner } from './components/Common/OfflineBanner';
 
 function AppContent() {
+  const [overrideError, setOverrideError] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [selectedModpackId, setSelectedModpackId] = useState<string | null>(null);
   const [lastSelectedModpackId, setLastSelectedModpackId] = useState<string | null>(null);
@@ -318,7 +319,7 @@ function AppContent() {
   // para permitir que la estructura de la app (Sidebar, etc.) aparezca instantáneamente.
 
   // Mostrar error crítico solo si no hay datos en absoluto
-  if (error && !modpacksData && !isLoading) {
+  if (error && !modpacksData && !isLoading && !showSetupWizard && !overrideError) {
     return (
       <div className="flex h-screen bg-dark-900 text-white">
         <div className="flex-1 flex items-center justify-center">
@@ -331,6 +332,12 @@ function AppContent() {
               className="btn-primary"
             >
               Reintentar
+            </button>
+            <button
+              onClick={() => setOverrideError(true)}
+              className="w-full px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl font-medium transition-colors mt-2"
+            >
+              Ignorar y Continuar
             </button>
           </div>
         </div>
