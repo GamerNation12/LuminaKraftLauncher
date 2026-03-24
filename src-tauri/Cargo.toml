@@ -47,6 +47,7 @@ hmac = "0.12"
 hex = "0.4"
 rayon = "1.10.0"
 walkdir = "2.5.0"
+percent-encoding = "2.3"
 
 [features]
 # No features here, they're now in the tauri dependency

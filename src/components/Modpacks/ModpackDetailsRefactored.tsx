@@ -10,6 +10,7 @@ import type { Modpack, ModpackState, ProgressInfo } from '../../types/launcher';
 import { useLauncher } from '../../contexts/LauncherContext';
 import { useAnimation } from '../../contexts/AnimationContext';
 import LauncherService from '../../services/launcherService';
+import ReactMarkdown from 'react-markdown';
 
 import ModpackActions from './Details/ModpackActions';
 import ModpackInfo from './Details/ModpackInfo';
@@ -17,6 +18,19 @@ import ModpackRequirements from './Details/ModpackRequirements';
 import ModpackFeatures from './Details/ModpackFeatures';
 import ModpackScreenshotGallery from './Details/ModpackScreenshotGallery';
 import ProfileOptionsModal from './ProfileOptionsModal';
+
+const markdownComponents = {
+  h1: ({ children }: any) => <h1 className="text-2xl font-bold text-white mb-4 mt-6">{children}</h1>,
+  h2: ({ children }: any) => <h2 className="text-xl font-bold text-white mb-3 mt-5">{children}</h2>,
+  h3: ({ children }: any) => <h3 className="text-lg font-bold text-white mb-2 mt-4">{children}</h3>,
+  p: ({ children }: any) => <div className="text-dark-200 mb-4 leading-relaxed whitespace-pre-wrap">{children}</div>,
+  ul: ({ children }: any) => <ul className="list-disc list-inside space-y-1 mb-4 text-dark-300 pl-4">{children}</ul>,
+  ol: ({ children }: any) => <ol className="list-decimal list-inside space-y-1 mb-4 text-dark-300 pl-4">{children}</ol>,
+  li: ({ children }: any) => <li className="mb-0.5">{children}</li>,
+  a: ({ node, ...props }: any) => <a {...props} className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2" target="_blank" rel="noopener noreferrer" />,
+  img: ({ node, ...props }: any) => <img {...props} className="rounded-lg max-w-full my-4 border border-dark-700/50" />,
+  code: ({ children }: any) => <code className="bg-dark-800 px-1.5 py-0.5 rounded text-lumina-400 text-xs font-mono">{children}</code>
+};
 
 interface ModpackDetailsProps {
   modpack: Modpack;
@@ -249,6 +263,16 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
       {/* Features */}
       <ModpackFeatures features={resolvedFeatures} />
 
+      {/* Full Description (External APIs) */}
+      {modpack.longDescription && (
+        <div className="mt-6 border-t border-dark-800/80 pt-6">
+          <div className="text-dark-200 text-sm max-h-[1000px] overflow-y-auto pr-3 custom-scrollbar">
+            <ReactMarkdown components={markdownComponents as any}>
+              {modpack.longDescription}
+            </ReactMarkdown>
+          </div>
+        </div>
+      )}
     </>
   );
 
@@ -398,26 +422,26 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
                 <button
                   onClick={() => setActiveTab('content')}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all duration-75 ${activeTab === 'content'
-                    ? 'bg-lumina-600 text-white shadow-lg'
+                    ? 'bg-emerald-600 text-white shadow-lg'
                     : 'text-dark-300 hover:text-white hover:bg-dark-700'
                     }`}
                 >
                   <Info className="w-4 h-4" />
-                  <span>{t('modpacks.information')}</span>
+                  <span>Description</span>
                 </button>
                 {/* Screenshots Tab Button - Only show in read-only mode */}
                 {isReadOnly && (
                   <button
                     onClick={() => setActiveTab('screenshots')}
                     className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all duration-75 ${activeTab === 'screenshots'
-                      ? 'bg-lumina-600 text-white shadow-lg'
+                      ? 'bg-emerald-600 text-white shadow-lg'
                       : 'text-dark-300 hover:text-white hover:bg-dark-700'
                       }`}
                   >
                     <Image className="w-4 h-4" />
-                    <span>{t('modpacks.screenshots')}</span>
+                    <span>Gallery</span>
                     {modpack.images && modpack.images.length > 0 && (
-                      <span className="bg-lumina-400 text-black text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                      <span className="bg-emerald-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
                         {modpack.images.length}
                       </span>
                     )}

@@ -874,6 +874,7 @@ async fn create_microsoft_auth_link() -> Result<String, String> {
 #[tauri::command]
 async fn authenticate_microsoft(code: String) -> Result<MicrosoftAccount, String> {
     let client = reqwest::Client::new();
+
     match lyceris::auth::microsoft::authenticate(code, &client).await {
         Ok(account) => Ok(MicrosoftAccount {
             xuid: account.xuid,
@@ -945,8 +946,10 @@ async fn open_microsoft_auth_modal(app: tauri::AppHandle) -> Result<String, Stri
         // Check if URL contains code parameter or is the redirect URL
         if url_str.contains("code=") || url_str.contains("login.live.com/oauth20_desktop.srf") {
             if let Some(code) = url_str.split("code=").nth(1).and_then(|s| s.split('&').next()) {
+                // URL-decode the code to avoid invalid parameter errors (e.g. %24 to $)
+                let decoded_code = percent_encoding::percent_decode_str(code).decode_utf8_lossy().into_owned();
                 if let Ok(mut result_guard) = result_nav.lock() {
-                    *result_guard = Some(Ok(code.to_string()));
+                    *result_guard = Some(Ok(decoded_code));
                 }
                 return false; // cancel navigation as we're done
             } else if url_str.contains("error=") {

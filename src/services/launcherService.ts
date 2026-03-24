@@ -624,7 +624,20 @@ class LauncherService {
   private async ensureModpackHasRequiredFields(modpackId: string): Promise<any> {
     let modpack = this.modpacksData?.modpacks.find((m: any) => m.id === modpackId);
 
-    // If not found in server list, try to load from local instance metadata
+    // If not found in server list, try to load from local storage (for remote / Modrinth imports)
+    if (!modpack && typeof localStorage !== 'undefined') {
+      const stored = localStorage.getItem(`installing_modpack_${modpackId}`);
+      if (stored) {
+        try {
+          modpack = JSON.parse(stored);
+          console.log(`📦 Loaded modpack metadata from localStorage for ${modpackId}`);
+        } catch (e) {
+          console.error('Failed to parse stored installing modpack:', e);
+        }
+      }
+    }
+
+    // If not found in server list or localStorage, try to load from local instance metadata
     if (!modpack) {
       try {
         const metadataJson = await safeInvoke<string | null>('get_instance_metadata', { modpackId });

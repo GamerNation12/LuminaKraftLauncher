@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Clock, Play } from 'lucide-react';
+import { ArrowRight, Clock, Play, Compass } from 'lucide-react';
 import { invoke } from '@tauri-apps/api/core';
 import ModpackCard from '../Modpacks/ModpackCard';
 import { Modpack } from '../../types/launcher';
-import LauncherService from '../../services/launcherService';
+import { ModrinthService } from '../../services/modrinthService';
 import { useLauncher } from '../../contexts/LauncherContext';
 
 interface HomePageProps {
@@ -116,37 +116,18 @@ export function HomePage({ onNavigate }: HomePageProps) {
   const loadHomePageData = async () => {
     setLoading(true);
     try {
-      const service = LauncherService.getInstance();
-      const data = await service.fetchModpacksData();
-      const allModpacks = data.modpacks;
+      const service = ModrinthService.getInstance();
+      
+      // Fetch Featured/Popular (by downloads)
+      const popular = await service.searchModpacks('', 10, 0, 'downloads');
+      setFeaturedModpacks(popular);
 
-      if (allModpacks && allModpacks.length > 0) {
-        // Filter Coming Soon modpacks (active + coming soon)
-        const comingSoon = allModpacks.filter(
-          modpack => modpack.isActive && modpack.isComingSoon
-        );
-        setComingSoonModpacks(comingSoon);
+      // Fetch Discover/Newest
+      const newest = await service.searchModpacks('', 10, 0, 'newest');
+      setDiscoverModpacks(newest);
 
-        // Filter Featured modpacks (active + NOT coming soon + (official OR partner OR new))
-        const featured = allModpacks
-          .filter(
-            modpack => modpack.isActive && !modpack.isComingSoon &&
-              (modpack.category === 'official' || modpack.category === 'partner' || modpack.isNew)
-          )
-          .sort((a, b) => (b.downloads || 0) - (a.downloads || 0)); // Sort by downloads descending
-
-        setFeaturedModpacks(featured);
-
-        // Get random modpacks for discover section (active + NOT coming soon + NOT in featured)
-        const availableForDiscover = allModpacks.filter(
-          modpack => modpack.isActive && !modpack.isComingSoon &&
-            !featured.some(f => f.id === modpack.id)
-        );
-
-        // Shuffle and take 4
-        const shuffled = [...availableForDiscover].sort(() => Math.random() - 0.5);
-        setDiscoverModpacks(shuffled.slice(0, 4));
-      }
+      // Clear coming soon since Modrinth doesn't have a direct flag
+      setComingSoonModpacks([]);
     } catch (error) {
       console.error('Error loading homepage data:', error);
     } finally {
@@ -189,10 +170,37 @@ export function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
       {/* Minimal Hero Section - More professional */}
-      <div className="mb-2">
-        <h1 className="text-3xl font-bold text-white mb-1">
-          {t('home.hero.title')} <span className="text-blue-400">{displayName}</span>
-        </h1>
+      {/* Premium Welcome Banner */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-dark-800 to-dark-900 rounded-2xl p-8 border border-dark-700/50 shadow-xl mb-2">
+        {/* Ambient background glow dots */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-lumina-500/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none"></div>
+
+        <div className="relative z-10">
+          <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+            {t('home.hero.title')}, <span className="bg-gradient-to-r from-lumina-400 to-blue-500 bg-clip-text text-transparent">{displayName}</span>
+          </h1>
+          <p className="text-dark-300 text-base max-w-lg leading-relaxed">
+            Ready to jump back in? Select your recently played modpacks below or Explore new communities live!
+          </p>
+          
+          <div className="flex items-center gap-4 mt-6">
+            <button 
+              onClick={() => onNavigate?.('my-modpacks')}
+              className="btn-primary flex items-center gap-2 px-5 py-2.5 text-sm"
+            >
+              <Play className="w-4 h-4" />
+              <span>Resume Play</span>
+            </button>
+            <button 
+              onClick={() => onNavigate?.('explore')}
+              className="flex items-center gap-2 border border-dark-600 hover:border-dark-500 hover:bg-dark-800 px-5 py-2.5 rounded-lg text-white font-medium text-sm transition-all duration-150"
+            >
+              <Compass className="w-4 h-4 text-dark-400" />
+              <span>Explore</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Jump back in Section */}

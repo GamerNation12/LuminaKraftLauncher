@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, RefreshCw, AlertCircle } from 'lucide-react';
+import { Search, RefreshCw, AlertCircle, Download, Loader2 } from 'lucide-react';
 import { useLauncher } from '../../contexts/LauncherContext';
 import { useAnimation } from '../../contexts/AnimationContext';
 import ModpackCard from './ModpackCard';
+import ModrinthListCard from './ModrinthListCard';
 import ModpackDetailsRefactored from './ModpackDetailsRefactored';
 import LauncherService from '../../services/launcherService';
+import { ModrinthService } from '../../services/modrinthService';
 
 import type { Modpack } from '../../types/launcher';
 
@@ -29,10 +31,19 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
   const [selectedModpackDetails, setSelectedModpackDetails] = useState<Modpack | null>(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [source, setSource] = useState<'local' | 'modrinth'>('modrinth');
+  const [modrinthModpacks, setModrinthModpacks] = useState<Modpack[]>([]);
+  const [isRemoteLoading, setIsRemoteLoading] = useState(false);
+  const [selectedVersion, setSelectedVersion] = useState<string>('');
+  const [selectedLoader, setSelectedLoader] = useState<string>('');
 
   const [isRefreshAnimating, setIsRefreshAnimating] = useState(false);
   const [showingDetails, setShowingDetails] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const [offset, setOffset] = useState(0);
+  const [isRemoteLoadingMore, setIsRemoteLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   // Handle initial modpack selection from navigation
   React.useEffect(() => {
@@ -50,6 +61,62 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
       setShowingDetails(false);
     }
   }, [initialModpackId, modpacksData]);
+
+  // Modrinth Live Search Trigger
+  React.useEffect(() => {
+    if (source !== 'modrinth') return;
+
+    const delayDebounceFn = setTimeout(async () => {
+      setIsRemoteLoading(true);
+      setOffset(0); // Reset offset on filter change
+      setHasMore(true);
+      try {
+        const results = await ModrinthService.getInstance().searchModpacks(
+          searchTerm, 
+          20, 
+          0,
+          'relevance',
+          selectedVersion, 
+          selectedLoader
+        );
+        setModrinthModpacks(results);
+        if (results.length < 20) {
+          setHasMore(false);
+        }
+      } catch (err) {
+        console.error('Remote search error:', err);
+      } finally {
+        setIsRemoteLoading(false);
+      }
+    }, 400); // 400ms debounce
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm, source, selectedVersion, selectedLoader]);
+
+  const loadMoreModpacks = async () => {
+    if (isRemoteLoadingMore || !hasMore) return;
+    setIsRemoteLoadingMore(true);
+    try {
+      const nextOffset = offset + 20;
+      const results = await ModrinthService.getInstance().searchModpacks(
+        searchTerm,
+        20,
+        nextOffset,
+        'relevance',
+        selectedVersion,
+        selectedLoader
+      );
+      setModrinthModpacks(prev => [...prev, ...results]);
+      setOffset(nextOffset);
+      if (results.length < 20) {
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error('Load more error:', err);
+    } finally {
+      setIsRemoteLoadingMore(false);
+    }
+  };
 
   // Check if any modpack is currently installing/updating
   const hasActiveInstallation = Object.values(modpackStates).some(state =>
@@ -69,9 +136,14 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
     const loadDetails = async () => {
       setDetailsLoading(true);
       try {
-        const launcherService = LauncherService.getInstance();
-        const details = await launcherService.fetchModpackDetails(modpack.id);
-        setSelectedModpackDetails(details);
+        if (source === 'modrinth') {
+          const details = await ModrinthService.getInstance().getModpackDetails(modpack.id);
+          setSelectedModpackDetails(details);
+        } else {
+          const launcherService = LauncherService.getInstance();
+          const details = await launcherService.fetchModpackDetails(modpack.id);
+          setSelectedModpackDetails(details);
+        }
       } catch {
         setSelectedModpackDetails(null);
       } finally {
@@ -170,7 +242,14 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
           state={modpackState}
           onBack={handleBackToList}
           isReadOnly={true}
-          onNavigate={onNavigate}
+          onNavigate={(page, id) => {
+            if (page === 'my-modpacks') {
+              console.log('🔄 onNavigate interceptor: closing details on redirect');
+              setSelectedModpack(null);
+              setShowingDetails(false);
+            }
+            if (onNavigate) onNavigate(page, id);
+          }}
           isLoadingDetails={detailsLoading}
         />
       </div>
@@ -210,6 +289,7 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
               ...getAnimationStyle({})
             }}
           >
+
             <div className="relative group">
               <Search className={`w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-dark-400 transition-colors duration-200 ${getAnimationClass('', 'group-focus-within:text-lumina-400')
                 }`} />
@@ -240,7 +320,7 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
 
       {/* Content */}
       <div className="flex-1 overflow-auto">
-        {showLoadingOverlay ? (
+        {showLoadingOverlay || isRemoteLoading ? (
           /* Skeleton loading state - inline, not blocking */
           <div className="p-6 space-y-8">
             {[1, 2, 3].map((section) => (
@@ -265,6 +345,105 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
                 </div>
               </div>
             ))}
+          </div>
+        ) : source === 'modrinth' ? (
+          /* Modrinth List Grid */
+          <div className="p-6 flex flex-row-reverse gap-6 items-start">
+            {/* Left Sidebar: Filters */}
+            <div className="w-64 flex-shrink-0 space-y-6 bg-dark-800/40 p-4 rounded-xl border border-dark-700/60 sticky top-6">
+              <div>
+                <h3 className="text-xs font-bold text-dark-400 uppercase tracking-wider mb-3">Minecraft Version</h3>
+                <select
+                  value={selectedVersion}
+                  onChange={(e) => setSelectedVersion(e.target.value)}
+                  className="w-full bg-dark-800 border border-dark-700/80 rounded-lg p-2.5 text-white text-sm focus:ring-1 focus:ring-lumina-500 focus:border-lumina-500 outline-none"
+                >
+                  <option value="">All Versions</option>
+                  {['1.21.1', '1.20.4', '1.20.1', '1.19.4', '1.19.2', '1.18.2', '1.16.5'].map(v => (
+                    <option key={v} value={v}>{v}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <h3 className="text-xs font-bold text-dark-400 uppercase tracking-wider mb-3">Modloader</h3>
+                <div className="space-y-1">
+                  {[
+                    { id: '', label: 'All Loaders' },
+                    { id: 'fabric', label: 'Fabric' },
+                    { id: 'forge', label: 'Forge' },
+                    { id: 'neoforge', label: 'NeoForge' },
+                    { id: 'quilt', label: 'Quilt' }
+                  ].map(loader => (
+                    <button
+                      key={loader.id}
+                      onClick={() => setSelectedLoader(loader.id)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${selectedLoader === loader.id
+                        ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 font-medium'
+                        : 'text-dark-200 hover:bg-dark-700/60 hover:text-white border border-transparent'
+                        }`}
+                    >
+                      {loader.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right Pane: Grid */}
+            <div className="flex-1 space-y-4">
+              <div className="flex items-center space-x-2 border-b border-dark-700 pb-2">
+                <h2 className="text-xl font-bold text-white">Modrinth Modpacks</h2>
+                <span className="text-sm text-dark-400 bg-dark-700 px-2 py-0.5 rounded-full">
+                  {modrinthModpacks.length}
+                </span>
+              </div>
+
+            {modrinthModpacks.length === 0 && !isRemoteLoading ? (
+              <p className="text-dark-400 text-center py-12">No modpacks found. Try searching for something.</p>
+            ) : (
+              <div className="flex flex-col space-y-3">
+                {modrinthModpacks.map((modpack, index) => {
+                  const modpackState = modpackStates[modpack.id] || {
+                    status: 'not_installed' as const,
+                    installed: false,
+                    downloading: false,
+                    progress: { percentage: 0 },
+                    features: []
+                  };
+
+                  return (
+                    <ModrinthListCard
+                      key={modpack.id}
+                      modpack={modpack}
+                      state={modpackState}
+                      onSelect={() => handleModpackSelect(modpack)}
+                      index={index}
+                      onNavigateToMyModpacks={() => onNavigate?.('my-modpacks')}
+                    />
+                  );
+                })}
+
+                {/* Load More Button */}
+                {hasMore && modrinthModpacks.length >= 20 && (
+                  <div className="flex justify-center pt-4">
+                    <button
+                      onClick={loadMoreModpacks}
+                      disabled={isRemoteLoadingMore}
+                      className="flex items-center gap-2 bg-dark-800 hover:bg-dark-700 border border-dark-700/80 hover:border-dark-600 px-6 py-2.5 rounded-lg text-white font-medium text-sm transition-all duration-150 disabled:opacity-50"
+                    >
+                      {isRemoteLoadingMore ? (
+                        <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
+                      ) : (
+                        <Download className="w-4 h-4 text-dark-400" />
+                      )}
+                      <span>Load More</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
           </div>
         ) : filteredModpacks.length === 0 ? (
           <div className="h-full flex items-center justify-center">

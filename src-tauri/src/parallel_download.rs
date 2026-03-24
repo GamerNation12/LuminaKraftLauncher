@@ -31,8 +31,8 @@ pub struct DownloadConfig {
 impl Default for DownloadConfig {
     fn default() -> Self {
         Self {
-            max_concurrent_downloads: 10,
-            max_concurrent_writes: 10,
+            max_concurrent_downloads: 20,
+            max_concurrent_writes: 20,
         }
     }
 }
@@ -280,7 +280,8 @@ where
     F: Fn(String, f32, String) + Send + Sync + 'static + Clone,
 {
     let client = Client::builder()
-        .timeout(std::time::Duration::from_secs(30))
+        .timeout(std::time::Duration::from_secs(60))
+        .no_gzip() // Disable automatic decompression for Mojang raw files to avoid body decode errors
         .build()?;
 
     let download_semaphore = Arc::new(Semaphore::new(config.max_concurrent_downloads));
@@ -465,19 +466,34 @@ where
                 let _download_permit = download_sem.acquire().await
                     .map_err(|e| anyhow!("Semaphore error: {}", e))?;
 
-                // Download file
-                let response = client.get(&file.url)
-                    .send()
-                    .await
-                    .map_err(|e| anyhow!("Download failed for {}: {}", file.url, e))?;
-
-                if !response.status().is_success() {
-                    return Err(anyhow!("HTTP {} for {}", response.status(), file.url));
-                }
-
-                let bytes = response.bytes()
-                    .await
-                    .map_err(|e| anyhow!("Failed to read bytes from {}: {}", file.url, e))?;
+                // Download file with retries (Safe against random network drops/decoding limits)
+                let mut attempts = 0;
+                let bytes = loop {
+                    attempts += 1;
+                    match client.get(&file.url).send().await {
+                        Ok(response) if response.status().is_success() => {
+                            match response.bytes().await {
+                                Ok(bytes) => break Ok(bytes),
+                                Err(e) if attempts < 3 => {
+                                    println!("⚠️ Read error ({}), retrying file ({})...", e, file.url);
+                                    tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+                                }
+                                Err(e) => break Err(anyhow!("Failed to read bytes from {}: {}", file.url, e)),
+                            }
+                        }
+                        Ok(response) => {
+                            if attempts >= 3 {
+                                break Err(anyhow!("HTTP {} for {}", response.status(), file.url));
+                            }
+                            tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+                        }
+                        Err(e) if attempts < 3 => {
+                            tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+                        }
+                        Err(e) => break Err(anyhow!("Download failed for {}: {}", file.url, e)),
+                    }
+                };
+                let bytes = bytes?;
 
                 // Verify SHA1 if provided
                 if let Some(expected_sha1) = &file.sha1 {
@@ -689,25 +705,32 @@ fn build_client_file(meta: &VersionMeta, versions_dir: &Path, version: &str) -> 
     }]
 }
 
-/// Filter out files that already exist with correct hash
+/// Filter out files that already exist with correct hash (Parallelized!)
 async fn filter_existing_files(files: Vec<DownloadFile>) -> Vec<DownloadFile> {
-    let mut to_download = Vec::with_capacity(files.len());
-    
-    for file in files {
-        if !file.path.exists() {
-            to_download.push(file);
-        } else if let Some(expected_sha1) = &file.sha1 {
-            // Verify existing file hash
-            if let Ok(bytes) = tokio::fs::read(&file.path).await {
-                let actual_sha1 = calculate_sha1(&bytes);
-                if &actual_sha1 != expected_sha1 {
-                    to_download.push(file);
+    let results: Vec<Option<DownloadFile>> = stream::iter(files)
+        .map(|file| async move {
+            if !file.path.exists() {
+                return Some(file);
+            }
+            if let Some(expected_sha1) = &file.sha1 {
+                match tokio::fs::read(&file.path).await {
+                    Ok(bytes) => {
+                        let actual_sha1 = calculate_sha1(&bytes);
+                        if actual_sha1 != *expected_sha1 {
+                            Some(file)
+                        } else {
+                            None
+                        }
+                    }
+                    Err(_) => Some(file),
                 }
             } else {
-                to_download.push(file);
+                None // If no sha1 and file exists, consider it done
             }
-        }
-    }
+        })
+        .buffer_unordered(20) // Parallelize disk reading up to 20 files at once
+        .collect()
+        .await;
 
-    to_download
+    results.into_iter().flatten().collect()
 }

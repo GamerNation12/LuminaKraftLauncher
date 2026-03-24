@@ -103,7 +103,7 @@
   }
 
   .sidebar-item.active {
-    @apply bg-lumina-600 hover:bg-lumina-700;
+    @apply bg-lumina-600/20 text-lumina-400 border-l-[3px] border-lumina-500 rounded-r-lg rounded-l-none;
   }
 
   /* Range slider styling */

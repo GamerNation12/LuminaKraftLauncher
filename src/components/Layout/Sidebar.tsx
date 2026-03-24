@@ -151,7 +151,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
                 <img
                   src={`https://mc-heads.net/avatar/${userSettings.microsoftAccount.uuid}/40`}
                   alt={`${userSettings.microsoftAccount.username}'s head`}
-                  className="w-full h-full object-cover transition-all duration-200 group-hover:scale-110 group-hover:rotate-6 group-active:scale-125 group-active:rotate-12"
+                  className="w-full h-full object-cover transition-all duration-200 group-hover:scale-105 group-active:scale-110"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     if (!target.src.includes('crafatar')) {
@@ -159,12 +159,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
                     }
                   }}
                 />
-                {/* Fun sparkle effect on hover */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                  <div className="absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full animate-ping" style={{ animationDelay: '0ms' }}></div>
-                  <div className="absolute bottom-0 left-0 w-1.5 h-1.5 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: '200ms' }}></div>
-                  <div className="absolute top-1/2 left-0 w-1 h-1 bg-green-400 rounded-full animate-ping" style={{ animationDelay: '400ms' }}></div>
-                </div>
                 {/* Glow effect */}
                 <div className="absolute inset-0 rounded-lg bg-gradient-to-tr from-lumina-400/20 to-lumina-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"></div>
               </div>
@@ -177,14 +171,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
             /* Offline mode - show loader */
             <>
               <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center cursor-pointer group relative" role="button" tabIndex={0} onClick={handleAvatarClick} onMouseEnter={() => { if (!isPinned) setIsExpanded(true); }}>
-                <div className="transition-all duration-200 group-hover:scale-110 group-hover:rotate-6 group-active:scale-125 group-active:rotate-12">
+                <div className="transition-all duration-200 group-hover:scale-105 group-active:scale-110">
                   <PlayerHeadLoader />
-                </div>
-                {/* Fun sparkle effect on hover for offline mode too */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                  <div className="absolute top-0 right-0 w-2 h-2 bg-gray-400 rounded-full animate-ping" style={{ animationDelay: '0ms' }}></div>
-                  <div className="absolute bottom-0 left-0 w-1.5 h-1.5 bg-gray-300 rounded-full animate-ping" style={{ animationDelay: '200ms' }}></div>
-                  <div className="absolute top-1/2 left-0 w-1 h-1 bg-gray-500 rounded-full animate-ping" style={{ animationDelay: '400ms' }}></div>
                 </div>
                 {/* Glow effect */}
                 <div className="absolute inset-0 rounded-lg bg-gradient-to-tr from-gray-400/20 to-gray-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"></div>

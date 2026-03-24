@@ -7,6 +7,7 @@ export interface Modpack {
   name: string;
   description?: string;
   shortDescription?: string; // From translations in lightweight response
+  longDescription?: string; // Full markdown / body description from external APIs
   version: string;
   minecraftVersion: string;
   modloader: string;
@@ -34,6 +35,14 @@ export interface Modpack {
   allowCustomResourcepacks?: boolean; // Allow users to add custom resourcepacks (default true)
   fileSha256?: string; // SHA256 hash of the modpack ZIP file
   authorName?: string; // Display name of the author (for community modpacks)
+  gameVersions?: string[]; // Listed game versions from external APIs
+  links?: {
+    issues?: string;
+    source?: string;
+    wiki?: string;
+    discord?: string;
+    donate?: string;
+  };
 }
 
 export interface Collaborator {

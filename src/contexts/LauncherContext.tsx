@@ -845,9 +845,22 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
     action: 'install' | 'update' | 'launch' | 'repair' | 'reinstall' | 'stop',
     modpackId: string
   ): Promise<boolean> => {
-    const modpack = state.modpacksData?.modpacks.find((m: {
+    let modpack = state.modpacksData?.modpacks.find((m: {
       id: string
     }) => m.id === modpackId);
+
+    // Fallback over localStorage for remote / Modrinth imports
+    if (!modpack && typeof localStorage !== 'undefined') {
+      const stored = localStorage.getItem(`installing_modpack_${modpackId}`);
+      if (stored) {
+        try {
+          modpack = JSON.parse(stored);
+          console.log(`📦 performModpackAction: Loaded modpack metadata from localStorage for ${modpackId}`);
+        } catch (e) {
+          console.error('Failed to parse stored installing modpack in performModpackAction:', e);
+        }
+      }
+    }
 
     // For launch and stop actions, we don't need the modpack data from server
     // These actions work with locally installed modpacks
@@ -857,7 +870,7 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
 
     // Verificar si el modpack requiere ZIP (no es vanilla/paper)
     // Only check for actions that need download from catalog (not reinstall - reads from instance metadata)
-    if (modpack && !modpack.urlModpackZip && (action === 'install' || action === 'update')) {
+    if (modpack && !modpack.urlModpackZip && !(modpack as any).isModrinth && (action === 'install' || action === 'update')) {
       if (modpack.ip) {
         // Es un servidor vanilla/paper, solo se puede "conectar"
         throw new Error(`Este es un servidor ${modpack.modloader}. IP: ${modpack.ip}`);

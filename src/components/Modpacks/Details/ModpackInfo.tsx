@@ -1,100 +1,98 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Package, Cpu, HardDrive, Server } from 'lucide-react';
+import { ExternalLink, ShieldAlert, FileCode, BookOpen, MessageSquare, Heart } from 'lucide-react';
 import type { Modpack } from '../../../types/launcher';
-import { useAnimation } from '../../../contexts/AnimationContext';
 
 interface ModpackInfoProps {
   modpack: Modpack;
 }
 
 const ModpackInfo: React.FC<ModpackInfoProps> = ({ modpack }) => {
-  const { t } = useTranslation();
-  const { getAnimationClass, getAnimationStyle } = useAnimation();
+  const links = modpack.links;
 
-  const getModloaderDisplayName = (modloader: string | undefined) => {
+  const getModloaderDisplayName = (modloader?: string) => {
     if (!modloader) return 'Unknown';
-
-    const modloaderMappings: { [key: string]: string } = {
-      'forge': 'Forge',
-      'fabric': 'Fabric',
-      'quilt': 'Quilt',
-      'neoforge': 'NeoForge',
-      'vanilla': 'Vanilla'
+    const mappings: { [key: string]: string } = {
+      forge: 'Forge', fabric: 'Fabric', quilt: 'Quilt', neoforge: 'NeoForge'
     };
-
-    return modloaderMappings[modloader.toLowerCase()] || modloader;
+    return mappings[modloader.toLowerCase()] || modloader;
   };
-
-  const isVanillaServer = modpack.modloader?.toLowerCase() === 'vanilla' && modpack.gamemode?.toLowerCase() === 'server';
 
   return (
     <div className="space-y-6">
-      {/* Installation Card */}
-      <div
-        className={`bg-dark-800 rounded-xl p-6 border border-dark-700 transition-all duration-75 ${getAnimationClass('', 'hover:border-lumina-400/30')
-          }`}
-        style={{
-          animation: 'fadeInUp 0.15s ease-out 0.05s backwards',
-          ...getAnimationStyle({})
-        }}
-      >
-        <h2 className="text-xl font-bold text-white mb-4">{t('modpacks.installation')}</h2>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 text-dark-300">
-              <Package className="w-4 h-4" />
-              <span>{t('modpacks.version')}</span>
-            </div>
-            <span className="text-white">v{modpack.version}</span>
+      {/* Compatibility */}
+      {modpack.gameVersions && modpack.gameVersions.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-xs font-bold text-dark-400 uppercase tracking-wider">Compatibility</h3>
+          <p className="text-xs text-dark-300">Minecraft: Java Edition</p>
+          <div className="flex flex-wrap gap-1.5">
+            {modpack.gameVersions.slice(0, 8).map((v, i) => (
+              <span key={i} className="bg-dark-800 border border-dark-700/80 px-2 py-0.5 rounded-lg text-xs text-white">
+                {v}
+              </span>
+            ))}
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 text-dark-300">
-              <Cpu className="w-4 h-4" />
-              <span>{t('modpacks.modloader')}</span>
-            </div>
-            <div className="text-right">
-              <div className="text-white font-medium">
-                {getModloaderDisplayName(modpack.modloader)} {modpack.modloaderVersion && `${modpack.modloaderVersion}`}
-              </div>
-              <div className="text-sm text-dark-400">Minecraft {modpack.minecraftVersion}</div>
-            </div>
-          </div>
-          {modpack.gamemode && (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-dark-300">
-                <HardDrive className="w-4 h-4" />
-                <span>{t('modpacks.gamemode')}</span>
-              </div>
-              <span className="text-white">{modpack.gamemode}</span>
-            </div>
-          )}
+        </div>
+      )}
+
+      {/* Platforms */}
+      <div className="space-y-3 pt-4 border-t border-dark-800/80">
+        <h3 className="text-xs font-bold text-dark-400 uppercase tracking-wider">Platforms</h3>
+        <div className="flex flex-wrap gap-2">
+          <span className="bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 px-2.5 py-0.5 rounded-full text-xs font-semibold">
+             {getModloaderDisplayName(modpack.modloader)}
+          </span>
         </div>
       </div>
 
-      {/* Server Info */}
-      {isVanillaServer && modpack.ip && (
-        <div
-          className={`bg-dark-800 rounded-xl p-6 border border-dark-700 transition-all duration-200 ${getAnimationClass('', 'hover:border-lumina-400/30')
-            }`}
-          style={getAnimationStyle({})}
-        >
-          <h3 className="text-xl font-bold text-white mb-4">{t('modpacks.serverInfo')}</h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-dark-300">
-                <Server className="w-4 h-4" />
-                <span>{t('modpacks.serverIPLabel')}</span>
-              </div>
-              <code className="text-lumina-400 bg-dark-900 px-3 py-1 rounded-lg text-sm">
-                {modpack.ip}
-              </code>
-            </div>
+      {/* Links */}
+      {links && (Object.values(links).some(v => v)) && (
+        <div className="space-y-3 pt-4 border-t border-dark-800/80">
+          <h3 className="text-xs font-bold text-dark-400 uppercase tracking-wider">Links</h3>
+          <div className="space-y-2">
+            {links.issues && (
+              <a href={links.issues} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-dark-200 hover:text-white text-sm group">
+                <ShieldAlert className="w-4 h-4 text-dark-400 group-hover:text-emerald-400" />
+                <span>Report issues</span>
+                <ExternalLink className="w-3.5 h-3.5 ml-auto text-dark-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+            )}
+            {links.source && (
+              <a href={links.source} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-dark-200 hover:text-white text-sm group">
+                <FileCode className="w-4 h-4 text-dark-400 group-hover:text-emerald-400" />
+                <span>View source</span>
+                <ExternalLink className="w-3.5 h-3.5 ml-auto text-dark-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+            )}
+            {links.wiki && (
+              <a href={links.wiki} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-dark-200 hover:text-white text-sm group">
+                <BookOpen className="w-4 h-4 text-dark-400 group-hover:text-emerald-400" />
+                <span>Visit wiki</span>
+                <ExternalLink className="w-3.5 h-3.5 ml-auto text-dark-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+            )}
+            {links.discord && (
+              <a href={links.discord} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-dark-200 hover:text-white text-sm group">
+                <MessageSquare className="w-4 h-4 text-dark-400 group-hover:text-emerald-400" />
+                <span>Join Discord server</span>
+                <ExternalLink className="w-3.5 h-3.5 ml-auto text-dark-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+            )}
           </div>
+        </div>
+      )}
+
+      {/* Donate */}
+      {links?.donate && (
+        <div className="pt-4 border-t border-dark-800/80">
+          <a href={links.donate} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-pink-500/10 hover:bg-pink-500/20 text-pink-400 border border-pink-500/20 rounded-xl py-2 text-sm font-medium transition-colors">
+            <Heart className="w-4 h-4 fill-pink-500/30" />
+            <span>Donate</span>
+          </a>
         </div>
       )}
     </div>
   );
 };
 
-export default ModpackInfo; 
+export default ModpackInfo;
+ 

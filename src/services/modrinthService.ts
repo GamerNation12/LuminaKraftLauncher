@@ -1,180 +1,133 @@
-/**
- * Modrinth API Service
- * 
- * Unlike CurseForge, Modrinth's API is public and doesn't require authentication.
- * We can call it directly without a proxy.
- */
+import type { Modpack } from '../types/launcher';
+import type { ModrinthSearchResult } from '../types/modrinth';
 
-import type {
-    ModrinthProject,
-    ModrinthVersion,
-    ModrinthSearchResult
-} from '../types/modrinth';
-
-const MODRINTH_API_BASE = 'https://api.modrinth.com/v2';
-const USER_AGENT = 'LuminaKraftLauncher/1.0 (https://luminakraft.com)';
+const MODRINTH_API_URL = 'https://api.modrinth.com/v2';
 
 export class ModrinthService {
-    private static instance: ModrinthService;
+  private static instance: ModrinthService;
 
-    private constructor() { }
+  public static getInstance(): ModrinthService {
+    if (!ModrinthService.instance) {
+      ModrinthService.instance = new ModrinthService();
+    }
+    return ModrinthService.instance;
+  }
 
-    public static getInstance(): ModrinthService {
-        if (!ModrinthService.instance) {
-            ModrinthService.instance = new ModrinthService();
+  /**
+   * Search for modpacks on Modrinth
+   * @param query Search string
+   * @param limit Maximum results (default 21)
+   * @param offset Offset results (default 0)
+   * @param index Sorting index (default 'relevance')
+   * @param version Minecraft version filter
+   * @param loader Modloader filter
+   */
+  async searchModpacks(query: string, limit: number = 20, offset: number = 0, index: string = 'relevance', version?: string, loader?: string): Promise<Modpack[]> {
+    try {
+      const facetList: string[][] = [['project_type:modpack']];
+
+      if (version && version.trim() !== '') {
+        facetList.push([`versions:${version}`]);
+      }
+
+      if (loader && loader.trim() !== '') {
+        facetList.push([`categories:${loader.toLowerCase()}`]);
+      }
+
+      const facets = encodeURIComponent(JSON.stringify(facetList));
+      const url = `${MODRINTH_API_URL}/search?query=${encodeURIComponent(query)}&facets=${facets}&limit=${limit}&offset=${offset}&index=${index}`;
+
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'LuminaKraftLauncher/0.1.7 (contact@luminakraft.com)'
         }
-        return ModrinthService.instance;
+      });
+
+      if (!response.ok) {
+        throw new Error(`Modrinth API error: ${response.statusText}`);
+      }
+
+      const result: ModrinthSearchResult = await response.json();
+      return result.hits.map(hit => this.mapHitToModpack(hit));
+    } catch (error) {
+      console.error('Error searching Modrinth modpacks:', error);
+      return [];
     }
+  }
 
-    /**
-     * Make a request to the Modrinth API
-     */
-    private async fetchApi<T>(endpoint: string, options?: any): Promise<T | null> {
-        try {
-            const response = await fetch(`${MODRINTH_API_BASE}${endpoint}`, {
-                ...options,
-                headers: {
-                    'User-Agent': USER_AGENT,
-                    'Accept': 'application/json',
-                    ...options?.headers,
-                },
-            });
+  /**
+   * Get detail information for a specific Modrinth modpack
+   * (Matches design flow for handling clicks)
+   */
+  async getModpackDetails(projectId: string): Promise<Modpack | null> {
+    try {
+      const url = `${MODRINTH_API_URL}/project/${projectId}`;
+      const response = await fetch(url);
 
-            if (!response.ok) {
-                if (response.status === 404) {
-                    return null;
-                }
-                console.error(`[ModrinthService] API error: ${response.status}`);
-                return null;
-            }
+      if (!response.ok) return null;
 
-            return await response.json();
-        } catch (error) {
-            console.error('[ModrinthService] Request failed:', error);
-            return null;
+      const project = await response.json();
+      // Fetch latest version for file URL
+      const versionsResponse = await fetch(`${MODRINTH_API_URL}/project/${projectId}/version`);
+      const versions = await versionsResponse.json();
+      const latestVersion = versions[0];
+
+      return {
+        id: project.id,
+        name: project.title,
+        description: project.description,
+        shortDescription: project.description?.substring(0, 150),
+        longDescription: project.body,
+        version: latestVersion?.version_number || '1.0.0',
+        minecraftVersion: latestVersion?.game_versions?.[0] || '1.20.1',
+        modloader: latestVersion?.loaders?.[0] || 'forge',
+        modloaderVersion: latestVersion?.loaders?.[0] || 'unknown',
+        logo: project.icon_url || '',
+        backgroundImage: project.gallery?.[0]?.url || project.icon_url || '',
+        images: project.gallery?.map((img: any) => img.url) || [],
+        category: 'community',
+        downloads: project.downloads,
+        isActive: true,
+        urlModpackZip: latestVersion?.files?.find((f: any) => f.primary)?.url || latestVersion?.files?.[0]?.url,
+        gameVersions: latestVersion?.game_versions || [],
+        links: {
+          issues: project.issues_url || undefined,
+          source: project.source_url || undefined,
+          wiki: project.wiki_url || undefined,
+          discord: project.discord_url || undefined,
+          donate: project.donation_urls?.[0]?.url || undefined
         }
+      };
+    } catch (error) {
+      console.error('Error fetching Modrinth details:', error);
+      return null;
     }
+  }
 
-    /**
-     * Get project info by slug or ID
-     */
-    async getProject(idOrSlug: string): Promise<ModrinthProject | null> {
-        console.log(`[ModrinthService] Fetching project: ${idOrSlug}`);
-        return this.fetchApi<ModrinthProject>(`/project/${idOrSlug}`);
-    }
+  /**
+   * Map a Modrinth search hit onto the Launcher's generic Modpack interface
+   */
+  private mapHitToModpack(hit: any): Modpack {
+    // Determine modloader from categories
+    const modloaders = ['fabric', 'forge', 'neoforge', 'quilt'];
+    const detectedModloader = hit.categories?.find((c: string) => modloaders.includes(c)) || 'forge';
 
-    /**
-     * Get version info by hash (sha1 or sha512)
-     */
-    async getVersionByHash(hash: string, algorithm: 'sha1' | 'sha512' = 'sha1'): Promise<ModrinthVersion | null> {
-        console.log(`[ModrinthService] Fetching version by hash: ${hash.substring(0, 16)}...`);
-        return this.fetchApi<ModrinthVersion>(`/version_file/${hash}?algorithm=${algorithm}`);
-    }
-
-    /**
-     * Batch get versions by hashes
-     */
-    async getVersionsByHashes(hashes: string[], algorithm: 'sha1' | 'sha512' = 'sha1'): Promise<Record<string, ModrinthVersion>> {
-        console.log(`[ModrinthService] Fetching ${hashes.length} versions by hashes`);
-
-        const response = await this.fetchApi<Record<string, ModrinthVersion>>('/version_files', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                hashes,
-                algorithm,
-            }),
-        });
-
-        return response || {};
-    }
-
-    /**
-     * Get a specific version by ID
-     */
-    async getVersion(versionId: string): Promise<ModrinthVersion | null> {
-        console.log(`[ModrinthService] Fetching version: ${versionId}`);
-        return this.fetchApi<ModrinthVersion>(`/version/${versionId}`);
-    }
-
-    /**
-     * Get all versions for a project
-     */
-    async getProjectVersions(projectId: string): Promise<ModrinthVersion[]> {
-        console.log(`[ModrinthService] Fetching versions for project: ${projectId}`);
-        const response = await this.fetchApi<ModrinthVersion[]>(`/project/${projectId}/version`);
-        return response || [];
-    }
-
-    /**
-     * Search for projects (mods, modpacks, etc.)
-     */
-    async search(query: string, options?: {
-        facets?: string[][];
-        index?: 'relevance' | 'downloads' | 'follows' | 'newest' | 'updated';
-        offset?: number;
-        limit?: number;
-    }): Promise<ModrinthSearchResult | null> {
-        console.log(`[ModrinthService] Searching: ${query}`);
-
-        const params = new URLSearchParams();
-        params.set('query', query);
-
-        if (options?.facets) {
-            params.set('facets', JSON.stringify(options.facets));
-        }
-        if (options?.index) {
-            params.set('index', options.index);
-        }
-        if (options?.offset) {
-            params.set('offset', options.offset.toString());
-        }
-        if (options?.limit) {
-            params.set('limit', options.limit.toString());
-        }
-
-        return this.fetchApi<ModrinthSearchResult>(`/search?${params.toString()}`);
-    }
-
-    /**
-     * Get multiple projects by IDs
-     */
-    async getProjects(ids: string[]): Promise<ModrinthProject[]> {
-        if (ids.length === 0) return [];
-
-        console.log(`[ModrinthService] Fetching ${ids.length} projects`);
-        const response = await this.fetchApi<ModrinthProject[]>(`/projects?ids=${JSON.stringify(ids)}`);
-        return response || [];
-    }
-
-    /**
-     * Get multiple versions by IDs
-     */
-    async getVersions(ids: string[]): Promise<ModrinthVersion[]> {
-        if (ids.length === 0) return [];
-
-        console.log(`[ModrinthService] Fetching ${ids.length} versions`);
-        const response = await this.fetchApi<ModrinthVersion[]>(`/versions?ids=${JSON.stringify(ids)}`);
-        return response || [];
-    }
-
-    /**
-     * Test if the Modrinth API is reachable
-     */
-    async testConnection(): Promise<boolean> {
-        try {
-            console.log('[ModrinthService] Testing connection...');
-            // Try to fetch a known project (Sodium)
-            const testProject = await this.getProject('sodium');
-            console.log('[ModrinthService] Connection test successful:', !!testProject);
-            return !!testProject;
-        } catch (error) {
-            console.error('[ModrinthService] Connection test failed:', error);
-            return false;
-        }
-    }
+    return {
+      id: hit.project_id,
+      name: hit.title,
+      description: hit.description,
+      shortDescription: hit.description,
+      version: 'Latest', // Search doesn't give latest version release string directly 
+      minecraftVersion: hit.versions?.[0] || 'Unknown',
+      modloader: detectedModloader,
+      modloaderVersion: 'latest',
+      logo: hit.icon_url || '',
+      backgroundImage: hit.featured_gallery || hit.icon_url || '',
+      category: 'community',
+      isNew: false,
+      downloads: hit.downloads,
+      isActive: true,
+      authorName: hit.author
+    };
+  }
 }
-
-export default ModrinthService;
