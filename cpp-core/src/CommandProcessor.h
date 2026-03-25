@@ -18,4 +18,5 @@ public slots:
 private:
     Launcher* m_launcher;
     DownloadManager* m_downloadManager;
+    QString m_currentModpackId;
 };

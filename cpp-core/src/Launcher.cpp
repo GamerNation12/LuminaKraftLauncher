@@ -40,7 +40,7 @@ Launcher::~Launcher() {
 }
 
 bool Launcher::launchInstance(const QString &instanceId, const QJsonObject &auth) {
-    qDebug() << "🚀 Natively Resolving instance ID:" << instanceId;
+    qDebug() << "💎 [PROD-ENGINE] Natively Resolving instance ID:" << instanceId;
 
     QJsonObject instanceMeta = FileSystem::readInstanceJson(instanceId);
     if (instanceMeta.isEmpty()) {
@@ -49,9 +49,17 @@ bool Launcher::launchInstance(const QString &instanceId, const QJsonObject &auth
     }
 
     QString mcVersion = instanceMeta["minecraftVersion"].toString();
-    QJsonObject versionMeta = FileSystem::readVersionJson(mcVersion);
+    QString modloader = instanceMeta["modloader"].toString();
+    QString modloaderVersion = instanceMeta["modloaderVersion"].toString();
+
+    QString targetVersionId = mcVersion;
+    if (!modloader.isEmpty() && !modloaderVersion.isEmpty()) {
+        targetVersionId = mcVersion + "-" + modloaderVersion;
+    }
+
+    QJsonObject versionMeta = FileSystem::readVersionJson(targetVersionId);
     if (versionMeta.isEmpty()) {
-        emit logReceived("[FATAL] Process Error: Failed to read version.json natively for " + mcVersion + "!");
+        emit logReceived("[FATAL] Process Error: Failed to read version.json natively for " + targetVersionId + "!");
         return false;
     }
 

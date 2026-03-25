@@ -1,5 +1,0 @@
-C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build/Desktop_Qt_6_11_0_MinGW_64_bit-Debug/CMakeFiles/LuminaCore.dir
-C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build/Desktop_Qt_6_11_0_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
-C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build/Desktop_Qt_6_11_0_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
-C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build/Desktop_Qt_6_11_0_MinGW_64_bit-Debug/CMakeFiles/LuminaCore_autogen_timestamp_deps.dir
-C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build/Desktop_Qt_6_11_0_MinGW_64_bit-Debug/CMakeFiles/LuminaCore_autogen.dir

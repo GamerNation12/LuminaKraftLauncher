@@ -9,7 +9,7 @@ pub struct CoreState(pub Mutex<Option<ChildStdin>>);
 #[tauri::command]
 pub async fn start_lumina_core(app: AppHandle, state: State<'_, CoreState>) -> Result<String, String> {
     // The exact path built by Qt Creator
-    let exe_path = r"C:\Users\minec\Documents\GitHub\LuminaKraftLauncher\cpp-core\build\Desktop_Qt_6_11_0_MinGW_64_bit-Debug\LuminaCore.exe";
+    let exe_path = r"C:\Users\minec\Documents\GitHub\LuminaKraftLauncher\cpp-core\build\LuminaCore.exe";
     
     let mut child = match Command::new(exe_path)
         .stdin(Stdio::piped())

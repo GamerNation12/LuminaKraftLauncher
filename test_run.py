@@ -1,5 +1,5 @@
 import subprocess, sys
-p = subprocess.Popen([r'cpp-core\build\Desktop_Qt_6_11_0_MinGW_64_bit-Debug\LuminaCore.exe'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+p = subprocess.Popen([r'cpp-core\build\LuminaCore.exe'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 p.stdin.write(b'{"action":"launch", "modpack_id":"1KVo5zza", "auth":{}}\n')
 p.stdin.write(b'{"action":"exit"}\n')
 p.stdin.flush()

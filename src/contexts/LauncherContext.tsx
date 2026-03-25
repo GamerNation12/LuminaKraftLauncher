@@ -43,7 +43,7 @@ import { FailedModsDialog } from '../components/FailedModsDialog';
 import AuthService from '../services/authService';
 import JSZip from 'jszip';
 import { ModpackManagementService } from '../services/modpackManagementService';
-import { listen } from '@tauri-apps/api/event';
+import { listen, emit } from '@tauri-apps/api/event';
 import { supabase, getUserProfile } from '../services/supabaseClient';
 import RateLimitDialog from '../components/RateLimitDialog';
 import { KnownErrorModal } from '../components/KnownErrorModal';
@@ -1809,8 +1809,28 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
               emit(`minecraft-log-${data.modpack_id}`, data.message);
             } else if (data.status === 'game_started') {
               emit(`minecraft-started-${data.modpack_id}`, {});
+              dispatch({
+                type: 'SET_MODPACK_STATE',
+                payload: {
+                  id: data.modpack_id,
+                  state: {
+                    ...(state.modpackStates[data.modpack_id] || { installed: true, downloading: false, progress: { percentage: 100 } }),
+                    status: 'running'
+                  }
+                }
+              });
             } else if (data.status === 'game_finished') {
               emit(`minecraft-exited-${data.modpack_id}`, { exit_code: data.exit_code });
+              dispatch({
+                type: 'SET_MODPACK_STATE',
+                payload: {
+                  id: data.modpack_id,
+                  state: {
+                    ...(state.modpackStates[data.modpack_id] || { installed: true, downloading: false, progress: { percentage: 100 } }),
+                    status: 'installed'
+                  }
+                }
+              });
             } else if (data.status === 'launching_native') {
               dispatch({
                 type: 'SET_MODPACK_STATE',
@@ -1819,7 +1839,7 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
                   state: {
                     ...state.modpackStates[data.modpack_id],
                     status: 'launching',
-                    progress: 100
+                    progress: { percentage: 100 }
                   }
                 }
               });
