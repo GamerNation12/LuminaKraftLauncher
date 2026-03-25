@@ -1,0 +1,5 @@
+C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build_final/CMakeFiles/NebulaCore.dir
+C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build_final/CMakeFiles/edit_cache.dir
+C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build_final/CMakeFiles/rebuild_cache.dir
+C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build_final/CMakeFiles/NebulaCore_autogen_timestamp_deps.dir
+C:/Users/minec/Documents/GitHub/LuminaKraftLauncher/cpp-core/build_final/CMakeFiles/NebulaCore_autogen.dir

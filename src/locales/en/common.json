@@ -4,7 +4,7 @@
     "launchSuccess": "Launch successful"
   },
   "app": {
-    "title": "LuminaKraft Launcher",
+    "title": "Nebula Launcher",
     "version": "Version {{version}}",
     "loading": "Loading...",
     "error": "Error",
@@ -304,9 +304,9 @@
     "minecraftAccount": "Minecraft Account",
     "minecraftAccountDesc": "Manage your gameplay identity",
     "minecraftAccountHelp": "Your Minecraft account (Premium or Offline) is managed directly from the sidebar. Click your player head/avatar in the sidebar to switch accounts or login.",
-    "luminakraftAccount": "LuminaKraft Account",
+    "luminakraftAccount": "Nebula Account",
     "luminakraftAccountDesc": "Platform Account",
-    "luminakraftAccountHelp": "This account manages your profile, modpack publishing, and social features on the LuminaKraft platform.",
+    "luminakraftAccountHelp": "This account manages your profile, modpack publishing, and social features on the Nebula platform.",
     "advanced": "Advanced Settings",
     "performance": "Performance",
     "animations": "Animations & Transitions",
@@ -373,7 +373,7 @@
     "bannerUpdated": "Banner updated",
     "logoUpdateFailed": "Failed to update logo",
     "bannerUpdateFailed": "Failed to update banner",
-    "settingsDescription": "Customize your experience with LuminaKraft Launcher",
+    "settingsDescription": "Customize your experience with Nebula Launcher",
     "dataUrlDescription": "URL where modpack data is obtained from",
     "unsavedChanges": "You have unsaved changes",
     "saveChanges": "Save changes",
@@ -408,7 +408,7 @@
   },
   "onboarding": {
     "welcome": {
-      "title": "Welcome to LuminaKraft Launcher",
+      "title": "Welcome to Nebula Launcher",
       "subtitle": "Your new experience for managing modpacks: simple, modern, and powerful.",
       "start": "Get Started"
     },
@@ -426,7 +426,7 @@
         "connected": "Connected as {{username}}"
       },
       "luminakraft": {
-        "title": "LuminaKraft Account",
+        "title": "Nebula Account",
         "description": "Sync modpacks, publish, and more.",
         "connect": "Sign In / Register",
         "connected": "Connected"
@@ -442,7 +442,7 @@
     },
     "finish": {
       "title": "All Set!",
-      "description": "LuminaKraft Launcher has been configured successfully.",
+      "description": "Nebula Launcher has been configured successfully.",
       "account": "ACCOUNT",
       "status": "STATUS",
       "active": "Active",
@@ -522,8 +522,8 @@
   },
   "about": {
     "title": "About",
-    "description": "Official LuminaKraft Studios modpack launcher",
-    "descriptionLong": "A custom modpack launcher for the LuminaKraft Studios community. Designed to make modpack installation and management simple and efficient.",
+    "description": "Official Nebula Studios modpack launcher",
+    "descriptionLong": "A custom modpack launcher for the Nebula Studios community. Designed to make modpack installation and management simple and efficient.",
     "version": "{{version}}",
     "versionLabel": "Version:",
     "technologies": "Technologies:",
@@ -569,19 +569,19 @@
     "prereleaseUpdateDesc": "A new pre-release version is available. Pre-release versions may contain bugs and are intended for testing purposes.",
     "credits": "Credits",
     "developedWith": "Developed with",
-    "byTeam": "by the LuminaKraft Studios team",
+    "byTeam": "by the Nebula Studios team",
     "technologiesUsed": "Technologies used",
     "links": "Links",
     "officialWebsite": "Official Website",
     "discord": "Discord",
     "joinCommunity": "Join our community",
-    "developedBy": "Developed by LuminaKraft Studios",
+    "developedBy": "Developed by Nebula Studios",
     "poweredBy": "Powered by Tauri and React",
-    "copyright": "© 2025 LuminaKraft Studios. All rights reserved.",
+    "copyright": "© 2025 Nebula Studios. All rights reserved.",
     "license": "License",
     "minecraftTrademark": "Minecraft is a registered trademark of Mojang Studios",
     "supportUs": "Support Us",
-    "supportDescription": "LuminaKraft is a community project developed with love. If you enjoy the launcher, consider supporting us to help cover development and hosting costs.",
+    "supportDescription": "Nebula is a community project developed with love. If you enjoy the launcher, consider supporting us to help cover development and hosting costs.",
     "donatePaypal": "Donate with PayPal",
     "contributors": "Contributors"
   },

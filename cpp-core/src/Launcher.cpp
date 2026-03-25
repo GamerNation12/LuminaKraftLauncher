@@ -113,7 +113,7 @@ bool Launcher::launchInstance(const QString &instanceId, const QJsonObject &auth
     arguments << "--assetsDir" << QDir(FileSystem::getLauncherDataDir()).absoluteFilePath("meta/assets");
     arguments << "--assetIndex" << versionMeta["assetIndex"].toObject()["id"].toString();
     arguments << "--username" << username;
-    arguments << "--versionType" << "LuminaKraftNative";
+    arguments << "--versionType" << "Nebula";
     arguments << "--uuid" << uuid;
     arguments << "--accessToken" << accessToken;
 

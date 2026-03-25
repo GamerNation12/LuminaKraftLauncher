@@ -10,7 +10,7 @@ QString FileSystem::getLauncherDataDir() {
     }
     
     QDir dir(appData);
-    QString target = dir.absoluteFilePath("LKLauncher");
+    QString target = dir.absoluteFilePath("NebulaLauncher");
     
     ensureDirExists(target);
     return target;

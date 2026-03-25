@@ -113,7 +113,7 @@ const AboutPage: React.FC = () => {
               </div>
 
               <div className="flex-1">
-                <h2 className="text-white text-2xl font-bold mb-2">LuminaKraft Launcher</h2>
+                <h2 className="text-white text-2xl font-bold mb-2">Nebula Launcher</h2>
                 <p className="text-dark-300 mb-4">
                   {t('about.descriptionLong')}
                 </p>
