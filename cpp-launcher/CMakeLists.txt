@@ -23,6 +23,12 @@ set(CMAKE_AUTOUIC ON)
 set(SOURCES
     src/main.cpp
     src/FileSystem.cpp
+    src/network/DownloadManager.cpp
+    src/Launcher.cpp
+    src/ui/MainWindow.cpp
+    src/network/LoginManager.cpp
+    src/network/APIService.cpp
+    src/ui/ModpackDetailView.cpp
 )
 
 # ---------------------------------------------------------------------------
