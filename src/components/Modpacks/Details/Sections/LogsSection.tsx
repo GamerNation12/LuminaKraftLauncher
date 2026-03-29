@@ -198,7 +198,7 @@ const LogsSection: React.FC<LogsSectionProps> = ({ logs, modpackId }) => {
                 type="button"
                 onClick={() => setShowFilters(!showFilters)}
                 className={`flex items-center space-x-1 px-3 py-1.5 text-sm rounded-lg transition-colors ${showFilters
-                  ? 'bg-lumina-600 text-white'
+                  ? 'bg-nebula-600 text-white'
                   : 'bg-dark-700 hover:bg-dark-600 text-dark-200'
                   }`}
                 title={t('modpacks.filterLogs')}
@@ -220,7 +220,7 @@ const LogsSection: React.FC<LogsSectionProps> = ({ logs, modpackId }) => {
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
                   placeholder={t('modpacks.searchLogs')}
-                  className="w-full pl-9 pr-8 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white text-sm placeholder-dark-400 focus:ring-2 focus:ring-lumina-500 focus:border-transparent"
+                  className="w-full pl-9 pr-8 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white text-sm placeholder-dark-400 focus:ring-2 focus:ring-nebula-500 focus:border-transparent"
                 />
                 {searchFilter && (
                   <button
@@ -276,7 +276,7 @@ const LogsSection: React.FC<LogsSectionProps> = ({ logs, modpackId }) => {
                     containerRef.current.scrollTop = containerRef.current.scrollHeight;
                   }
                 }}
-                className="absolute bottom-4 right-4 p-2 bg-lumina-600 hover:bg-lumina-500 text-white rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center z-10 opacity-80 hover:opacity-100"
+                className="absolute bottom-4 right-4 p-2 bg-nebula-600 hover:bg-nebula-500 text-white rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center z-10 opacity-80 hover:opacity-100"
                 title={t('modpacks.scrollToBottom')}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

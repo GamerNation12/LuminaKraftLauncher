@@ -1511,7 +1511,7 @@ fn main() {
 
     tauri::Builder::default()
         .manage(oauth::OAuthServerState::default())
-        .manage(lumina_core::CoreState(Mutex::new(None)))
+        .manage(nebula_core::CoreState(Mutex::new(None)))
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())

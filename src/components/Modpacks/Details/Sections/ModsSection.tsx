@@ -82,7 +82,7 @@ const ModsSection: React.FC<ModsSectionProps> = ({ modpackId }) => {
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-          <Package className="w-5 h-5 text-lumina-400" />
+          <Package className="w-5 h-5 text-nebula-400" />
           <span>{t('modpacks.mods', { defaultValue: 'Mods' })}</span>
           <span className="text-sm text-dark-400">({mods.length})</span>
         </h3>
@@ -95,7 +95,7 @@ const ModsSection: React.FC<ModsSectionProps> = ({ modpackId }) => {
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
             placeholder={t('modpacks.searchMods', { defaultValue: 'Search mods...' })}
-            className="w-full pl-9 pr-8 py-1.5 bg-dark-800 border border-dark-700 rounded-lg text-white text-sm placeholder-dark-400 focus:ring-2 focus:ring-lumina-500 focus:border-transparent"
+            className="w-full pl-9 pr-8 py-1.5 bg-dark-800 border border-dark-700 rounded-lg text-white text-sm placeholder-dark-400 focus:ring-2 focus:ring-nebula-500 focus:border-transparent"
           />
           {searchFilter && (
             <button
@@ -111,7 +111,7 @@ const ModsSection: React.FC<ModsSectionProps> = ({ modpackId }) => {
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-lumina-500 animate-spin" />
+          <Loader2 className="w-8 h-8 text-nebula-500 animate-spin" />
         </div>
       ) : mods.length === 0 ? (
         <div className="text-center py-12 text-dark-400">
@@ -134,7 +134,7 @@ const ModsSection: React.FC<ModsSectionProps> = ({ modpackId }) => {
                 
                 <div className="flex items-center space-x-2">
                   {togglingMap[mod.name] ? (
-                    <Loader2 className="w-4 h-4 text-lumina-500 animate-spin" />
+                    <Loader2 className="w-4 h-4 text-nebula-500 animate-spin" />
                   ) : (
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -143,7 +143,7 @@ const ModsSection: React.FC<ModsSectionProps> = ({ modpackId }) => {
                         onChange={() => toggleMod(mod.name, mod.enabled)}
                         className="sr-only peer"
                       />
-                      <div className="w-9 h-5 bg-dark-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-lumina-500"></div>
+                      <div className="w-9 h-5 bg-dark-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-nebula-500"></div>
                     </label>
                   )}
                 </div>
@@ -157,3 +157,4 @@ const ModsSection: React.FC<ModsSectionProps> = ({ modpackId }) => {
 };
 
 export default ModsSection;
+

@@ -36,7 +36,7 @@ const CompactModpackCard: React.FC<CompactModpackCardProps> = memo(({
       <div className="w-full h-full relative p-2 flex flex-col items-center justify-center">
         {/* Background Glow (when selected or running) */}
         {(isSelected || isRunning) && (
-          <div className={`absolute inset-0 bg-lumina-500/10 blur-xl transition-opacity duration-300 ${isRunning ? 'opacity-100' : 'opacity-40'}`} />
+          <div className={`absolute inset-0 bg-nebula-500/10 blur-xl transition-opacity duration-300 ${isRunning ? 'opacity-100' : 'opacity-40'}`} />
         )}
 
         {/* The Icon */}
@@ -67,13 +67,13 @@ const CompactModpackCard: React.FC<CompactModpackCardProps> = memo(({
           {/* Loading Overlay */}
           {isLoading && (
             <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
-              <Loader2 className="w-8 h-8 text-lumina-400 animate-spin" />
+              <Loader2 className="w-8 h-8 text-nebula-400 animate-spin" />
             </div>
           )}
         </div>
 
         {/* Name Label */}
-        <span className={`mt-2 text-xs font-medium text-center truncate w-full px-1 transition-colors duration-200 ${isSelected ? 'text-lumina-300' : 'text-dark-300 group-hover:text-white'}`}>
+        <span className={`mt-2 text-xs font-medium text-center truncate w-full px-1 transition-colors duration-200 ${isSelected ? 'text-nebula-300' : 'text-dark-300 group-hover:text-white'}`}>
           {modpack.name}
         </span>
 
@@ -88,7 +88,7 @@ const CompactModpackCard: React.FC<CompactModpackCardProps> = memo(({
       {/* Hover Action Overlay (Quick Play) */}
       {!isLoading && !isRunning && !isSelected && (
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-          <div className="bg-lumina-600/80 rounded-full p-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-200 shadow-xl backdrop-blur-sm">
+          <div className="bg-nebula-600/80 rounded-full p-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-200 shadow-xl backdrop-blur-sm">
             <Play className="w-5 h-5 text-white fill-current" />
           </div>
         </div>
@@ -100,3 +100,4 @@ const CompactModpackCard: React.FC<CompactModpackCardProps> = memo(({
 CompactModpackCard.displayName = 'CompactModpackCard';
 
 export default CompactModpackCard;
+

@@ -304,9 +304,9 @@
     "minecraftAccount": "Minecraft Account",
     "minecraftAccountDesc": "Manage your gameplay identity",
     "minecraftAccountHelp": "Your Minecraft account (Premium or Offline) is managed directly from the sidebar. Click your player head/avatar in the sidebar to switch accounts or login.",
-    "luminakraftAccount": "Nebula Account",
-    "luminakraftAccountDesc": "Platform Account",
-    "luminakraftAccountHelp": "This account manages your profile, modpack publishing, and social features on the Nebula platform.",
+    "NebulaAccount": "Nebula Account",
+    "NebulaAccountDesc": "Platform Account",
+    "NebulaAccountHelp": "This account manages your profile, modpack publishing, and social features on the Nebula platform.",
     "advanced": "Advanced Settings",
     "performance": "Performance",
     "animations": "Animations & Transitions",
@@ -425,7 +425,7 @@
         "connecting": "Connecting...",
         "connected": "Connected as {{username}}"
       },
-      "luminakraft": {
+      "Nebula": {
         "title": "Nebula Account",
         "description": "Sync modpacks, publish, and more.",
         "connect": "Sign In / Register",

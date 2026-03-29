@@ -123,7 +123,7 @@ export interface DiscordAccount {
   discriminator: string | undefined;  // Discord removed discriminators
   avatar: string | null | undefined;  // Avatar hash
   providerRefreshToken?: string;  // Discord OAuth refresh token for syncing roles
-  isMember: boolean;              // Member of LuminaKraft Discord server
+  isMember: boolean;              // Member of Nebula Discord server
   hasPartnerRole: boolean;        // Has Partner role (1270158473937555519)
   partnerId: string | null;       // Specific partner ID from partners table (e.g., 'crucismc')
   roles: string[];                // All Discord role IDs

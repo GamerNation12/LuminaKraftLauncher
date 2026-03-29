@@ -33,8 +33,8 @@ export const UsernameRequiredDialog: React.FC = () => {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[9999]">
             <div className="bg-dark-800 rounded-2xl p-8 max-w-md w-full mx-4 border border-dark-600 shadow-2xl">
                 <div className="text-center mb-6">
-                    <div className="w-16 h-16 bg-lumina-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <User className="w-8 h-8 text-lumina-400" />
+                    <div className="w-16 h-16 bg-nebula-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <User className="w-8 h-8 text-nebula-400" />
                     </div>
                     <h2 className="text-2xl font-bold text-white mb-2">
                         {t('auth.chooseUsername')}
@@ -54,7 +54,7 @@ export const UsernameRequiredDialog: React.FC = () => {
                                 setError('');
                             }}
                             placeholder={t('auth.usernamePlaceholder')}
-                            className="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lumina-500 transition-all"
+                            className="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-nebula-500 transition-all"
                             autoFocus
                         />
                         {error && (
@@ -65,7 +65,7 @@ export const UsernameRequiredDialog: React.FC = () => {
                     <button
                         type="submit"
                         disabled={!username.trim()}
-                        className="w-full bg-lumina-600 hover:bg-lumina-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+                        className="w-full bg-nebula-600 hover:bg-nebula-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
                     >
                         <Check className="w-5 h-5" />
                         {t('app.continue')}
@@ -75,3 +75,4 @@ export const UsernameRequiredDialog: React.FC = () => {
         </div>
     );
 };
+

@@ -85,7 +85,7 @@ export function KnownErrorModal({
                 <div className="px-6 py-5 space-y-4">
                     {/* Solution */}
                     <div className="bg-dark-700/50 rounded-xl p-4 border border-dark-600">
-                        <h3 className="text-sm font-medium text-lumina-400 mb-2">
+                        <h3 className="text-sm font-medium text-nebula-400 mb-2">
                             {t('knownErrors.solution')}
                         </h3>
                         <p className="text-dark-200 text-sm whitespace-pre-line">
@@ -110,7 +110,7 @@ export function KnownErrorModal({
                         <span>{t('knownErrors.needHelp')}</span>
                         <button
                             onClick={() => open('https://discord.gg/UJZRrcUFMj')}
-                            className="inline-flex items-center gap-1 text-lumina-400 hover:text-lumina-300 transition-colors"
+                            className="inline-flex items-center gap-1 text-nebula-400 hover:text-nebula-300 transition-colors"
                         >
                             {t('knownErrors.openTicket')}
                             <ExternalLink className="w-3 h-3" />
@@ -157,3 +157,4 @@ export function KnownErrorModal({
 }
 
 export default KnownErrorModal;
+

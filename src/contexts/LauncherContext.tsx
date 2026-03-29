@@ -430,14 +430,14 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
       refreshPermissions(); // Also refresh permissions when profile updates
     };
 
-    window.addEventListener('luminakraft:profile-updated', handleProfileUpdate);
+    window.addEventListener('Nebula:profile-updated', handleProfileUpdate);
 
     // Also refresh on mount if we might have a session
     refreshUserProfile();
     refreshPermissions(); // Load initial permissions
 
     return () => {
-      window.removeEventListener('luminakraft:profile-updated', handleProfileUpdate);
+      window.removeEventListener('Nebula:profile-updated', handleProfileUpdate);
     };
   }, []);
 
@@ -576,10 +576,10 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    window.addEventListener('luminakraft:cache-cleared', handleCacheCleared);
+    window.addEventListener('Nebula:cache-cleared', handleCacheCleared);
 
     return () => {
-      window.removeEventListener('luminakraft:cache-cleared', handleCacheCleared);
+      window.removeEventListener('Nebula:cache-cleared', handleCacheCleared);
     };
   }, []); // Empty dependency array - only register once at mount
 

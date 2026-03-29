@@ -43,7 +43,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 ? 'border-green-500'
                 : toast.type === 'error'
                 ? 'border-red-500'
-                : 'border-lumina-500'
+                : 'border-nebula-500'
             }`}
           >
             {toast.message}

@@ -69,9 +69,9 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
         try {
             setIsLoading(true);
             const authService = AuthService.getInstance();
-            await authService.signInToLuminaKraftAccount();
+            await authService.signInToNebulaAccount();
         } catch (error) {
-            console.error('LuminaKraft login failed', error);
+            console.error('Nebula login failed', error);
         } finally {
             setIsLoading(false);
         }
@@ -126,28 +126,59 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
     };
 
     const renderWelcome = () => (
-        <div className="flex flex-col items-center justify-center text-center space-y-8 animate-fadeIn h-full">
-            <div className="relative">
-                <div className="w-24 h-24 bg-gradient-to-tr from-lumina-500 to-blue-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-lumina-500/20 p-4">
-                    <img src={logo} alt="LuminaKraft Logo" className="w-full h-full object-contain drop-shadow-md" />
+        <div className="flex flex-col items-center justify-center text-center space-y-10 animate-fadeIn h-full relative overflow-hidden nebula-glow-bg">
+            {/* Dynamic Star Field Overlay */}
+            <div className="absolute inset-0 z-0 opacity-60 pointer-events-none">
+                {/* Fixed Stars with Twinkle */}
+                {[...Array(80)].map((_, i) => (
+                    <div 
+                        key={`star-${i}`}
+                        className="star"
+                        style={{
+                            top: `${Math.random() * 100}%`,
+                            left: `${Math.random() * 100}%`,
+                            width: `${Math.random() * 2 + 1}px`,
+                            height: `${Math.random() * 2 + 1}px`,
+                            '--duration': `${Math.random() * 3 + 2}s`,
+                            '--delay': `${Math.random() * 5}s`
+                        } as any}
+                    />
+                ))}
+
+                {/* Shooting Stars */}
+                <div className="shooting-star top-[15%] right-[10%]" style={{ animationDelay: '0s', animationDuration: '3s' }}></div>
+                <div className="shooting-star top-[40%] right-[30%]" style={{ animationDelay: '6s', animationDuration: '4s' }}></div>
+                <div className="shooting-star top-[65%] right-[5%]" style={{ animationDelay: '12s', animationDuration: '5s' }}></div>
+            </div>
+
+            <div className="relative z-10 group">
+                <div className="relative w-32 h-32 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
+                    {/* Pulsing Glow behind logo */}
+                    <div className="absolute inset-0 bg-nebula-500/40 blur-[40px] rounded-full animate-pulse"></div>
+                    
+                    <img 
+                        src={logo} 
+                        alt="Nebula Logo" 
+                        className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_20px_rgba(139,92,246,0.8)] animate-float" 
+                    />
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-dark-800 rounded-full flex items-center justify-center border border-dark-700">
-                    <Check className="w-5 h-5 text-green-500" />
+                <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-nebula-500 rounded-full flex items-center justify-center border-2 border-dark-900 z-20 shadow-lg">
+                    <Check className="w-5 h-5 text-white" />
                 </div>
             </div>
 
-            <div className="space-y-2 max-w-md">
-                <h1 className="text-3xl font-bold text-white tracking-tight">
+            <div className="space-y-4 max-w-md relative z-10">
+                <h1 className="text-5xl font-black text-white italic uppercase tracking-tighter leading-none">
                     {t('onboarding.welcome.title')}
                 </h1>
-                <p className="text-gray-400 text-lg">
+                <p className="text-nebula-300/80 text-xl font-medium tracking-tight">
                     {t('onboarding.welcome.subtitle')}
                 </p>
             </div>
 
             <button
                 onClick={() => changeStep('account')}
-                className="group flex items-center gap-2 px-8 py-4 bg-white text-dark-900 rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-white/20 active:scale-95"
+                className="group relative flex items-center gap-3 px-10 py-5 bg-white text-dark-900 rounded-2xl font-black uppercase italic tracking-widest text-sm hover:bg-nebula-50 transition-all shadow-[0_20px_40px_-15px_rgba(255,255,255,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(139,92,246,0.4)] hover:-translate-y-1 active:scale-95 z-10"
             >
                 {t('onboarding.welcome.start')}
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -169,7 +200,7 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
                     {/* Microsoft Account Card */}
                     <div className={`relative group p-6 rounded-2xl border transition-all duration-300 ${msAccount
                         ? 'bg-green-500/10 border-green-500/30'
-                        : 'bg-dark-800/50 border-dark-700 hover:border-lumina-500/50 hover:bg-dark-700/50'
+                        : 'bg-dark-800/50 border-dark-700 hover:border-nebula-500/50 hover:bg-dark-700/50'
                         }`}>
                         <div className="flex flex-col items-center space-y-4">
                             <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${msAccount ? 'bg-transparent' : 'bg-[#00A4EF] text-white'
@@ -206,42 +237,42 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
                         </div>
                     </div>
 
-                    {/* LuminaKraft Account Card */}
-                    <div className={`relative group p-6 rounded-2xl border transition-all duration-300 ${userSettings.discordAccount // Using discord account as proxy for LuminaKraft linked account for now
-                        ? 'bg-lumina-500/10 border-lumina-500/30'
-                        : 'bg-dark-800/50 border-dark-700 hover:border-lumina-500/50 hover:bg-dark-700/50'
+                    {/* Nebula Account Card */}
+                    <div className={`relative group p-6 rounded-2xl border transition-all duration-300 ${userSettings.discordAccount // Using discord account as proxy for Nebula linked account for now
+                        ? 'bg-nebula-500/10 border-nebula-500/30'
+                        : 'bg-dark-800/50 border-dark-700 hover:border-nebula-500/50 hover:bg-dark-700/50'
                         }`}>
                         <div className="flex flex-col items-center space-y-4">
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${userSettings.discordAccount ? 'bg-transparent' : 'bg-lumina-600'
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${userSettings.discordAccount ? 'bg-transparent' : 'bg-nebula-600'
                                 }`}>
                                 {userSettings.discordAccount?.avatar ? (
                                     <img
                                         src={`https://cdn.discordapp.com/avatars/${userSettings.discordAccount.id}/${userSettings.discordAccount.avatar}.png`}
                                         alt={userSettings.discordAccount.username || 'Discord Avatar'}
-                                        className="w-full h-full rounded-xl shadow-lg border-2 border-lumina-500/50"
+                                        className="w-full h-full rounded-xl shadow-lg border-2 border-nebula-500/50"
                                     />
                                 ) : (
                                     <User className="w-8 h-8 text-white" />
                                 )}
                             </div>
                             <div className="text-center">
-                                <h3 className="font-semibold text-white mb-1">{t('onboarding.account.luminakraft.title')}</h3>
-                                <p className="text-sm text-gray-400">{t('onboarding.account.luminakraft.description')}</p>
+                                <h3 className="font-semibold text-white mb-1">{t('onboarding.account.Nebula.title')}</h3>
+                                <p className="text-sm text-gray-400">{t('onboarding.account.Nebula.description')}</p>
                             </div>
 
                             {userSettings.discordAccount ? (
-                                <div className="flex items-center gap-2 px-3 py-1 bg-lumina-500/20 text-lumina-300 rounded-full text-sm font-medium">
-                                    <span className="w-2 h-2 rounded-full bg-lumina-400"></span>
-                                    {t('onboarding.account.luminakraft.connected')}
+                                <div className="flex items-center gap-2 px-3 py-1 bg-nebula-500/20 text-nebula-300 rounded-full text-sm font-medium">
+                                    <span className="w-2 h-2 rounded-full bg-nebula-400"></span>
+                                    {t('onboarding.account.Nebula.connected')}
                                 </div>
                             ) : (
                                 <div className="flex gap-2 w-full">
                                     <button
                                         onClick={handleLuminaLogin}
                                         disabled={isLoading}
-                                        className="flex-1 py-2.5 bg-lumina-600 hover:bg-lumina-500 rounded-xl text-white font-medium transition-colors text-sm"
+                                        className="flex-1 py-2.5 bg-nebula-600 hover:bg-nebula-500 rounded-xl text-white font-medium transition-colors text-sm"
                                     >
-                                        {t('onboarding.account.luminakraft.connect')}
+                                        {t('onboarding.account.Nebula.connect')}
                                     </button>
                                 </div>
                             )}
@@ -287,7 +318,7 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder={t('onboarding.profile.usernamePlaceholder')}
-                        className="w-full bg-dark-800 border-dark-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-lumina-500 focus:border-transparent outline-none transition-all"
+                        className="w-full bg-dark-800 border-dark-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-nebula-500 focus:border-transparent outline-none transition-all"
                     />
                     <p className="text-xs text-gray-500 mt-2">
                         {t('onboarding.profile.usernameDescription')}
@@ -343,37 +374,17 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-dark-900/90 backdrop-blur-md">
             {/* Background ambience */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-lumina-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-nebula-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-pink-500/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 animate-pulse" style={{ animationDelay: '2s' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-transparent via-nebula-500/5 to-transparent opacity-30" />
             </div>
 
             <div
                 className={`w-full max-w-4xl h-[600px] bg-dark-900 rounded-3xl shadow-2xl overflow-hidden border border-dark-700 flex relative transition-all duration-300 ${animating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
             >
                 <div className="relative z-10 w-full h-full p-8 md:p-12">
-                    {/* Language Switcher */}
-                    <div className="absolute top-8 right-8 z-20">
-                        <div className="flex bg-dark-800 rounded-lg p-1 border border-dark-700">
-                            <button
-                                onClick={() => changeLanguage('en')}
-                                className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${i18n.language.startsWith('en')
-                                    ? 'bg-dark-600 text-white shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-300'
-                                    }`}
-                            >
-                                EN
-                            </button>
-                            <button
-                                onClick={() => changeLanguage('es')}
-                                className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${i18n.language.startsWith('es')
-                                    ? 'bg-dark-600 text-white shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-300'
-                                    }`}
-                            >
-                                ES
-                            </button>
-                        </div>
-                    </div>
+                    {/* Language Switcher Removed */}
+
 
                     {step !== 'welcome' && (
                         <button
@@ -405,3 +416,4 @@ export const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
         </div>
     );
 };
+

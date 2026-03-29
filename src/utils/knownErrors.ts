@@ -27,7 +27,7 @@ export interface KnownErrorsData {
 }
 
 // Remote URL for known errors JSON
-const REMOTE_URL = 'https://raw.githubusercontent.com/LuminaKraft/LuminaKraftLauncher/main/known-errors.json';
+const REMOTE_URL = 'https://raw.githubusercontent.com/Nebula/NebulaLauncher/main/known-errors.json';
 
 // Cache for loaded errors
 let cachedErrors: KnownError[] | null = null;

@@ -179,11 +179,17 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
       {/* Footer - Branding */}
       <div className="p-4 flex flex-col items-center gap-4 border-t border-white/5 relative">
         <button 
-          className="w-12 h-12 rounded-[1.25rem] bg-gradient-to-br from-nebula-500 via-indigo-600 to-nebula-700 flex items-center justify-center cursor-pointer group hover:shadow-[0_0_25px_rgba(139,92,246,0.5)] transition-all duration-500 hover:scale-110 active:scale-95 border-2 border-white/10 relative"
+          className="w-12 h-12 rounded-[1.25rem] bg-dark-800/50 backdrop-blur-xl flex items-center justify-center cursor-pointer group hover:shadow-[0_0_25px_rgba(139,92,246,0.3)] transition-all duration-500 hover:scale-110 active:scale-95 border border-white/10 hover:border-nebula-500/50 relative overflow-hidden"
           onClick={() => onSectionChange('about')}
           title={hasUpdate ? t('notifications.updateAvailable', { version: latestVersion }) : undefined}
         >
-          <span className="text-white font-black text-xl italic tracking-tighter drop-shadow-lg">N</span>
+          <img 
+            src="/nebula-logo.png" 
+            alt="Nebula Logo" 
+            className="w-8 h-8 object-contain transition-transform duration-500 group-hover:scale-110" 
+          />
+          
+          <div className="absolute inset-0 bg-gradient-to-tr from-nebula-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
           
           {/* Update Badge */}
           {hasUpdate && (

@@ -96,19 +96,19 @@ const AboutPage: React.FC = () => {
             <div className="flex items-start space-x-6">
               <div className="w-20 h-20 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                 <img
-                  src="/luminakraft-logo.svg"
-                  alt="LuminaKraft Logo"
+                  src="/nebula-logo.png"
+                  alt="Nebula Logo"
                   className="w-full h-full object-contain"
                   onError={(e) => {
-                    // Fallback to the original "L" if SVG fails to load
+                    // Fallback to the original "N" if image fails to load
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
                     const fallback = target.nextElementSibling as HTMLElement;
                     if (fallback) fallback.style.display = 'flex';
                   }}
                 />
-                <div className="w-full h-full bg-gradient-to-br from-lumina-500 to-lumina-700 rounded-xl flex items-center justify-center" style={{ display: 'none' }}>
-                  <span className="text-white font-bold text-2xl">L</span>
+                <div className="w-full h-full bg-gradient-to-br from-nebula-500 to-nebula-700 rounded-xl flex items-center justify-center" style={{ display: 'none' }}>
+                  <span className="text-white font-bold text-2xl">N</span>
                 </div>
               </div>
 
@@ -139,7 +139,7 @@ const AboutPage: React.FC = () => {
                 <h3 className="text-white font-semibold text-lg mb-2">{t('about.updates')}</h3>
                 {isCheckingUpdate ? (
                   <div className="flex items-center space-x-2">
-                    <RefreshCw className="w-4 h-4 text-lumina-500 animate-spin" />
+                    <RefreshCw className="w-4 h-4 text-nebula-500 animate-spin" />
                     <p className="text-dark-300">{t('about.checkingUpdates')}</p>
                   </div>
                 ) : updateError ? (
@@ -171,7 +171,7 @@ const AboutPage: React.FC = () => {
                   <button
                     onClick={handleDownloadUpdate}
                     disabled={isDownloadingUpdate}
-                    className="inline-flex items-center px-4 py-2 bg-lumina-600 hover:bg-lumina-700 disabled:bg-gray-600 text-white rounded-lg transition-colors"
+                    className="inline-flex items-center px-4 py-2 bg-nebula-600 hover:bg-nebula-700 disabled:bg-gray-600 text-white rounded-lg transition-colors"
                   >
                     {isDownloadingUpdate ? (
                       <>
@@ -204,7 +204,7 @@ const AboutPage: React.FC = () => {
           </div>
 
           {/* Support Us */}
-          <div className="card bg-gradient-to-r from-lumina-900/30 to-purple-900/30 border-lumina-500/30">
+          <div className="card bg-gradient-to-r from-nebula-900/30 to-purple-900/30 border-nebula-500/30">
             <div className="flex items-center space-x-3 mb-4">
               <Heart className="w-6 h-6 text-pink-500" />
               <h3 className="text-white font-semibold text-xl">{t('about.supportUs')}</h3>
@@ -231,21 +231,21 @@ const AboutPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-3">
                 <div className="flex items-start space-x-3">
-                  <Download className="w-5 h-5 text-lumina-500 mt-0.5 flex-shrink-0" />
+                  <Download className="w-5 h-5 text-nebula-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-white font-medium">{t('about.feature1')}</p>
                     <p className="text-dark-400 text-sm">{t('about.feature1Desc')}</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <RefreshCw className="w-5 h-5 text-lumina-500 mt-0.5 flex-shrink-0" />
+                  <RefreshCw className="w-5 h-5 text-nebula-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-white font-medium">{t('about.feature2')}</p>
                     <p className="text-dark-400 text-sm">{t('about.feature2Desc')}</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <Globe className="w-5 h-5 text-lumina-500 mt-0.5 flex-shrink-0" />
+                  <Globe className="w-5 h-5 text-nebula-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-white font-medium">{t('about.feature3')}</p>
                     <p className="text-dark-400 text-sm">{t('about.feature3Desc')}</p>
@@ -254,21 +254,21 @@ const AboutPage: React.FC = () => {
               </div>
               <div className="space-y-3">
                 <div className="flex items-start space-x-3">
-                  <Heart className="w-5 h-5 text-lumina-500 mt-0.5 flex-shrink-0" />
+                  <Heart className="w-5 h-5 text-nebula-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-white font-medium">{t('about.feature4')}</p>
                     <p className="text-dark-400 text-sm">{t('about.feature4Desc')}</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <CheckCircle className="w-5 h-5 text-lumina-500 mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-nebula-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-white font-medium">{t('about.feature7')}</p>
                     <p className="text-dark-400 text-sm">{t('about.feature7Desc')}</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <ExternalLink className="w-5 h-5 text-lumina-500 mt-0.5 flex-shrink-0" />
+                  <ExternalLink className="w-5 h-5 text-nebula-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-white font-medium">{t('about.feature9')}</p>
                     <p className="text-dark-400 text-sm">{t('about.feature9Desc')}</p>
@@ -283,7 +283,7 @@ const AboutPage: React.FC = () => {
             <h3 className="text-white font-semibold text-xl mb-4">{t('about.credits')}</h3>
             <div className="space-y-4">
               <div>
-                <h4 className="text-lumina-400 font-medium mb-2">{t('about.developedWith')}</h4>
+                <h4 className="text-nebula-400 font-medium mb-2">{t('about.developedWith')}</h4>
                 <div className="flex items-center space-x-2 text-dark-300">
                   <Heart className="w-4 h-4 text-red-500" />
                   <span>{t('about.byTeam')}</span>
@@ -291,7 +291,7 @@ const AboutPage: React.FC = () => {
               </div>
 
               <div>
-                <h4 className="text-lumina-400 font-medium mb-2">{t('about.technologiesUsed')}</h4>
+                <h4 className="text-nebula-400 font-medium mb-2">{t('about.technologiesUsed')}</h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-dark-300">
                   <span>• Tauri (Framework)</span>
                   <span>• React (UI)</span>
@@ -309,15 +309,15 @@ const AboutPage: React.FC = () => {
             <h3 className="text-white font-semibold text-xl mb-4">{t('about.links')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button
-                onClick={() => handleOpenUrl('https://luminakraft.com')}
+                onClick={() => handleOpenUrl('https://nebula-launcher.com')}
                 className="flex items-center space-x-3 p-3 bg-dark-700 rounded-lg hover:bg-dark-600 transition-colors group w-full text-left"
               >
-                <Globe className="w-5 h-5 text-lumina-500" />
+                <Globe className="w-5 h-5 text-nebula-500" />
                 <div className="flex-1">
-                  <p className="text-white font-medium group-hover:text-lumina-400 transition-colors">
+                  <p className="text-white font-medium group-hover:text-nebula-400 transition-colors">
                     {t('about.officialWebsite')}
                   </p>
-                  <p className="text-dark-400 text-sm">luminakraft.com</p>
+                  <p className="text-dark-400 text-sm">nebula-launcher.com</p>
                 </div>
                 <ExternalLink className="w-4 h-4 text-dark-400" />
               </button>
@@ -330,7 +330,7 @@ const AboutPage: React.FC = () => {
                   <span className="text-white text-xs font-bold">D</span>
                 </div>
                 <div className="flex-1">
-                  <p className="text-white font-medium group-hover:text-lumina-400 transition-colors">
+                  <p className="text-white font-medium group-hover:text-nebula-400 transition-colors">
                     {t('about.discord')}
                   </p>
                   <p className="text-dark-400 text-sm">{t('about.joinCommunity')}</p>

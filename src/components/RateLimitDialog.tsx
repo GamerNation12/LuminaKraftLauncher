@@ -13,7 +13,7 @@ interface RateLimitDialogProps {
   onJoinDiscord?: () => void;
 }
 
-const DISCORD_INVITE_URL = 'https://discord.gg/luminakraft';
+const DISCORD_INVITE_URL = 'https://discord.gg/Nebula';
 
 export default function RateLimitDialog({
   isOpen,
@@ -110,8 +110,8 @@ export default function RateLimitDialog({
 
                       {errorCode === 'LIMIT_EXCEEDED_ANON' && (
                         <div className="flex items-center justify-between text-sm mb-2">
-                          <span className="text-lumina-400 font-medium">{t('auth.signIn')}</span>
-                          <span className="text-lumina-400 font-bold">10/h</span>
+                          <span className="text-nebula-400 font-medium">{t('auth.signIn')}</span>
+                          <span className="text-nebula-400 font-bold">10/h</span>
                         </div>
                       )}
 
@@ -138,7 +138,7 @@ export default function RateLimitDialog({
                   {content.action !== onClose && (
                     <button
                       type="button"
-                      className="inline-flex justify-center items-center gap-2 rounded-md border border-transparent bg-lumina-600 px-4 py-2 text-sm font-medium text-white hover:bg-lumina-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-lumina-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center items-center gap-2 rounded-md border border-transparent bg-nebula-600 px-4 py-2 text-sm font-medium text-white hover:bg-nebula-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-nebula-500 focus-visible:ring-offset-2"
                       onClick={() => {
                         content.action?.();
                         onClose();
@@ -157,3 +157,4 @@ export default function RateLimitDialog({
     </Transition>
   );
 }
+

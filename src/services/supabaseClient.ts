@@ -33,11 +33,11 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     // Detect session from URL (useful for OAuth callbacks)
     detectSessionInUrl: true,
     // Storage key
-    storageKey: 'luminakraft-auth',
+    storageKey: 'Nebula-auth',
   },
   global: {
     headers: {
-      'x-luminakraft-client': 'luminakraft-launcher',
+      'x-Nebula-client': 'Nebula-launcher',
     },
   },
 });

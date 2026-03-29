@@ -14,18 +14,18 @@ import { useAnimation } from '../../contexts/AnimationContext';
 const AccountPage: React.FC = () => {
   const { t } = useTranslation();
   const { getAnimationStyle } = useAnimation();
-  const [luminaKraftUser, setLuminaKraftUser] = useState<any>(null);
+  const [NebulaUser, setNebulaUser] = useState<any>(null);
   const [discordAccount, setDiscordAccount] = useState<DiscordAccount | null>(null);
   const [linkedProviders, setLinkedProviders] = useState<{ provider: string; email?: string; id: string }[]>([]);
-  const [isLoadingLuminaKraft, setIsLoadingLuminaKraft] = useState(true);
+  const [isLoadingNebula, setIsLoadingNebula] = useState(true);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const hasLoadedUserRef = React.useRef(false);
 
-  const canUnlink = (luminaKraftUser?.identities?.length || 0) > 1;
+  const canUnlink = (NebulaUser?.identities?.length || 0) > 1;
 
-  // Load LuminaKraft account session and listen for changes
+  // Load Nebula account session and listen for changes
   useEffect(() => {
 
     const setupAuth = async () => {
@@ -131,12 +131,12 @@ const AccountPage: React.FC = () => {
 
         const { user: initialUser, discord: initialDiscord, providers: initialProviders } = await fetchUserWithProfile();
 
-        setLuminaKraftUser(initialUser);
+        setNebulaUser(initialUser);
         setDiscordAccount(initialDiscord);
         setLinkedProviders(initialProviders);
 
         if (initialUser) hasLoadedUserRef.current = true;
-        setIsLoadingLuminaKraft(false);
+        setIsLoadingNebula(false);
 
         // Listen for auth state changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -149,7 +149,7 @@ const AccountPage: React.FC = () => {
             if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
               // Only show loader if we haven't loaded a user yet
               if (!hasLoadedUserRef.current) {
-                setIsLoadingLuminaKraft(true);
+                setIsLoadingNebula(true);
               }
 
               const currentUser = session?.user;
@@ -158,7 +158,7 @@ const AccountPage: React.FC = () => {
                 await fetchUserWithProfile(currentUser);
 
               if (updatedUser) {
-                setLuminaKraftUser(updatedUser);
+                setNebulaUser(updatedUser);
                 hasLoadedUserRef.current = true;
 
                 // Persistence logic: Only update if valid, or if we are sure it's gone.
@@ -199,10 +199,10 @@ const AccountPage: React.FC = () => {
                 // Update failed or user null?
               }
 
-              setIsLoadingLuminaKraft(false);
+              setIsLoadingNebula(false);
               setIsSigningIn(false);
             } else if (event === 'SIGNED_OUT') {
-              setLuminaKraftUser(null);
+              setNebulaUser(null);
               hasLoadedUserRef.current = false;
               setDiscordAccount(null);
               setLinkedProviders([]);
@@ -215,7 +215,7 @@ const AccountPage: React.FC = () => {
         const handleProfileUpdateEvent = async () => {
           try {
             // Update silently without showing loader
-            // setIsLoadingLuminaKraft(true); // Commented out to prevent flicker
+            // setIsLoadingNebula(true); // Commented out to prevent flicker
 
             // Try to get cached session first to avoid network calls/timeouts
             const { data: { session } } = await supabase.auth.getSession();
@@ -225,7 +225,7 @@ const AccountPage: React.FC = () => {
               await fetchUserWithProfile(currentUser);
 
             if (updatedUser) {
-              setLuminaKraftUser(updatedUser);
+              setNebulaUser(updatedUser);
               // Also update hasLoadedUserRef to ensure subsequent auth events don't trigger loader
               hasLoadedUserRef.current = true;
 
@@ -239,22 +239,22 @@ const AccountPage: React.FC = () => {
               }
             }
 
-            // setIsLoadingLuminaKraft(false);
+            // setIsLoadingNebula(false);
           } catch (error) {
             console.error('Error updating user from profile event:', error);
-            // setIsLoadingLuminaKraft(false);
+            // setIsLoadingNebula(false);
           }
         };
-        window.addEventListener('luminakraft:profile-updated', handleProfileUpdateEvent);
+        window.addEventListener('Nebula:profile-updated', handleProfileUpdateEvent);
 
         // Cleanup subscription on unmount
         return () => {
           subscription.unsubscribe();
-          window.removeEventListener('luminakraft:profile-updated', handleProfileUpdateEvent);
+          window.removeEventListener('Nebula:profile-updated', handleProfileUpdateEvent);
         };
       } catch (error) {
-        console.error('Error loading LuminaKraft session:', error);
-        setIsLoadingLuminaKraft(false);
+        console.error('Error loading Nebula session:', error);
+        setIsLoadingNebula(false);
       }
     };
 
@@ -264,19 +264,19 @@ const AccountPage: React.FC = () => {
     };
   }, []);
 
-  const handleSignInToLuminaKraft = async () => {
+  const handleSignInToNebula = async () => {
     setIsSigningIn(true);
     const authService = AuthService.getInstance();
-    await authService.signInToLuminaKraftAccount();
+    await authService.signInToNebulaAccount();
   };
 
-  const handleSignUpToLuminaKraft = async () => {
+  const handleSignUpToNebula = async () => {
     setIsSigningIn(true);
     const authService = AuthService.getInstance();
-    await authService.signUpLuminaKraftAccount();
+    await authService.signUpNebulaAccount();
   };
 
-  const handleSignOutFromLuminaKraft = async () => {
+  const handleSignOutFromNebula = async () => {
     setShowSignOutConfirm(true);
   };
 
@@ -285,7 +285,7 @@ const AccountPage: React.FC = () => {
       const authService = AuthService.getInstance();
       await authService.signOutSupabase();
       // Force state update to ensure UI reflects sign out immediately
-      setLuminaKraftUser(null);
+      setNebulaUser(null);
       setDiscordAccount(null);
       setLinkedProviders([]);
     } catch (error) {
@@ -296,7 +296,7 @@ const AccountPage: React.FC = () => {
 
   const handleProfileUpdate = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    setLuminaKraftUser(user);
+    setNebulaUser(user);
   };
 
   const handleLinkDiscord = async () => {
@@ -344,7 +344,7 @@ const AccountPage: React.FC = () => {
 
       if (success) {
         toast.success('Account deleted successfully');
-        setLuminaKraftUser(null);
+        setNebulaUser(null);
       } else {
         toast.error('Failed to delete account');
       }
@@ -354,7 +354,7 @@ const AccountPage: React.FC = () => {
     }
   };
 
-  if (isLoadingLuminaKraft) {
+  if (isLoadingNebula) {
     return (
       <div className="p-10 max-w-5xl mx-auto w-full custom-scrollbar overflow-y-auto h-full">
         {/* Title skeleton */}
@@ -428,7 +428,7 @@ const AccountPage: React.FC = () => {
           <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">NEBULA_IDENTITY</h2>
         </div>
 
-        {isLoadingLuminaKraft ? (
+        {isLoadingNebula ? (
           <div className="flex flex-col items-center justify-center p-12 bg-white/5 rounded-3xl border border-white/5 animate-pulse">
             <div className="relative w-16 h-16 mb-6">
               <div className="absolute inset-0 rounded-full border-4 border-white/5"></div>
@@ -436,10 +436,10 @@ const AccountPage: React.FC = () => {
             </div>
             <p className="text-dark-500 font-black text-[10px] uppercase italic tracking-[0.2em]">{t('common.loading')}</p>
           </div>
-        ) : luminaKraftUser ? (
+        ) : NebulaUser ? (
           <>
             <ProfileEditor
-              luminaKraftUser={luminaKraftUser}
+              NebulaUser={NebulaUser}
               discordAccount={discordAccount || null}
               onUpdate={handleProfileUpdate}
             />
@@ -643,7 +643,7 @@ const AccountPage: React.FC = () => {
             <div className="mt-16 pt-10 border-t border-white/5">
               <div className="flex flex-col md:flex-row gap-6">
                 <button
-                  onClick={handleSignOutFromLuminaKraft}
+                  onClick={handleSignOutFromNebula}
                   className="flex-1 px-8 py-5 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all border border-white/5 flex items-center justify-center gap-3 group active:scale-[0.98]"
                 >
                   <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-all" />
@@ -673,17 +673,17 @@ const AccountPage: React.FC = () => {
             </div>
             <h3 className="text-3xl font-black text-white italic tracking-tighter mb-4">{t('settings.accountAccess')}</h3>
             <p className="text-dark-500 text-center mb-10 max-w-sm font-medium italic leading-relaxed">
-              {t('settings.luminakraftAccountHelp')}
+              {t('settings.NebulaAccountHelp')}
             </p>
             <div className="flex gap-6 w-full max-w-md">
               <button
-                onClick={handleSignInToLuminaKraft}
+                onClick={handleSignInToNebula}
                 className="flex-1 px-8 py-5 bg-nebula-500 hover:bg-nebula-600 text-white rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all shadow-xl shadow-nebula-500/20 active:scale-95"
               >
                 {t('auth.signIn')}
               </button>
               <button
-                onClick={handleSignUpToLuminaKraft}
+                onClick={handleSignUpToNebula}
                 className="flex-1 px-8 py-5 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all border border-white/5 active:scale-95"
               >
                 {t('auth.signUp')}

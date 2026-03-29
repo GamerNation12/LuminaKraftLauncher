@@ -23,7 +23,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
   const [_loading, setLoading] = useState(true);
 
   const displayName = useMemo(() => {
-    // 1. Try Discord Global Name (LuminaKraft Profile)
+    // 1. Try Discord Global Name (Nebula Profile)
     if (userSettings.discordAccount?.globalName) {
       return userSettings.discordAccount.globalName;
     }

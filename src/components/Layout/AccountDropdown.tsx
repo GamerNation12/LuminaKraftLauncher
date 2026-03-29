@@ -27,7 +27,7 @@ const MinecraftAccountDropdown: React.FC<MinecraftAccountDropdownProps> = ({
   const { t } = useTranslation();
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [offlineUsername, setOfflineUsername] = useState(userSettings.username || 'Player');
-  const [luminaKraftUser, setLuminaKraftUser] = useState<any>(null);
+  const [NebulaUser, setNebulaUser] = useState<any>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,29 +47,29 @@ const MinecraftAccountDropdown: React.FC<MinecraftAccountDropdownProps> = ({
     };
   }, [isOpen, onClose, anchorRef]);
 
-  // Listen for LuminaKraft profile updates
+  // Listen for Nebula profile updates
   useEffect(() => {
-    const loadLuminaKraftUser = async () => {
+    const loadNebulaUser = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        setLuminaKraftUser(user);
+        setNebulaUser(user);
       } catch (error) {
-        console.error('Error loading LuminaKraft user:', error);
+        console.error('Error loading Nebula user:', error);
       }
     };
 
     // Load initial state
-    loadLuminaKraftUser();
+    loadNebulaUser();
 
     // Listen for profile updates
     const handleProfileUpdate = () => {
-      loadLuminaKraftUser();
+      loadNebulaUser();
     };
 
-    window.addEventListener('luminakraft:profile-updated', handleProfileUpdate);
+    window.addEventListener('Nebula:profile-updated', handleProfileUpdate);
 
     return () => {
-      window.removeEventListener('luminakraft:profile-updated', handleProfileUpdate);
+      window.removeEventListener('Nebula:profile-updated', handleProfileUpdate);
     };
   }, []);
 
@@ -246,19 +246,19 @@ const MinecraftAccountDropdown: React.FC<MinecraftAccountDropdownProps> = ({
           </div>
         )}
 
-        {/* LuminaKraft Account Section */}
+        {/* Nebula Account Section */}
         <div className="pt-6 border-t border-white/5">
           <div className="flex items-center justify-between mb-4 px-1">
             <h4 className="text-[10px] font-black text-dark-500 uppercase tracking-[0.2em] italic">NEBULA_PROFILE</h4>
           </div>
-          {luminaKraftUser ? (
+          {NebulaUser ? (
             <div className="flex items-center justify-between p-4 bg-nebula-500/5 border border-nebula-500/20 rounded-2xl group/profile">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-10 h-10 rounded-xl bg-nebula-500/10 flex items-center justify-center text-nebula-400 shadow-inner">
                   <UserIcon className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">
-                  <span className="text-xs text-white font-black uppercase italic tracking-tighter truncate block">{luminaKraftUser.user_metadata?.display_name || luminaKraftUser.email}</span>
+                  <span className="text-xs text-white font-black uppercase italic tracking-tighter truncate block">{NebulaUser.user_metadata?.display_name || NebulaUser.email}</span>
                   <span className="text-[8px] text-nebula-400/60 font-black uppercase tracking-widest">AUTHENTICATED</span>
                 </div>
               </div>

@@ -43,9 +43,9 @@ export const LoadingModal: React.FC<LoadingModalProps> = ({
         <div className="flex flex-col items-center space-y-4">
           {/* Spinner */}
           <div className="relative">
-            <Loader2 className="w-12 h-12 text-lumina-400 animate-spin" />
+            <Loader2 className="w-12 h-12 text-nebula-400 animate-spin" />
             {/* Glow effect */}
-            <div className="absolute inset-0 blur-xl bg-lumina-400/30 animate-pulse"></div>
+            <div className="absolute inset-0 blur-xl bg-nebula-400/30 animate-pulse"></div>
           </div>
 
           {/* Message */}
@@ -62,7 +62,7 @@ export const LoadingModal: React.FC<LoadingModalProps> = ({
 
           {/* Progress indicator */}
           <div className="w-full bg-dark-700 rounded-full h-1.5 overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-lumina-500 to-lumina-300 animate-loading-bar"></div>
+            <div className="h-full bg-gradient-to-r from-nebula-500 to-nebula-300 animate-loading-bar"></div>
           </div>
 
           {/* Cancel button - appears after delay */}
@@ -80,3 +80,4 @@ export const LoadingModal: React.FC<LoadingModalProps> = ({
     </div>
   );
 };
+

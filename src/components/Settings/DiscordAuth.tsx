@@ -364,7 +364,7 @@ export default function DiscordAuth({
                 type="text"
                 value={manualUrl}
                 onChange={(e) => setManualUrl(e.target.value)}
-                placeholder="https://luminakraft.com/auth-callback#access_token=..."
+                placeholder="https://Nebula.com/auth-callback#access_token=..."
                 className="flex-1 px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-yellow-300 dark:border-yellow-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
               <button

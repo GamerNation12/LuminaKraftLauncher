@@ -7,25 +7,25 @@ import type { DiscordAccount } from '../../types/launcher';
 import { supabase, updateUser } from '../../services/supabaseClient';
 
 interface ProfileEditorProps {
-  luminaKraftUser: User;
+  NebulaUser: User;
   discordAccount: DiscordAccount | null;
   onUpdate: () => void;
 }
 
-const ProfileEditor: React.FC<ProfileEditorProps> = ({ luminaKraftUser, discordAccount, onUpdate }) => {
+const ProfileEditor: React.FC<ProfileEditorProps> = ({ NebulaUser, discordAccount, onUpdate }) => {
   const { t } = useTranslation();
-  const [displayName, setDisplayName] = useState(luminaKraftUser.user_metadata?.display_name || '');
+  const [displayName, setDisplayName] = useState(NebulaUser.user_metadata?.display_name || '');
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [tempDisplayName, setTempDisplayName] = useState(displayName);
 
   // Sync state with prop changes (e.g. silent background updates)
   React.useEffect(() => {
-    const newName = luminaKraftUser.user_metadata?.display_name;
+    const newName = NebulaUser.user_metadata?.display_name;
     if (newName && newName !== displayName) {
       setDisplayName(newName);
     }
-  }, [luminaKraftUser]);
+  }, [NebulaUser]);
 
   const handleStartEdit = () => {
     setTempDisplayName(displayName);
@@ -55,7 +55,7 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ luminaKraftUser, discordA
 
       // 2. Update Public User Table (DB)
       try {
-        await updateUser(luminaKraftUser.id, { display_name: tempDisplayName });
+        await updateUser(NebulaUser.id, { display_name: tempDisplayName });
       } catch (dbError) {
         console.error('Failed to update public user profile:', dbError);
         // Don't block UI if only DB sync fails but Auth succeeded
@@ -75,8 +75,8 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ luminaKraftUser, discordA
   };
 
   const getProfilePicture = () => {
-    if (luminaKraftUser.user_metadata?.avatar_url) {
-      return luminaKraftUser.user_metadata.avatar_url;
+    if (NebulaUser.user_metadata?.avatar_url) {
+      return NebulaUser.user_metadata.avatar_url;
     }
 
     if (discordAccount?.avatar) {
@@ -157,7 +157,7 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ luminaKraftUser, discordA
 
         <div className="flex items-center gap-2 mt-2 px-1">
           <div className="w-1.5 h-1.5 rounded-full bg-nebula-500 animate-pulse"></div>
-          <p className="text-[10px] text-dark-500 font-bold uppercase tracking-widest truncate">{luminaKraftUser.email}</p>
+          <p className="text-[10px] text-dark-500 font-bold uppercase tracking-widest truncate">{NebulaUser.email}</p>
         </div>
       </div>
     </div>

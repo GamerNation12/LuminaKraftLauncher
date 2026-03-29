@@ -102,14 +102,6 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
     }
   };
 
-  const handleLanguageChange = async (language: string) => {
-    try {
-      await changeLanguage(language);
-      toast.success(t('settings.saved'));
-    } catch (_error) {
-      console.error('Error changing language:', _error);
-    }
-  };
 
   const handleSave = () => {
     if (usernameError) {
@@ -233,10 +225,6 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
     }
   };
 
-  const languageOptions = [
-    { value: 'es', label: 'Español', name: 'Español' },
-    { value: 'en', label: 'English', name: 'English' }
-  ];
 
   const getStatusIcon = () => {
     switch (apiStatus) {
@@ -304,52 +292,6 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
         </div>
 
         <div className="space-y-8">
-          {/* Language Settings */}
-          <div
-            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
-            style={getAnimationStyle({})}
-          >
-            <div className="flex items-center gap-4 mb-8">
-              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
-                <Languages className="w-6 h-6 text-nebula-400" />
-              </div>
-              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('settings.language')}</h2>
-            </div>
-
-            <div className="max-w-md">
-              <label className="block text-[10px] font-black text-dark-500 uppercase tracking-widest italic mb-4 px-1">
-                {t('settings.selectLanguage')}
-              </label>
-              <div className="relative group">
-                <select
-                  value={currentLanguage}
-                  onChange={(e) => handleLanguageChange(e.target.value)}
-                  disabled={hasActiveOperations}
-                  className={`w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white font-black italic tracking-tighter outline-none focus:border-nebula-500/50 appearance-none transition-all shadow-inner ${hasActiveOperations
-                    ? 'cursor-not-allowed opacity-30'
-                    : 'cursor-pointer'
-                    }`}
-                >
-                  {languageOptions.map(option => (
-                    <option key={option.value} value={option.value} className="bg-nebula-900 text-white">
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute inset-y-0 right-5 flex items-center pointer-events-none text-dark-500 group-hover:text-nebula-400 transition-colors">
-                  <ChevronDown className="w-5 h-5" />
-                </div>
-              </div>
-              {hasActiveOperations && (
-                <div className="mt-6 p-4 bg-nebula-500/5 border border-nebula-500/10 rounded-2xl flex items-center gap-3">
-                  <RefreshCw className="w-4 h-4 text-nebula-400 animate-spin" />
-                  <p className="text-nebula-400 text-[10px] font-black uppercase italic tracking-widest">
-                    {t('settings.languageDisabledDuringOperations')}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
 
           {/* API Status */}
           <div

@@ -191,7 +191,7 @@ class AuthService {
   }
 
   /**
-   * Sign in to LuminaKraft Account using web-based OAuth flow
+   * Sign in to Nebula Account using web-based OAuth flow
    * Opens browser to /auth/sign-in with HTTP server callback
    */
   async signInToNebulaAccount(): Promise<boolean> {
@@ -275,7 +275,7 @@ class AuthService {
       );
 
       // 4. Open browser to sign in page
-      const url = `https://luminakraft.com/auth/sign-in?launcher=true&port=${port}`;
+      const url = `https://Nebula.com/auth/sign-in?launcher=true&port=${port}`;
       await invoke('open_url', { url });
 
       return true;
@@ -286,12 +286,12 @@ class AuthService {
   }
 
   /**
-   * Sign up for LuminaKraft Account using web-based OAuth flow
+   * Sign up for Nebula Account using web-based OAuth flow
    * Opens browser to /auth/sign-up with HTTP server callback
    */
   async signUpNebulaAccount(): Promise<boolean> {
     try {
-      console.log('Starting LuminaKraft Account sign up flow...');
+      console.log('Starting Nebula Account sign up flow...');
 
       // 1. Start HTTP server and get port
       const port = await invoke<number>('start_oauth_server');
@@ -375,7 +375,7 @@ class AuthService {
       );
 
       // 4. Open browser to sign up page
-      const url = `https://luminakraft.com/auth/sign-up?launcher=true&port=${port}`;
+      const url = `https://Nebula.com/auth/sign-up?launcher=true&port=${port}`;
       await invoke('open_url', { url });
       console.log(`Opened browser to ${url}`);
 
@@ -387,7 +387,7 @@ class AuthService {
   }
 
   /**
-   * Sync Microsoft/Minecraft data to LuminaKraft account if both are available
+   * Sync Microsoft/Minecraft data to Nebula account if both are available
    * Called after successful login to either service.
    * 
    * IMPORTANT: This method strictly uses the LOCAL Minecraft authentication data (from localStorage)
@@ -493,7 +493,7 @@ class AuthService {
   /**
    * Link Discord account using OAuth
    * Uses linkIdentity() if user is logged in, signInWithOAuth() otherwise
-   * Opens Discord OAuth in external browser, redirects to luminakraft.com
+   * Opens Discord OAuth in external browser, redirects to Nebula.com
    */
   async linkDiscordAccount(): Promise<boolean> {
     try {
@@ -511,7 +511,7 @@ class AuthService {
       console.log(`OAuth server started on port ${port}`);
 
       // Construct redirect URL with port
-      const redirectUrl = `https://luminakraft.com/auth-callback?launcher=true&port=${port}`;
+      const redirectUrl = `https://Nebula.com/auth-callback?launcher=true&port=${port}`;
 
       // 2. Set up event listener for oauth callback
       const unlisten = await listen<{

@@ -85,7 +85,7 @@ export function UnknownErrorModal({
                         <span>{t('knownErrors.needHelp')}</span>
                         <button
                             onClick={() => open('https://discord.gg/UJZRrcUFMj')}
-                            className="inline-flex items-center gap-1 text-lumina-400 hover:text-lumina-300 transition-colors"
+                            className="inline-flex items-center gap-1 text-nebula-400 hover:text-nebula-300 transition-colors"
                         >
                             {t('knownErrors.openTicket')}
                             <ExternalLink className="w-3 h-3" />
@@ -119,3 +119,4 @@ export function UnknownErrorModal({
 }
 
 export default UnknownErrorModal;
+

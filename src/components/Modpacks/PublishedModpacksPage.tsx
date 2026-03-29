@@ -69,7 +69,7 @@ export function PublishedModpacksPage({ onNavigate }: PublishedModpacksPageProps
       loadData(); // Refresh page data
     };
 
-    window.addEventListener('luminakraft:profile-updated', handleProfileUpdate);
+    window.addEventListener('Nebula:profile-updated', handleProfileUpdate);
 
     // Also listen for auth state changes from Supabase
     let cleanup: (() => void) | undefined;
@@ -86,7 +86,7 @@ export function PublishedModpacksPage({ onNavigate }: PublishedModpacksPageProps
     })();
 
     return () => {
-      window.removeEventListener('luminakraft:profile-updated', handleProfileUpdate);
+      window.removeEventListener('Nebula:profile-updated', handleProfileUpdate);
       cleanup?.();
     };
   }, []);

@@ -45,7 +45,7 @@ export class ModrinthService {
 
       const response = await fetch(url, {
         headers: {
-          'User-Agent': 'LuminaKraftLauncher/0.1.7 (contact@luminakraft.com)'
+          'User-Agent': 'NebulaLauncher/0.1.7 (contact@Nebula.com)'
         }
       });
 

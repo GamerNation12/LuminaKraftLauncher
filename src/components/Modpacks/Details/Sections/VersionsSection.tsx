@@ -118,7 +118,7 @@ const VersionsSection: React.FC<VersionsSectionProps> = ({ modpackId, currentVer
             >
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-12 text-dark-400">
-                        <Loader2 className="w-8 h-8 animate-spin mb-3 text-lumina-500" />
+                        <Loader2 className="w-8 h-8 animate-spin mb-3 text-nebula-500" />
                         <p>{t('common.loading')}</p>
                     </div>
                 ) : error ? (
@@ -143,7 +143,7 @@ const VersionsSection: React.FC<VersionsSectionProps> = ({ modpackId, currentVer
                                 return (
                                     <div
                                         key={version.version}
-                                        className={`bg-dark-800/60 backdrop-blur-sm border border-dark-700/50 rounded-xl p-5 transition-all duration-300 hover:border-lumina-500/30 group ${isCurrent ? 'ring-1 ring-green-500/30 bg-dark-800/80' : ''
+                                        className={`bg-dark-800/60 backdrop-blur-sm border border-dark-700/50 rounded-xl p-5 transition-all duration-300 hover:border-nebula-500/30 group ${isCurrent ? 'ring-1 ring-green-500/30 bg-dark-800/80' : ''
                                             }`}
                                     >
                                         {/* Header row with version info and button */}
@@ -168,7 +168,7 @@ const VersionsSection: React.FC<VersionsSectionProps> = ({ modpackId, currentVer
                                                 </div>
 
                                                 <div className="flex flex-wrap gap-2 text-[10px] sm:text-xs font-mono uppercase tracking-wider">
-                                                    <span className="px-2.5 py-1 bg-lumina-500/5 text-lumina-400 rounded border border-lumina-500/10">
+                                                    <span className="px-2.5 py-1 bg-nebula-500/5 text-nebula-400 rounded border border-nebula-500/10">
                                                         Minecraft {version.minecraftVersion}
                                                     </span>
                                                     <span className="px-2.5 py-1 bg-dark-900/60 text-dark-300 rounded border border-dark-700/50">
@@ -184,7 +184,7 @@ const VersionsSection: React.FC<VersionsSectionProps> = ({ modpackId, currentVer
                                                         disabled={isBusy || installingVersion !== null}
                                                         className={`flex items-center justify-center p-3 rounded-lg font-bold transition-all shadow-md ${isBusy
                                                             ? 'bg-dark-700 text-dark-400 cursor-not-allowed'
-                                                            : 'bg-lumina-600 hover:bg-lumina-500 text-white hover:shadow-lumina-500/20 hover:scale-[1.02] active:scale-[0.98]'
+                                                            : 'bg-nebula-600 hover:bg-nebula-500 text-white hover:shadow-nebula-500/20 hover:scale-[1.02] active:scale-[0.98]'
                                                             }`}
                                                     >
                                                         {isInstallingThis ? (
@@ -216,7 +216,7 @@ const VersionsSection: React.FC<VersionsSectionProps> = ({ modpackId, currentVer
                                         {showProgress && (
                                             <div className="mt-4 space-y-2 animate-in fade-in duration-300">
                                                 <div className="flex items-center justify-between text-sm">
-                                                    <span className="text-lumina-400 font-medium">
+                                                    <span className="text-nebula-400 font-medium">
                                                         {installMessage || t('modpacks.installing')}
                                                     </span>
                                                     <span className="text-dark-400 font-mono">
@@ -225,7 +225,7 @@ const VersionsSection: React.FC<VersionsSectionProps> = ({ modpackId, currentVer
                                                 </div>
                                                 <div className="w-full h-2 bg-dark-900/60 rounded-full overflow-hidden border border-dark-700/30">
                                                     <div
-                                                        className="h-full bg-gradient-to-r from-lumina-600 to-lumina-400 rounded-full transition-all duration-300 ease-out"
+                                                        className="h-full bg-gradient-to-r from-nebula-600 to-nebula-400 rounded-full transition-all duration-300 ease-out"
                                                         style={{ width: `${Math.max(installProgress, 0)}%` }}
                                                     />
                                                 </div>
@@ -256,4 +256,5 @@ const VersionsSection: React.FC<VersionsSectionProps> = ({ modpackId, currentVer
 };
 
 export default VersionsSection;
+
 

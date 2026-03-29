@@ -35,7 +35,7 @@ class UpdateService {
   private async getPrereleaseSettings(): Promise<boolean> {
     try {
       // Unified key used by LauncherService
-      const raw = localStorage.getItem('LuminaKraftLauncher_settings') || localStorage.getItem('userSettings');
+      const raw = localStorage.getItem('NebulaLauncher_settings') || localStorage.getItem('userSettings');
       if (raw) {
         const parsed = JSON.parse(raw);
         return parsed.enablePrereleases === true;
@@ -117,7 +117,7 @@ class UpdateService {
     console.log('🔍 Checking for any updates (including prereleases)...');
 
     try {
-      const response = await fetch('https://api.github.com/repos/LuminaKraft/LuminakraftLauncher/releases');
+      const response = await fetch('https://api.github.com/repos/Nebula/NebulaLauncher/releases');
       const releases = await response.json();
 
       if (!Array.isArray(releases)) {

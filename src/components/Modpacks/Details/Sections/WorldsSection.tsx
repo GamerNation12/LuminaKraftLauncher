@@ -94,7 +94,7 @@ const WorldsSection: React.FC<WorldsSectionProps> = ({ modpackId }) => {
     >
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-          <Globe className="w-5 h-5 text-lumina-400" />
+          <Globe className="w-5 h-5 text-nebula-400" />
           <span>{t('modpacks.worlds', { defaultValue: 'Worlds' })}</span>
           <span className="text-sm text-dark-400">({worlds.length})</span>
         </h3>
@@ -102,7 +102,7 @@ const WorldsSection: React.FC<WorldsSectionProps> = ({ modpackId }) => {
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-lumina-500 animate-spin" />
+          <Loader2 className="w-8 h-8 text-nebula-500 animate-spin" />
         </div>
       ) : worlds.length === 0 ? (
         <div className="text-center py-12 text-dark-400">
@@ -115,7 +115,7 @@ const WorldsSection: React.FC<WorldsSectionProps> = ({ modpackId }) => {
               key={world.name} 
               className="p-4 bg-dark-800/50 hover:bg-dark-800 border border-dark-700 hover:border-dark-600 rounded-xl transition-all group flex items-start space-x-3"
             >
-              <div className="p-2 bg-dark-700 rounded-lg text-dark-300 group-hover:text-lumina-400 transition-colors">
+              <div className="p-2 bg-dark-700 rounded-lg text-dark-300 group-hover:text-nebula-400 transition-colors">
                 <Globe className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
@@ -134,7 +134,7 @@ const WorldsSection: React.FC<WorldsSectionProps> = ({ modpackId }) => {
                     handleBackup(world.name);
                   }}
                   disabled={!!backingUp || !!deleting}
-                  className="p-1.5 hover:bg-dark-700 bg-dark-800/10 rounded-lg text-dark-300 hover:text-lumina-400 transition-colors disabled:opacity-50"
+                  className="p-1.5 hover:bg-dark-700 bg-dark-800/10 rounded-lg text-dark-300 hover:text-nebula-400 transition-colors disabled:opacity-50"
                   title="Create Backup"
                 >
                   {backingUp === world.name ? (
@@ -180,3 +180,4 @@ const WorldsSection: React.FC<WorldsSectionProps> = ({ modpackId }) => {
 };
 
 export default WorldsSection;
+

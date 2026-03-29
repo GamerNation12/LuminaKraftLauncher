@@ -63,13 +63,13 @@ class LauncherService {
     this.setupAxiosDefaults();
     // Remove legacy launcherDataUrl from localStorage if present
     if (typeof window !== 'undefined' && window.localStorage) {
-      const saved = localStorage.getItem('LuminaKraftLauncher_settings');
+      const saved = localStorage.getItem('NebulaLauncher_settings');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
           if ('launcherDataUrl' in parsed) {
             delete parsed.launcherDataUrl; // removed, endpoint is hardcoded
-            localStorage.setItem('LuminaKraftLauncher_settings', JSON.stringify(parsed));
+            localStorage.setItem('NebulaLauncher_settings', JSON.stringify(parsed));
           }
         } catch {
           // Ignore JSON parsing errors for legacy settings
@@ -92,7 +92,7 @@ class LauncherService {
   private detectDefaultLanguage(): string {
     try {
       // Check if user has manually set a language preference
-      const storedLanguage = localStorage.getItem('LuminaKraftLauncher-language');
+      const storedLanguage = localStorage.getItem('NebulaLauncher-language');
       if (storedLanguage && ['es', 'en'].includes(storedLanguage)) {
         return storedLanguage;
       }
@@ -123,7 +123,7 @@ class LauncherService {
     };
 
     try {
-      const saved = localStorage.getItem('LuminaKraftLauncher_settings');
+      const saved = localStorage.getItem('NebulaLauncher_settings');
       if (saved) {
         const parsed = JSON.parse(saved);
         const merged = { ...defaultSettings, ...parsed } as UserSettings;
@@ -148,7 +148,7 @@ class LauncherService {
 
         // Save the merged settings with guaranteed clientToken and migrated RAM
         try {
-          localStorage.setItem('LuminaKraftLauncher_settings', JSON.stringify(merged));
+          localStorage.setItem('NebulaLauncher_settings', JSON.stringify(merged));
         } catch (saveError) {
           console.error('Error saving merged settings to localStorage:', saveError);
         }
@@ -161,7 +161,7 @@ class LauncherService {
 
     // Fallback: return default settings (which already have a clientToken generated)
     try {
-      localStorage.setItem('LuminaKraftLauncher_settings', JSON.stringify(defaultSettings));
+      localStorage.setItem('NebulaLauncher_settings', JSON.stringify(defaultSettings));
     } catch (saveError) {
       console.error('Error saving default settings to localStorage:', saveError);
     }
@@ -172,7 +172,7 @@ class LauncherService {
 
   saveUserSettings(settings: Partial<UserSettings>): void {
     this.userSettings = { ...this.userSettings, ...settings };
-    localStorage.setItem('LuminaKraftLauncher_settings', JSON.stringify(this.userSettings));
+    localStorage.setItem('NebulaLauncher_settings', JSON.stringify(this.userSettings));
   }
 
   getUserSettings(): UserSettings {
@@ -1101,7 +1101,7 @@ class LauncherService {
 
     // Dispatch a custom event to notify all listeners that cache has been cleared
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('luminakraft:cache-cleared'));
+      window.dispatchEvent(new CustomEvent('Nebula:cache-cleared'));
     }
   }
 
@@ -1154,7 +1154,7 @@ class LauncherService {
       const isHealthy = await this.checkAPIHealth();
 
       return {
-        backend: 'LuminaKraft Services',
+        backend: 'Nebula Services',
         status: isHealthy ? 'online' : 'offline',
         version: '1.0.0',
         features: ['modpacks', 'authentication', 'statistics', 'file-storage']
@@ -1162,7 +1162,7 @@ class LauncherService {
     } catch (error) {
       console.error('Error getting backend info:', error);
       return {
-        backend: 'LuminaKraft Services',
+        backend: 'Nebula Services',
         status: 'offline',
         version: '1.0.0',
         features: []
@@ -1176,7 +1176,7 @@ class LauncherService {
     this.saveUserSettings({ language });
 
     // Actualizar localStorage para i18n
-    localStorage.setItem('LuminaKraftLauncher-language', language);
+    localStorage.setItem('NebulaLauncher-language', language);
 
     // Limpiar caché de traducciones y características para forzar recarga completa
     const keysToDelete = Array.from(this.cache.keys()).filter(key =>

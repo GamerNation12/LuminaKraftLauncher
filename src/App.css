@@ -86,6 +86,62 @@
       transition-duration: 0.01ms !important;
     }
   }
+
+  /* Nebula Branding Animations */
+  @keyframes nebulaPulse {
+    0% { background-position: 0% 50%; opacity: 0.4; }
+    50% { background-position: 100% 50%; opacity: 0.7; }
+    100% { background-position: 0% 50%; opacity: 0.4; }
+  }
+
+  @keyframes driftStars {
+    from { transform: translateY(0); }
+    to { transform: translateY(-1000px); }
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(1deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+  }
+
+  .nebula-glow-bg {
+    background: linear-gradient(-45deg, #1e1b4b, #2e1065, #4c1d95, #6d28d9, #db2777, #4c1d95, #1e1b4b);
+    background-size: 400% 400%;
+    animation: nebulaPulse 10s ease-in-out infinite;
+  }
+
+  /* Improved Star Animations */
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  @keyframes shootingStar {
+    0% { transform: translateX(0) translateY(0) rotate(-35deg) scale(0); opacity: 0; }
+    10% { transform: translateX(-100px) translateY(70px) rotate(-35deg) scale(1); opacity: 1; }
+    30% { transform: translateX(-800px) translateY(560px) rotate(-35deg) scale(1); opacity: 0; }
+    100% { transform: translateX(-800px) translateY(560px) rotate(-35deg) scale(0); opacity: 0; }
+  }
+
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--duration, 3s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    box-shadow: 0 0 4px white;
+  }
+
+  .shooting-star {
+    position: absolute;
+    width: 150px;
+    height: 1px;
+    background: linear-gradient(-45deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    filter: drop-shadow(0 0 6px white);
+    animation: shootingStar 4s ease-in infinite;
+    z-index: 5;
+  }
 }
 
 @layer components {
@@ -322,7 +378,7 @@
   }
 
   .card-compact.selected {
-    @apply bg-white/15 border-lumina-500/50 shadow-inner;
+    @apply bg-white/15 border-nebula-500/50 shadow-inner;
   }
 
   /* Discord-like pulsing red highlight */

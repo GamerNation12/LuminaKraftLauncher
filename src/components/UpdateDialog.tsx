@@ -52,7 +52,7 @@ const UpdateDialog: React.FC<UpdateDialogProps> = ({
     return updateInfo.isPrerelease ? (
       <AlertCircle className="w-6 h-6 text-yellow-400 mr-3" />
     ) : (
-      <Download className="w-6 h-6 text-lumina-400 mr-3" />
+      <Download className="w-6 h-6 text-nebula-400 mr-3" />
     );
   };
 
@@ -94,7 +94,7 @@ const UpdateDialog: React.FC<UpdateDialogProps> = ({
             </div>
             <div className="flex justify-between items-center">
               <span className="text-dark-400">{t('update.latestVersion')}</span>
-              <span className="text-lumina-400 font-mono font-semibold">{updateInfo.latestVersion}</span>
+              <span className="text-nebula-400 font-mono font-semibold">{updateInfo.latestVersion}</span>
             </div>
           </div>
 
@@ -125,7 +125,7 @@ const UpdateDialog: React.FC<UpdateDialogProps> = ({
           <button
             onClick={onDownload}
             disabled={isDownloading}
-            className="bg-lumina-600 hover:bg-lumina-700 disabled:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center"
+            className="bg-nebula-600 hover:bg-nebula-700 disabled:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center"
           >
             {isDownloading ? (
               <>
@@ -155,10 +155,10 @@ const UpdateDialog: React.FC<UpdateDialogProps> = ({
             {t('update.platform', { platform: updateInfo.platform })}
           </p>
           <a 
-            href="https://github.com/LuminaKraft/LuminaKraftLauncher/releases/latest"
+            href="https://github.com/Nebula/NebulaLauncher/releases/latest"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-dark-500 hover:text-lumina-400 text-xs inline-flex items-center mt-1 transition-colors"
+            className="text-dark-500 hover:text-nebula-400 text-xs inline-flex items-center mt-1 transition-colors"
           >
             <ExternalLink className="w-3 h-3 mr-1" />
             {t('update.viewOnGithub')}
