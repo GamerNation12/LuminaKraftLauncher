@@ -146,6 +146,7 @@ export interface UserSettings {
   onboardingCompleted?: boolean;
   maxConcurrentDownloads?: number; // Max parallel downloads (1-20, default 10)
   maxConcurrentWrites?: number; // Max parallel disk writes (1-50, default 10)
+  jvmArgs?: string; // NEW: Custom JVM arguments
 }
 
 export interface ProgressInfo {

@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Clock, Play, Compass } from 'lucide-react';
+import { ArrowRight, Clock, Play, Compass, Globe } from 'lucide-react';
 import { invoke } from '@tauri-apps/api/core';
 import ModpackCard from '../Modpacks/ModpackCard';
 import { Modpack } from '../../types/launcher';
 import { ModrinthService } from '../../services/modrinthService';
 import { useLauncher } from '../../contexts/LauncherContext';
+import { useAnimation } from '../../contexts/AnimationContext';
 
 interface HomePageProps {
   onNavigate?: (_section: string, _modpackId?: string) => void;
@@ -13,6 +14,7 @@ interface HomePageProps {
 
 export function HomePage({ onNavigate }: HomePageProps) {
   const { t } = useTranslation();
+  const { getAnimationStyle } = useAnimation();
   const { modpackStates, userSettings } = useLauncher();
   const [comingSoonModpacks, setComingSoonModpacks] = useState<Modpack[]>([]);
   const [featuredModpacks, setFeaturedModpacks] = useState<Modpack[]>([]);
@@ -168,49 +170,75 @@ export function HomePage({ onNavigate }: HomePageProps) {
   // We want to show "Jump back in" immediately if local modpacks are available.
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-8">
-      {/* Minimal Hero Section - More professional */}
+    <div className="max-w-7xl mx-auto p-10 space-y-12 w-full custom-scrollbar overflow-y-auto h-full">
       {/* Premium Welcome Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-dark-800 to-dark-900 rounded-2xl p-8 border border-dark-700/50 shadow-xl mb-2">
-        {/* Ambient background glow dots */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-lumina-500/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none"></div>
+      <div 
+        className="relative overflow-hidden bg-white/[0.02] backdrop-blur-3xl rounded-[3rem] p-12 border border-white/5 shadow-2xl transition-all duration-500 hover:border-nebula-500/20 group/hero"
+        style={getAnimationStyle({})}
+      >
+        {/* Animated nebula background bits */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-nebula-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 animate-pulse pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-nebula-500/[0.02] via-transparent to-transparent opacity-0 group-hover/hero:opacity-100 transition-opacity duration-700"></div>
 
-        <div className="relative z-10">
-          <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
-            {t('home.hero.title')}, <span className="bg-gradient-to-r from-lumina-400 to-blue-500 bg-clip-text text-transparent">{displayName}</span>
-          </h1>
-          <p className="text-dark-300 text-base max-w-lg leading-relaxed">
-            Ready to jump back in? Select your recently played modpacks below or Explore new communities live!
-          </p>
-          
-          <div className="flex items-center gap-4 mt-6">
-            <button 
-              onClick={() => onNavigate?.('my-modpacks')}
-              className="btn-primary flex items-center gap-2 px-5 py-2.5 text-sm"
-            >
-              <Play className="w-4 h-4" />
-              <span>Resume Play</span>
-            </button>
-            <button 
-              onClick={() => onNavigate?.('explore')}
-              className="flex items-center gap-2 border border-dark-600 hover:border-dark-500 hover:bg-dark-800 px-5 py-2.5 rounded-lg text-white font-medium text-sm transition-all duration-150"
-            >
-              <Compass className="w-4 h-4 text-dark-400" />
-              <span>Explore</span>
-            </button>
+        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+          <div className="flex-1 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-nebula-500/10 border border-nebula-500/20 rounded-full mb-6 mx-auto lg:mx-0">
+              <div className="w-1.5 h-1.5 rounded-full bg-nebula-400 animate-pulse"></div>
+              <span className="text-[10px] font-black text-nebula-400 uppercase tracking-[0.2em] italic">SYSTEMS_ACTIVE</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter uppercase italic leading-[0.9]">
+              {t('home.hero.title')}, <br />
+              <span className="bg-gradient-to-r from-nebula-400 via-indigo-400 to-nebula-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-x">{displayName}</span>
+            </h1>
+            
+            <p className="text-dark-400 text-lg max-w-xl leading-relaxed font-black uppercase italic tracking-wider opacity-60 mb-10 mx-auto lg:mx-0">
+              Your gateway to the stars. Resume your journey or <span className="text-white">explore new worlds</span> across the Nebula network.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start">
+              <button 
+                onClick={() => onNavigate?.('my-modpacks')}
+                className="w-full sm:w-auto px-10 py-5 bg-nebula-500 hover:bg-nebula-600 text-white rounded-2xl font-black text-sm uppercase italic tracking-[0.1em] transition-all shadow-xl shadow-nebula-500/30 active:scale-95 flex items-center justify-center gap-4 group/play"
+              >
+                <Play className="w-5 h-5 fill-current group-hover/play:scale-110 transition-transform" />
+                <span>RESUME_JOURNEY</span>
+              </button>
+              <button 
+                onClick={() => onNavigate?.('explore')}
+                className="w-full sm:w-auto px-10 py-5 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-white rounded-2xl font-black text-sm uppercase italic tracking-[0.1em] transition-all flex items-center justify-center gap-4 group/explore active:scale-95"
+              >
+                <Compass className="w-5 h-5 text-dark-400 group-hover/explore:text-white transition-colors group-hover/explore:rotate-45 transition-transform" />
+                <span>EXPLORE_WORLDS</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex-shrink-0 w-64 h-64 items-center justify-center relative hidden lg:flex">
+            <div className="absolute inset-0 bg-nebula-500/20 blur-[100px] rounded-full animate-pulse"></div>
+            <div className="w-48 h-48 rounded-[3.5rem] bg-gradient-to-br from-nebula-500 via-indigo-600 to-nebula-700 flex items-center justify-center shadow-2xl transform rotate-12 group-hover/hero:rotate-[15deg] group-hover/hero:scale-110 transition-all duration-700 border-4 border-white/20">
+              <span className="text-white font-black text-8xl select-none italic tracking-tighter shadow-2xl">N</span>
+              <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-white/10 backdrop-blur-3xl rounded-3xl border border-white/10 flex items-center justify-center shadow-2xl">
+                <div className="w-10 h-10 border-4 border-nebula-400 rounded-full animate-spin border-t-transparent"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Jump back in Section */}
       {recentInstances.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <Play className="w-5 h-5" />
-              {t('home.jumpBackIn.title')}
-            </h2>
+        <section style={getAnimationStyle({})}>
+          <div className="flex items-center justify-between mb-8 px-4">
+            <div className="flex items-center gap-4">
+              <div className="p-2 bg-nebula-500/10 rounded-xl border border-nebula-500/20">
+                <Play className="w-5 h-5 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">
+                {t('home.jumpBackIn.title')}
+              </h2>
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {recentInstances.map((modpackId, index) => {
@@ -243,12 +271,16 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
       {/* Coming Soon Section */}
       {comingSoonModpacks.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <Clock className="w-5 h-5" />
-              {t('home.comingSoon.title')}
-            </h2>
+        <section style={getAnimationStyle({})}>
+          <div className="flex items-center justify-between mb-8 px-4">
+            <div className="flex items-center gap-4">
+              <div className="p-2 bg-nebula-500/10 rounded-xl border border-nebula-500/20">
+                <Clock className="w-5 h-5 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">
+                {t('home.comingSoon.title')}
+              </h2>
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {comingSoonModpacks.slice(0, 4).map((modpack, index) => {
@@ -275,17 +307,22 @@ export function HomePage({ onNavigate }: HomePageProps) {
       )}
 
       {/* Featured Section */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white">
-            {t('home.featured.title')}
-          </h2>
+      <section style={getAnimationStyle({})}>
+        <div className="flex items-center justify-between mb-8 px-4">
+          <div className="flex items-center gap-4">
+            <div className="p-2 bg-nebula-500/10 rounded-xl border border-nebula-500/20">
+              <Compass className="w-5 h-5 text-nebula-400" />
+            </div>
+            <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">
+              {t('home.featured.title')}
+            </h2>
+          </div>
           <button
             onClick={() => onNavigate?.('explore')}
-            className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium group transition-colors duration-150"
+            className="flex items-center gap-3 text-[10px] font-black text-nebula-400 hover:text-nebula-300 uppercase italic tracking-[0.2em] group transition-all"
           >
             {t('home.viewAll')}
-            <ArrowRight className="w-4 h-4 transition-transform duration-150 group-hover:translate-x-1" />
+            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
           </button>
         </div>
         {featuredModpacks.length > 0 ? (
@@ -311,8 +348,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
             })}
           </div>
         ) : (
-          <div className="bg-dark-800 rounded-lg p-8 border border-dark-700">
-            <p className="text-gray-400 text-center">
+          <div className="bg-white/[0.02] backdrop-blur-3xl rounded-[2.5rem] p-16 border border-white/5 shadow-inner flex flex-col items-center justify-center">
+            <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 border border-white/5 opacity-40">
+              <Compass className="w-8 h-8 text-dark-500" />
+            </div>
+            <p className="text-dark-500 font-black text-xs uppercase italic tracking-widest text-center">
               {t('home.featured.empty')}
             </p>
           </div>
@@ -321,17 +361,22 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
       {/* Discover Section */}
       {discoverModpacks.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white">
-              {t('home.discover.title')}
-            </h2>
+        <section style={getAnimationStyle({})}>
+          <div className="flex items-center justify-between mb-8 px-4">
+            <div className="flex items-center gap-4">
+              <div className="p-2 bg-nebula-500/10 rounded-xl border border-nebula-500/20">
+                <Globe className="w-5 h-5 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">
+                {t('home.discover.title')}
+              </h2>
+            </div>
             <button
               onClick={() => onNavigate?.('explore')}
-              className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium group transition-colors duration-150"
+              className="flex items-center gap-3 text-[10px] font-black text-nebula-400 hover:text-nebula-300 uppercase italic tracking-[0.2em] group transition-all"
             >
               {t('home.discover.viewAll')}
-              <ArrowRight className="w-4 h-4 transition-transform duration-150 group-hover:translate-x-1" />
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

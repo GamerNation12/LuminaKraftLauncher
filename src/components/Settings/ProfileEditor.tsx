@@ -89,72 +89,76 @@ const ProfileEditor: React.FC<ProfileEditorProps> = ({ luminaKraftUser, discordA
   const profilePic = getProfilePicture();
 
   return (
-    <div className="flex items-center space-x-4 mb-6 p-4 bg-dark-700/50 rounded-lg border border-dark-600">
+    <div className="flex items-center gap-8 mb-10 p-8 bg-white/5 rounded-[2rem] border border-white/5 shadow-inner transition-all hover:bg-white/[0.07] group/profile">
       {/* Avatar */}
       <div className="relative flex-shrink-0">
+        <div className="absolute -inset-1 bg-gradient-to-tr from-nebula-500 to-blue-500 rounded-full blur opacity-20 group-hover/profile:opacity-40 transition-opacity"></div>
         {profilePic ? (
           <img
             src={profilePic}
             alt="Profile"
-            className="w-16 h-16 rounded-full object-cover border-2 border-lumina-600/50 shadow-lg"
+            className="w-24 h-24 rounded-full object-cover border-4 border-white/10 shadow-2xl relative z-10"
           />
         ) : (
-          <div className="w-16 h-16 bg-dark-700 rounded-full flex items-center justify-center border-2 border-dark-500">
-            <UserIcon className="w-8 h-8 text-dark-400" />
+          <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center border-4 border-white/10 relative z-10">
+            <UserIcon className="w-10 h-10 text-dark-500" />
           </div>
         )}
       </div>
 
       {/* Info & Edit */}
       <div className="flex-1 min-w-0">
-        <p className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">
+        <p className="text-[10px] font-black text-dark-500 uppercase tracking-[0.2em] italic mb-3 px-1">
           {t('settings.displayName')}
         </p>
 
         {isEditing ? (
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-3">
             <input
               type="text"
               value={tempDisplayName}
               onChange={(e) => setTempDisplayName(e.target.value)}
               disabled={isSaving}
-              className="flex-1 px-3 py-1 bg-dark-800 border border-lumina-500 rounded focus:outline-none text-white text-sm disabled:opacity-50"
-              placeholder="Display Name"
+              className="flex-1 px-5 py-3 bg-white/5 border border-nebula-500/50 rounded-2xl focus:outline-none text-white font-black italic tracking-tighter disabled:opacity-50 transition-all shadow-inner"
+              placeholder="DISPLAY_NAME"
               autoFocus
             />
             <button
               onClick={handleUpdateDisplayName}
               disabled={isSaving}
-              className="p-1.5 bg-green-600/20 text-green-400 rounded hover:bg-green-600/30 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 bg-nebula-500/10 text-nebula-400 rounded-xl hover:bg-nebula-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {isSaving ? (
-                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                <Check size={16} />
+                <Check size={20} />
               )}
             </button>
             <button
               onClick={handleCancelEdit}
               disabled={isSaving}
-              className="p-1.5 bg-red-600/20 text-red-400 rounded hover:bg-red-600/30 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 bg-red-500/10 text-red-400 rounded-xl hover:bg-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              <X size={16} />
+              <X size={20} />
             </button>
           </div>
         ) : (
-          <div className="flex items-center space-x-2 group">
-            <h3 className="text-xl font-bold text-white truncate">{displayName || 'User'}</h3>
+          <div className="flex items-center gap-4 group">
+            <h3 className="text-3xl font-black text-white italic tracking-tighter truncate">{displayName || 'COMMAND_PILOT'}</h3>
             <button
               onClick={handleStartEdit}
-              className="p-1.5 text-gray-500 hover:text-lumina-400 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="p-2 text-dark-500 hover:text-nebula-400 opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
               title={t('settings.edit')}
             >
-              <Pencil size={14} />
+              <Pencil size={18} />
             </button>
           </div>
         )}
 
-        <p className="text-sm text-gray-500 mt-1 truncate">{luminaKraftUser.email}</p>
+        <div className="flex items-center gap-2 mt-2 px-1">
+          <div className="w-1.5 h-1.5 rounded-full bg-nebula-500 animate-pulse"></div>
+          <p className="text-[10px] text-dark-500 font-bold uppercase tracking-widest truncate">{luminaKraftUser.email}</p>
+        </div>
       </div>
     </div>
   );

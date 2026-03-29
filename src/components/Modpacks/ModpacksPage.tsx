@@ -302,95 +302,71 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
   }
 
   return (
-    <div className={`h-full flex flex-col ${getAnimationClass('transition-opacity duration-75 ease-out', '')
-      } ${isTransitioning
-        ? 'opacity-0'
-        : 'opacity-100'
-      }`}
-      style={getAnimationStyle({})}
-    >
+    <div className={`h-full flex flex-col bg-transparent ${isTransitioning ? 'opacity-0' : 'opacity-100'} transition-opacity duration-500 custom-scrollbar overflow-y-auto`}>
       {/* Header */}
-      <div
-        className="p-6 border-b border-dark-700"
-        style={{
-          animation: 'fadeInUp 0.15s ease-out',
-          ...getAnimationStyle({})
-        }}
-      >
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-white text-2xl font-bold bg-gradient-to-r from-lumina-400 to-lumina-300 bg-clip-text text-transparent">
-              {t('modpacks.title')}
+      <div className="p-10 border-b border-white/5 bg-white/[0.01] backdrop-blur-3xl sticky top-0 z-30">
+        <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-8 max-w-[1600px] mx-auto">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-2 h-2 rounded-full bg-nebula-500 animate-pulse" />
+              <span className="text-[10px] font-black text-nebula-400 uppercase tracking-[0.3em] italic">DEEP_SPACE_EXPLORATION</span>
+            </div>
+            <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase italic leading-[0.9]">
+              {t('modpacks.explore', 'Explore Nebula')}
             </h1>
-            <p className="text-dark-400 mt-1">
-              {t('modpacks.availableCount', { count: filteredModpacks.length })}
+            <p className="text-dark-400 font-black uppercase italic tracking-[0.1em] opacity-40 text-sm">
+              {t('modpacks.availableCount', { count: filteredModpacks.length + modrinthModpacks.length })} DISCOVERIES_UNLOCKED
             </p>
           </div>
 
-          <div
-            className="flex items-center space-x-3"
-            style={{
-              animation: 'fadeInRight 0.15s ease-out 0.05s backwards',
-              ...getAnimationStyle({})
-            }}
-          >
-
-            <div className="relative group">
-              <Search className={`w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-dark-400 transition-colors duration-200 ${getAnimationClass('', 'group-focus-within:text-lumina-400')
-                }`} />
+          <div className="flex flex-wrap items-center gap-6 w-full xl:w-auto">
+            <div className="relative group flex-1 xl:flex-none">
+              <Search className="w-5 h-5 absolute left-5 top-1/2 -translate-y-1/2 text-dark-500 group-focus-within:text-nebula-400 transition-all duration-300 group-focus-within:scale-110" />
               <input
                 type="text"
                 placeholder={t('modpacks.searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={`input-field pl-10 w-64 transition-all duration-75 ${getAnimationClass('', 'focus:ring-2 focus:ring-lumina-400/50 focus:border-lumina-400')
-                  }`}
-                style={getAnimationStyle({})}
+                className="w-full xl:w-96 bg-white/5 border border-white/10 rounded-2xl pl-14 pr-6 py-5 text-white placeholder:text-dark-600 focus:outline-none focus:ring-4 focus:ring-nebula-500/20 transition-all font-black italic uppercase tracking-wider text-sm shadow-inner"
               />
             </div>
 
-            <div className="flex bg-dark-800/80 p-0.5 rounded-lg border border-dark-700/60 ml-2">
+            <div className="flex bg-white/5 p-1.5 rounded-2xl border border-white/10 shadow-inner">
               <button
                 onClick={() => setSource('modrinth')}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${source === 'modrinth'
-                  ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-dark-400 hover:text-white'
-                  }`}
+                className={`px-8 py-3.5 rounded-xl text-xs font-black uppercase italic tracking-[0.1em] transition-all relative overflow-hidden group/btn ${source === 'modrinth' ? 'bg-nebula-500 text-white shadow-lg shadow-nebula-500/30' : 'text-dark-500 hover:text-white'}`}
               >
-                Modrinth
+                MODRINTH
+                {source === 'modrinth' && <div className="absolute inset-0 bg-white/10 animate-pulse" />}
               </button>
               <button
                 onClick={() => setSource('curseforge')}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${source === 'curseforge'
-                  ? 'bg-amber-600 text-white shadow-sm'
-                  : 'text-dark-400 hover:text-white'
-                  }`}
+                className={`px-8 py-3.5 rounded-xl text-xs font-black uppercase italic tracking-[0.1em] transition-all relative overflow-hidden group/btn ${source === 'curseforge' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30' : 'text-dark-500 hover:text-white'}`}
               >
-                CurseForge
+                CURSEFORGE
+                {source === 'curseforge' && <div className="absolute inset-0 bg-white/10 animate-pulse" />}
               </button>
             </div>
 
             <select
               value={sortIndex}
               onChange={(e) => setSortIndex(e.target.value as any)}
-              className="bg-dark-800 border border-dark-700/80 rounded-lg p-2.5 text-white text-sm focus:ring-1 focus:ring-lumina-500 outline-none"
+              className="bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white text-[10px] font-black focus:outline-none focus:ring-4 focus:ring-nebula-500/20 outline-none appearance-none min-w-[180px] text-center uppercase tracking-[0.2em] italic cursor-pointer transition-all shadow-inner"
             >
-              <option value="relevance">Sort: Relevance</option>
-              <option value="downloads">Sort: Downloads</option>
-              <option value="follows">Sort: Followers</option>
-              <option value="newest">Sort: Newest</option>
-              <option value="updated">Sort: Updated</option>
+              <option value="relevance">RELEVANCE</option>
+              <option value="downloads">DOWNLOADS</option>
+              <option value="follows">FOLLOWERS</option>
+              <option value="newest">NEWEST</option>
+              <option value="updated">UPDATED</option>
             </select>
 
             <button
               onClick={handleRefresh}
               disabled={isLoading || hasActiveInstallation}
-              className={`btn-secondary transition-transform duration-75 group ${getAnimationClass('', 'hover:scale-105')
-                }`}
-              style={getAnimationStyle({})}
-              title={hasActiveInstallation ? t('modpacks.refreshDisabledDuringInstall') : t('modpacks.refresh')}
+              className="p-5 rounded-2xl bg-white/5 border border-white/10 text-dark-400 hover:text-nebula-400 hover:bg-white/10 hover:border-nebula-500/20 transition-all disabled:opacity-30 disabled:cursor-not-allowed group/refresh shadow-inner"
+              title={t('modpacks.refresh')}
             >
-              <RefreshCw className={`w-4 h-4 ${isLoading || isRefreshAnimating ? 'animate-spin' : ''} transition-transform duration-150`} />
+              <RefreshCw className={`w-6 h-6 ${isLoading || isRefreshAnimating ? 'animate-spin' : ''} transition-transform duration-500 group-hover/refresh:rotate-180`} />
             </button>
           </div>
         </div>
@@ -426,17 +402,20 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
           </div>
         ) : source === 'modrinth' ? (
           /* Modrinth List Grid */
-          <div className="p-6 flex flex-row-reverse gap-6 items-start">
+          <div className="p-10 flex flex-col lg:flex-row gap-12 items-start max-w-[1600px] mx-auto">
             {/* Left Sidebar: Filters */}
-            <div className="w-64 flex-shrink-0 space-y-6 bg-dark-800/40 p-4 rounded-xl border border-dark-700/60 sticky top-6">
+            <div className="w-full lg:w-80 flex-shrink-0 space-y-10 bg-white/[0.02] p-8 rounded-[3rem] border border-white/5 sticky top-40 backdrop-blur-3xl shadow-2xl">
               <div>
-                <h3 className="text-xs font-bold text-dark-400 uppercase tracking-wider mb-3">Minecraft Version</h3>
+                <h3 className="text-[10px] font-black text-dark-500 uppercase tracking-[0.3em] italic mb-6 flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-nebula-500" />
+                  MINECRAFT_VERSION
+                </h3>
                 <select
                   value={selectedVersion}
                   onChange={(e) => setSelectedVersion(e.target.value)}
-                  className="w-full bg-dark-800 border border-dark-700/80 rounded-lg p-2.5 text-white text-sm focus:ring-1 focus:ring-lumina-500 focus:border-lumina-500 outline-none"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white text-xs font-black uppercase italic tracking-widest focus:ring-4 focus:ring-nebula-500/20 outline-none appearance-none cursor-pointer transition-all"
                 >
-                  <option value="">All Versions</option>
+                  <option value="">ALL_VERSIONS</option>
                   {['1.21.1', '1.20.4', '1.20.1', '1.19.4', '1.19.2', '1.18.2', '1.16.5'].map(v => (
                     <option key={v} value={v}>{v}</option>
                   ))}
@@ -444,21 +423,24 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
               </div>
 
               <div>
-                <h3 className="text-xs font-bold text-dark-400 uppercase tracking-wider mb-3">Modloader</h3>
-                <div className="space-y-1">
+                <h3 className="text-[10px] font-black text-dark-500 uppercase tracking-[0.3em] italic mb-6 flex items-center gap-3">
+                   <div className="w-1.5 h-1.5 rounded-full bg-nebula-500" />
+                   MOD_LOADER
+                </h3>
+                <div className="space-y-3">
                   {[
-                    { id: '', label: 'All Loaders' },
-                    { id: 'fabric', label: 'Fabric' },
-                    { id: 'forge', label: 'Forge' },
-                    { id: 'neoforge', label: 'NeoForge' },
-                    { id: 'quilt', label: 'Quilt' }
+                    { id: '', label: 'ALL_LOADERS' },
+                    { id: 'fabric', label: 'FABRIC' },
+                    { id: 'forge', label: 'FORGE' },
+                    { id: 'neoforge', label: 'NEO_FORGE' },
+                    { id: 'quilt', label: 'QUILT' }
                   ].map(loader => (
                     <button
                       key={loader.id}
                       onClick={() => setSelectedLoader(loader.id)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${selectedLoader === loader.id
-                        ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 font-medium'
-                        : 'text-dark-200 hover:bg-dark-700/60 hover:text-white border border-transparent'
+                      className={`w-full text-left px-5 py-4 rounded-xl text-[10px] transition-all font-black uppercase tracking-[0.1em] italic border ${selectedLoader === loader.id
+                        ? 'bg-nebula-500/10 text-nebula-400 border-nebula-500/30 shadow-lg shadow-nebula-500/10 translate-x-1'
+                        : 'text-dark-500 hover:bg-white/5 hover:text-dark-300 border-transparent'
                         }`}
                     >
                       {loader.label}
@@ -468,8 +450,11 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
               </div>
 
               <div>
-                <h3 className="text-xs font-bold text-dark-400 uppercase tracking-wider mb-3">Categories</h3>
-                <div className="flex flex-wrap gap-1.5">
+                <h3 className="text-[10px] font-black text-dark-500 uppercase tracking-[0.3em] italic mb-6 flex items-center gap-3">
+                   <div className="w-1.5 h-1.5 rounded-full bg-nebula-500" />
+                   CATEGORIES
+                </h3>
+                <div className="flex flex-wrap gap-2.5">
                   {[
                     'Adventure', 'Magic', 'Tech', 'Exploration', 'Quest', 
                     'Optimization', 'Multiplayer', 'Vanilla+'
@@ -483,9 +468,9 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
                             : [...prev, cat]
                         );
                       }}
-                      className={`px-2.5 py-1.5 rounded-lg text-xs transition-colors border ${selectedCategories.includes(cat)
-                        ? 'bg-lumina-500/20 text-lumina-400 border-lumina-500/40 font-medium'
-                        : 'bg-dark-700/40 text-dark-300 border-dark-700 hover:bg-dark-700/80 hover:text-white'
+                      className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-[0.1em] italic transition-all border ${selectedCategories.includes(cat)
+                        ? 'bg-nebula-500 text-white border-white/20 shadow-lg shadow-nebula-500/30'
+                        : 'bg-white/5 text-dark-500 border-white/5 hover:bg-white/10 hover:text-dark-300'
                       }`}
                     >
                       {cat}
@@ -496,12 +481,15 @@ const ModpacksPage: React.FC<ModpacksPageProps> = ({ initialModpackId, onNavigat
             </div>
 
             {/* Right Pane: Grid */}
-            <div className="flex-1 space-y-4">
-              <div className="flex items-center space-x-2 border-b border-dark-700 pb-2">
-                <h2 className="text-xl font-bold text-white">Modrinth Modpacks</h2>
-                <span className="text-sm text-dark-400 bg-dark-700 px-2 py-0.5 rounded-full">
-                  {modrinthModpacks.length}
-                </span>
+            <div className="flex-1 space-y-8">
+              <div className="flex items-center justify-between border-b border-white/5 pb-6">
+                <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter transition-all duration-500 group-hover:translate-x-1">RESULTS</h2>
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-nebula-500 animate-pulse" />
+                  <span className="text-[10px] font-black text-nebula-400 bg-nebula-500/10 px-4 py-1.5 rounded-full border border-nebula-500/20 tracking-[0.2em] italic">
+                    {modrinthModpacks.length} DISCOVERED
+                  </span>
+                </div>
               </div>
 
             {modrinthModpacks.length === 0 && !isRemoteLoading ? (

@@ -105,7 +105,7 @@ class AuthService {
   }
 
   /**
-   * Sign out from LuminaKraft Account (Supabase session)
+   * Sign out from Nebula Account (Supabase session)
    * Note: This does NOT affect Microsoft Minecraft account (stored locally)
    */
   async signOutSupabase(): Promise<void> {
@@ -118,7 +118,7 @@ class AuthService {
       // Clear cached permission data
       this.clearPermissionCache();
 
-      console.log('✅ Signed out from LuminaKraft Account');
+      console.log('✅ Signed out from Nebula Account');
     } catch (error) {
       console.error('Error signing out from Supabase:', error);
       throw error;
@@ -194,7 +194,7 @@ class AuthService {
    * Sign in to LuminaKraft Account using web-based OAuth flow
    * Opens browser to /auth/sign-in with HTTP server callback
    */
-  async signInToLuminaKraftAccount(): Promise<boolean> {
+  async signInToNebulaAccount(): Promise<boolean> {
     try {
       // 1. Start HTTP server and get port
       const port = await invoke<number>('start_oauth_server');
@@ -289,7 +289,7 @@ class AuthService {
    * Sign up for LuminaKraft Account using web-based OAuth flow
    * Opens browser to /auth/sign-up with HTTP server callback
    */
-  async signUpLuminaKraftAccount(): Promise<boolean> {
+  async signUpNebulaAccount(): Promise<boolean> {
     try {
       console.log('Starting LuminaKraft Account sign up flow...');
 
@@ -327,7 +327,7 @@ class AuthService {
             if (error) {
               console.error('Failed to set Supabase session:', error);
             } else {
-              console.log('✅ LuminaKraft account created and authenticated');
+              console.log('✅ Nebula account created and authenticated');
 
               // Force refresh user
               const { data: { user } } = await supabase.auth.getUser();
@@ -396,12 +396,12 @@ class AuthService {
    */
   async syncMicrosoftData(microsoftAccount?: MicrosoftAccount): Promise<void> {
     try {
-      console.log('Attempting to sync LOCAL Minecraft data to LuminaKraft account...');
+      console.log('Attempting to sync LOCAL Minecraft data to Nebula account...');
 
       // 1. Get Microsoft Data (either passed or from local storage)
       let account = microsoftAccount;
       if (!account) {
-        const saved = localStorage.getItem('LuminaKraftLauncher_settings');
+        const saved = localStorage.getItem('NebulaLauncher_settings');
         if (saved) {
           const settings = JSON.parse(saved);
           if (settings.authMethod === 'microsoft' && settings.microsoftAccount) {
@@ -420,7 +420,7 @@ class AuthService {
       // 2. Get Supabase Session
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        console.log('No active LuminaKraft session. Skipping sync.');
+        console.log('No active Nebula session. Skipping sync.');
         return;
       }
 
@@ -445,7 +445,7 @@ class AuthService {
       if (error) {
         console.error('Failed to sync Microsoft data to DB:', error);
       } else {
-        console.log('✅ Minecraft profile data synced to LuminaKraft account successfully');
+        console.log('✅ Minecraft profile data synced to Nebula account successfully');
         this.emitProfileUpdate();
       }
 
@@ -456,7 +456,7 @@ class AuthService {
 
   /**
    * Authenticate Microsoft account for Minecraft premium only (local storage)
-   * This does NOT create a LuminaKraft account - use signInToLuminaKraftAccount() for that
+   * This does NOT create a Nebula account - use signInToNebulaAccount() for that
    */
   async authenticateMicrosoftMinecraft(): Promise<MicrosoftAccount> {
     const account = await this.authenticateWithMicrosoftModal();
@@ -476,7 +476,7 @@ class AuthService {
       // Step 2: Complete authentication with the code
       const account = await invoke<MicrosoftAccount>('authenticate_microsoft', { code: authCode });
 
-      // Sync with LuminaKraft account if logged in
+      // Sync with Nebula account if logged in
       await this.syncMicrosoftData(account);
 
       return account;
@@ -1172,7 +1172,7 @@ class AuthService {
       console.log(`OAuth server started on port ${port}`);
 
       // Construct redirect URL with port
-      const redirectUrl = `https://luminakraft.com/auth-callback?launcher=true&port=${port}`;
+      const redirectUrl = `https://nebula.gg/auth-callback?launcher=true&port=${port}`;
 
       // 2. Set up event listener for oauth callback
       const unlisten = await listen<{
@@ -1453,7 +1453,7 @@ class AuthService {
    */
   private getAnonymousUsernameFromLocalStorage(): string | null {
     try {
-      const saved = localStorage.getItem('LuminaKraftLauncher_settings');
+      const saved = localStorage.getItem('NebulaLauncher_settings');
       if (saved) {
         const settings = JSON.parse(saved);
         return settings.username || null;
@@ -1466,7 +1466,7 @@ class AuthService {
 
   private emitProfileUpdate() {
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('luminakraft:profile-updated'));
+      window.dispatchEvent(new CustomEvent('nebula:profile-updated'));
     }
   }
 }

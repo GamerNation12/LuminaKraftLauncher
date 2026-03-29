@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { invoke } from '@tauri-apps/api/core';
-import { User, Trash2 } from 'lucide-react';
+import { User, Trash2, Shield, Globe, ExternalLink, Mail, Lock, ChevronRight, LogOut, Disc } from 'lucide-react';
 import AuthService from '../../services/authService';
 import ProfileEditor from '../Settings/ProfileEditor';
 import { ConfirmDialog } from '../Common/ConfirmDialog';
@@ -9,9 +9,11 @@ import { LoadingModal } from '../Common/LoadingModal';
 import type { DiscordAccount } from '../../types/launcher';
 import toast from 'react-hot-toast';
 import { supabase } from '../../services/supabaseClient';
+import { useAnimation } from '../../contexts/AnimationContext';
 
 const AccountPage: React.FC = () => {
   const { t } = useTranslation();
+  const { getAnimationStyle } = useAnimation();
   const [luminaKraftUser, setLuminaKraftUser] = useState<any>(null);
   const [discordAccount, setDiscordAccount] = useState<DiscordAccount | null>(null);
   const [linkedProviders, setLinkedProviders] = useState<{ provider: string; email?: string; id: string }[]>([]);
@@ -354,33 +356,32 @@ const AccountPage: React.FC = () => {
 
   if (isLoadingLuminaKraft) {
     return (
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="p-10 max-w-5xl mx-auto w-full custom-scrollbar overflow-y-auto h-full">
         {/* Title skeleton */}
-        <div className="h-9 w-32 bg-dark-700 rounded mb-6 animate-pulse" />
+        <div className="h-10 w-48 bg-white/5 rounded-2xl animate-pulse mb-10 border border-white/5" />
 
         {/* Account card skeleton */}
-        <div className="bg-dark-900 rounded-lg p-6 border border-dark-700 animate-pulse">
+        <div className="bg-white/[0.02] backdrop-blur-3xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl animate-pulse">
           {/* Header skeleton */}
-          <div className="flex items-center space-x-3 mb-6">
-            <div className="w-6 h-6 bg-dark-700 rounded" />
-            <div className="h-6 w-40 bg-dark-700 rounded" />
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-12 h-12 bg-white/5 rounded-2xl border border-white/5" />
+            <div className="h-8 w-64 bg-white/5 rounded-2xl" />
           </div>
 
           {/* Profile section skeleton */}
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="w-16 h-16 bg-dark-700 rounded-full" />
-            <div className="flex-1">
-              <div className="h-5 w-32 bg-dark-700 rounded mb-2" />
-              <div className="h-4 w-48 bg-dark-700 rounded" />
+          <div className="flex items-center gap-8 mb-10 p-8 bg-white/5 rounded-3xl border border-white/5">
+            <div className="w-24 h-24 bg-white/5 rounded-full border-4 border-white/5" />
+            <div className="flex-1 space-y-3">
+              <div className="h-6 w-48 bg-white/5 rounded-xl" />
+              <div className="h-4 w-64 bg-white/5 rounded-xl" />
             </div>
           </div>
 
           {/* Linked accounts skeleton */}
-          <div className="h-4 w-28 bg-dark-700 rounded mb-3" />
-          <div className="space-y-2">
-            <div className="h-14 bg-dark-700/50 rounded-lg" />
-            <div className="h-14 bg-dark-700/50 rounded-lg" />
-            <div className="h-14 bg-dark-700/50 rounded-lg" />
+          <div className="h-4 w-32 bg-white/5 rounded-full mb-6 mx-2" />
+          <div className="space-y-4">
+            <div className="h-20 bg-white/5 rounded-3xl border border-white/5" />
+            <div className="h-20 bg-white/5 rounded-3xl border border-white/5" />
           </div>
         </div>
       </div>
@@ -388,7 +389,7 @@ const AccountPage: React.FC = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-10 max-w-5xl mx-auto w-full h-full custom-scrollbar overflow-y-auto">
       <ConfirmDialog
         isOpen={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
@@ -408,22 +409,32 @@ const AccountPage: React.FC = () => {
         confirmText={t('auth.signOut')}
       />
 
-      <h1 className="text-3xl font-bold text-white mb-6">Account</h1>
+      <div className="mb-12" style={getAnimationStyle({})}>
+        <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter mb-3">COMMAND_ACCOUNT</h1>
+        <p className="text-dark-500 font-black text-[10px] uppercase tracking-[0.2em] italic px-1 opacity-60">
+          NEBULA_DEEP_SPACE_IDENTITY_MANAGEMENT
+        </p>
+      </div>
 
-      {/* LuminaKraft Account Section */}
-      <div className="bg-dark-900 rounded-lg p-6 border border-dark-700 mb-6">
-        <div className="flex items-center space-x-3 mb-6">
-          <User className="w-6 h-6 text-lumina-500" />
-          <h2 className="text-white text-xl font-semibold">{t('settings.luminakraftAccount')}</h2>
+      {/* Nebula Account Section */}
+      <div
+        className="bg-white/[0.02] backdrop-blur-3xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10 mb-10"
+        style={getAnimationStyle({})}
+      >
+        <div className="flex items-center gap-4 mb-10">
+          <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+            <User className="w-6 h-6 text-nebula-400" />
+          </div>
+          <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">NEBULA_IDENTITY</h2>
         </div>
 
         {isLoadingLuminaKraft ? (
-          <div className="flex flex-col items-center justify-center p-12 bg-dark-700 rounded-lg border border-dark-600">
-            <div className="relative w-12 h-12 mb-4">
-              <div className="absolute inset-0 rounded-full border-2 border-dark-600"></div>
-              <div className="absolute inset-0 rounded-full border-2 border-t-primary-500 animate-spin"></div>
+          <div className="flex flex-col items-center justify-center p-12 bg-white/5 rounded-3xl border border-white/5 animate-pulse">
+            <div className="relative w-16 h-16 mb-6">
+              <div className="absolute inset-0 rounded-full border-4 border-white/5"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-t-nebula-500 animate-spin"></div>
             </div>
-            <p className="text-dark-400 text-sm">{t('common.loading')}</p>
+            <p className="text-dark-500 font-black text-[10px] uppercase italic tracking-[0.2em]">{t('common.loading')}</p>
           </div>
         ) : luminaKraftUser ? (
           <>
@@ -433,41 +444,45 @@ const AccountPage: React.FC = () => {
               onUpdate={handleProfileUpdate}
             />
 
-            <div className="mt-6">
-              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{t('settings.linkedAccounts')}</h3>
+            <div className="mt-12">
+              <div className="flex items-center gap-4 mb-6 px-1">
+                <Shield className="w-4 h-4 text-nebula-400" />
+                <h3 className="text-[10px] font-black text-dark-500 uppercase tracking-[0.2em] italic">{t('settings.linkedAccounts')}</h3>
+              </div>
 
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Discord */}
                 {discordAccount ? (
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between p-3 bg-dark-700/50 rounded-lg border border-dark-600">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 rounded-full bg-[#5865F2] flex items-center justify-center">
-                          <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 3.42 3.42 0 0 0-.623 1.281 18.346 18.346 0 0 0-5.462 0 2.79 2.79 0 0 0-.623-1.281.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.086 2.176 2.419 0 1.334-.966 2.419-2.176 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.086 2.176 2.419 0 1.334-.966 2.419-2.176 2.419z" />
-                          </svg>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/5 shadow-inner group transition-all hover:bg-white/10">
+                      <div className="flex items-center gap-5">
+                        <div className="w-12 h-12 rounded-2xl bg-[#5865F2] flex items-center justify-center shadow-lg shadow-[#5865F2]/20 rotate-3 group-hover:rotate-0 transition-transform">
+                          <Disc className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                          <p className="font-medium text-white">Discord</p>
-                          <p className="text-xs text-gray-400">{discordAccount.username}</p>
+                          <p className="font-black text-white italic tracking-tighter">DISCORD</p>
+                          <p className="text-[10px] text-dark-500 font-bold uppercase tracking-widest">{discordAccount.username}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-4">
                         {discordAccount.isMember ? (
-                          <span className="text-xs px-2 py-1 rounded bg-green-500/20 text-green-400">{t('auth.discordMemberYes')}</span>
+                          <div className="p-2 bg-nebula-500/10 border border-nebula-500/20 rounded-xl">
+                            <Shield className="w-4 h-4 text-nebula-400" />
+                          </div>
                         ) : (
-                          <span className="text-xs px-2 py-1 rounded bg-yellow-500/20 text-yellow-400">{t('auth.discordMemberNo')}</span>
+                          <div className="p-2 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
+                            <Lock className="w-4 h-4 text-yellow-400" />
+                          </div>
                         )}
                         <button
                           onClick={() => handleUnlinkProvider('discord')}
                           disabled={!canUnlink}
-                          title={!canUnlink ? (t('auth.cannotUnlinkOnlyProvider') || 'Cannot unlink only provider') : ''}
-                          className={`text-sm font-medium px-3 py-1 rounded transition-colors ${canUnlink
-                            ? 'text-red-400 hover:text-red-300 hover:bg-red-400/10'
-                            : 'text-gray-600 cursor-not-allowed'
+                          className={`p-3 rounded-xl transition-all ${canUnlink
+                            ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 active:scale-95'
+                            : 'bg-white/5 text-dark-500 opacity-20 cursor-not-allowed'
                             }`}
                         >
-                          Unlink
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
@@ -482,201 +497,194 @@ const AccountPage: React.FC = () => {
                             window.open('https://discord.gg/UJZRrcUFMj', '_blank', 'noopener,noreferrer');
                           }
                         }}
-                        className="w-full p-3 bg-[#5865F2] hover:bg-[#4752C4] rounded-lg transition-colors flex items-center justify-center gap-2 group"
+                        className="w-full px-6 py-4 bg-[#5865F2] hover:bg-[#4752C4] rounded-2xl transition-all shadow-xl shadow-[#5865F2]/20 flex items-center justify-between group active:scale-[0.98]"
                       >
-                        <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 3.42 3.42 0 0 0-.623 1.281 18.346 18.346 0 0 0-5.462 0 2.79 2.79 0 0 0-.623-1.281.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.086 2.176 2.419 0 1.334-.966 2.419-2.176 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.086 2.176 2.419 0 1.334-.966 2.419-2.176 2.419z" />
-                        </svg>
-                        <span className="text-white font-medium">{t('auth.joinDiscordServer')}</span>
-                        <span className="text-xs text-white/70">(50 downloads/h)</span>
+                        <div className="flex items-center gap-4">
+                          <Globe className="w-5 h-5 text-white/80 group-hover:animate-pulse" />
+                          <span className="text-white font-black text-xs uppercase italic tracking-widest">{t('auth.joinDiscordServer')}</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-1 bg-white/20 rounded-lg">
+                          <span className="text-[10px] text-white font-black italic">50x_SYNC</span>
+                        </div>
                       </button>
                     )}
                   </div>
                 ) : (
                   <button
                     onClick={handleLinkDiscord}
-                    className="w-full p-3 border border-dashed border-dark-600 rounded-lg hover:border-dark-500 hover:bg-dark-700/50 transition-colors flex items-center justify-between group"
+                    className="w-full p-6 border-2 border-dashed border-white/5 rounded-[2rem] hover:border-nebula-500/30 hover:bg-nebula-500/5 transition-all flex items-center justify-between group"
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-[#5865F2]/20 group-hover:bg-[#5865F2]/30 flex items-center justify-center transition-colors">
-                        <svg className="w-5 h-5 text-[#5865F2]" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 3.42 3.42 0 0 0-.623 1.281 18.346 18.346 0 0 0-5.462 0 2.79 2.79 0 0 0-.623-1.281.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.086 2.176 2.419 0 1.334-.966 2.419-2.176 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.086 2.176 2.419 0 1.334-.966 2.419-2.176 2.419z" />
-                        </svg>
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 group-hover:bg-[#5865F2]/20 flex items-center justify-center transition-all">
+                        <Disc className="w-6 h-6 text-dark-500 group-hover:text-[#5865F2]" />
                       </div>
-                      <span className="text-dark-300 group-hover:text-white transition-colors font-medium">Discord</span>
+                      <span className="text-dark-500 group-hover:text-white transition-colors font-black text-xs uppercase italic tracking-widest">CONNECT_DISCORD</span>
                     </div>
-                    <span className="text-xs text-gray-500">Not linked</span>
+                    <ChevronRight className="w-5 h-5 text-dark-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
                   </button>
                 )}
 
                 {/* GitHub */}
                 {linkedProviders.find(p => p.provider === 'github') ? (
-                  <div className="flex items-center justify-between p-3 bg-dark-700/50 rounded-lg border border-dark-600">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center">
-                        <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.137 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
-                        </svg>
+                  <div className="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/5 shadow-inner group transition-all hover:bg-white/10">
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-black flex items-center justify-center border border-white/10 shadow-lg shadow-black/20 group-hover:rotate-3 transition-transform">
+                        <Mail className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <p className="font-medium text-white">GitHub</p>
-                        <p className="text-xs text-gray-400">{linkedProviders.find(p => p.provider === 'github')?.email || 'Connected'}</p>
+                        <p className="font-black text-white italic tracking-tighter">GITHUB</p>
+                        <p className="text-[10px] text-dark-500 font-bold uppercase tracking-widest">{linkedProviders.find(p => p.provider === 'github')?.email || 'Connected'}</p>
                       </div>
                     </div>
                     <button
                       onClick={() => handleUnlinkProvider('github')}
                       disabled={!canUnlink}
-                      title={!canUnlink ? (t('auth.cannotUnlinkOnlyProvider') || 'Cannot unlink only provider') : ''}
-                      className={`text-sm font-medium px-3 py-1 rounded transition-colors ${canUnlink
-                        ? 'text-red-400 hover:text-red-300 hover:bg-red-400/10'
-                        : 'text-gray-600 cursor-not-allowed'
+                      className={`p-3 rounded-xl transition-all ${canUnlink
+                        ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 active:scale-95'
+                        : 'bg-white/5 text-dark-500 opacity-20 cursor-not-allowed'
                         }`}
                     >
-                      Unlink
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 ) : (
                   <button
                     onClick={() => handleLinkProvider('github')}
-                    className="w-full p-3 border border-dashed border-dark-600 rounded-lg hover:border-dark-500 hover:bg-dark-700/50 transition-colors flex items-center justify-between group"
+                    className="w-full p-6 border-2 border-dashed border-white/5 rounded-[2rem] hover:border-nebula-500/30 hover:bg-nebula-500/5 transition-all flex items-center justify-between group"
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-gray-900/20 group-hover:bg-gray-900/30 flex items-center justify-center transition-colors">
-                        <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.137 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
-                        </svg>
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 group-hover:bg-black/20 flex items-center justify-center transition-all">
+                        <Mail className="w-6 h-6 text-dark-500 group-hover:text-white" />
                       </div>
-                      <span className="text-dark-300 group-hover:text-white transition-colors font-medium">GitHub</span>
+                      <span className="text-dark-500 group-hover:text-white transition-colors font-black text-xs uppercase italic tracking-widest">CONNECT_GITHUB</span>
                     </div>
-                    <span className="text-xs text-gray-500">Not linked</span>
+                    <ChevronRight className="w-5 h-5 text-dark-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
                   </button>
                 )}
 
                 {/* Google */}
                 {linkedProviders.find(p => p.provider === 'google') ? (
-                  <div className="flex items-center justify-between p-3 bg-dark-700/50 rounded-lg border border-dark-600">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
-                        <svg className="w-5 h-5" viewBox="0 0 24 24">
-                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                        </svg>
+                  <div className="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/5 shadow-inner group transition-all hover:bg-white/10">
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg shadow-white/5 group-hover:-rotate-3 transition-transform">
+                        <ExternalLink className="w-6 h-6 text-[#4285F4]" />
                       </div>
                       <div>
-                        <p className="font-medium text-white">Google</p>
-                        <p className="text-xs text-gray-400">{linkedProviders.find(p => p.provider === 'google')?.email || 'Connected'}</p>
+                        <p className="font-black text-white italic tracking-tighter">GOOGLE</p>
+                        <p className="text-[10px] text-dark-500 font-bold uppercase tracking-widest">{linkedProviders.find(p => p.provider === 'google')?.email || 'Connected'}</p>
                       </div>
                     </div>
                     <button
                       onClick={() => handleUnlinkProvider('google')}
                       disabled={!canUnlink}
-                      title={!canUnlink ? (t('auth.cannotUnlinkOnlyProvider') || 'Cannot unlink only provider') : ''}
-                      className={`text-sm font-medium px-3 py-1 rounded transition-colors ${canUnlink
-                        ? 'text-red-400 hover:text-red-300 hover:bg-red-400/10'
-                        : 'text-gray-600 cursor-not-allowed'
+                      className={`p-3 rounded-xl transition-all ${canUnlink
+                        ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 active:scale-95'
+                        : 'bg-white/5 text-dark-500 opacity-20 cursor-not-allowed'
                         }`}
                     >
-                      Unlink
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 ) : (
                   <button
                     onClick={() => handleLinkProvider('google')}
-                    className="w-full p-3 border border-dashed border-dark-600 rounded-lg hover:border-dark-500 hover:bg-dark-700/50 transition-colors flex items-center justify-between group"
+                    className="w-full p-6 border-2 border-dashed border-white/5 rounded-[2rem] hover:border-nebula-500/30 hover:bg-nebula-500/5 transition-all flex items-center justify-between group"
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-white/20 group-hover:bg-white/30 flex items-center justify-center transition-colors">
-                        <svg className="w-5 h-5" viewBox="0 0 24 24">
-                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                        </svg>
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 group-hover:bg-white/10 flex items-center justify-center transition-all">
+                        <ExternalLink className="w-6 h-6 text-dark-500 group-hover:text-[#4285F4]" />
                       </div>
-                      <span className="text-dark-300 group-hover:text-white transition-colors font-medium">Google</span>
+                      <span className="text-dark-500 group-hover:text-white transition-colors font-black text-xs uppercase italic tracking-widest">CONNECT_GOOGLE</span>
                     </div>
-                    <span className="text-xs text-gray-500">Not linked</span>
+                    <ChevronRight className="w-5 h-5 text-dark-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
                   </button>
                 )}
 
                 {/* Microsoft/Azure */}
                 {linkedProviders.find(p => p.provider === 'azure') ? (
-                  <div className="flex items-center justify-between p-3 bg-dark-700/50 rounded-lg border border-dark-600">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-[#00A4EF] flex items-center justify-center">
-                        <svg className="w-5 h-5 text-white" viewBox="0 0 23 23" fill="currentColor">
-                          <path d="M0 0h10.377v10.377H0zm12.623 0H23v10.377H12.623zM0 12.623h10.377V23H0zm12.623 0H23V23H12.623z" />
-                        </svg>
+                  <div className="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/5 shadow-inner group transition-all hover:bg-white/10">
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-[#00A4EF] flex items-center justify-center shadow-lg shadow-[#00A4EF]/20 group-hover:rotate-6 transition-transform">
+                        <Lock className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <p className="font-medium text-white">Microsoft</p>
-                        <p className="text-xs text-gray-400">{linkedProviders.find(p => p.provider === 'azure')?.email || 'Connected'}</p>
+                        <p className="font-black text-white italic tracking-tighter">MICROSOFT</p>
+                        <p className="text-[10px] text-dark-500 font-bold uppercase tracking-widest">{linkedProviders.find(p => p.provider === 'azure')?.email || 'Connected'}</p>
                       </div>
                     </div>
                     <button
                       onClick={() => handleUnlinkProvider('azure')}
                       disabled={!canUnlink}
-                      title={!canUnlink ? (t('auth.cannotUnlinkOnlyProvider') || 'Cannot unlink only provider') : ''}
-                      className={`text-sm font-medium px-3 py-1 rounded transition-colors ${canUnlink
-                        ? 'text-red-400 hover:text-red-300 hover:bg-red-400/10'
-                        : 'text-gray-600 cursor-not-allowed'
+                      className={`p-3 rounded-xl transition-all ${canUnlink
+                        ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 active:scale-95'
+                        : 'bg-white/5 text-dark-500 opacity-20 cursor-not-allowed'
                         }`}
                     >
-                      Unlink
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 ) : (
                   <button
                     onClick={() => handleLinkProvider('azure')}
-                    className="w-full p-3 border border-dashed border-dark-600 rounded-lg hover:border-dark-500 hover:bg-dark-700/50 transition-colors flex items-center justify-between group"
+                    className="w-full p-6 border-2 border-dashed border-white/5 rounded-[2rem] hover:border-nebula-500/30 hover:bg-nebula-500/5 transition-all flex items-center justify-between group"
                   >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-[#00A4EF]/20 group-hover:bg-[#00A4EF]/30 flex items-center justify-center transition-colors">
-                        <svg className="w-5 h-5 text-[#00A4EF]" viewBox="0 0 23 23" fill="currentColor">
-                          <path d="M0 0h10.377v10.377H0zm12.623 0H23v10.377H12.623zM0 12.623h10.377V23H0zm12.623 0H23V23H12.623z" />
-                        </svg>
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 group-hover:bg-[#00A4EF]/20 flex items-center justify-center transition-all">
+                        <Lock className="w-6 h-6 text-dark-500 group-hover:text-[#00A4EF]" />
                       </div>
-                      <span className="text-dark-300 group-hover:text-white transition-colors font-medium">Microsoft</span>
+                      <span className="text-dark-300 group-hover:text-white transition-colors font-black text-xs uppercase italic tracking-widest">CONNECT_MICROSOFT</span>
                     </div>
-                    <span className="text-xs text-gray-500">Not linked</span>
+                    <ChevronRight className="w-5 h-5 text-dark-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
                   </button>
                 )}
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-dark-700 flex flex-col gap-2">
-              <button onClick={handleSignOutFromLuminaKraft} className="w-full btn-secondary text-sm">
-                {t('auth.signOut')}
-              </button>
-
-              <div className="pt-2">
-                <h3 className="text-xs font-bold text-red-400/70 uppercase tracking-wider mb-2">{t('settings.dangerZone')}</h3>
-                <button onClick={handleDeleteAccount} className="text-sm text-red-400 hover:text-red-300 transition-colors flex items-center space-x-2">
-                  <Trash2 className="w-4 h-4" />
-                  <span>{t('settings.deleteAccount')}</span>
+            <div className="mt-16 pt-10 border-t border-white/5">
+              <div className="flex flex-col md:flex-row gap-6">
+                <button
+                  onClick={handleSignOutFromLuminaKraft}
+                  className="flex-1 px-8 py-5 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all border border-white/5 flex items-center justify-center gap-3 group active:scale-[0.98]"
+                >
+                  <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-all" />
+                  {t('auth.signOut')}
                 </button>
+
+                <div className="flex-1 bg-red-500/5 rounded-[2rem] p-8 border border-red-500/10 relative overflow-hidden group/danger">
+                  <div className="absolute top-0 right-0 p-4 opacity-10">
+                    <Trash2 className="w-16 h-16 text-red-500" />
+                  </div>
+                  <h3 className="text-[10px] font-black text-red-500/70 uppercase tracking-[0.2em] italic mb-4">{t('settings.dangerZone')}</h3>
+                  <button
+                    onClick={handleDeleteAccount}
+                    className="text-xs font-black text-red-400 hover:text-red-300 uppercase italic tracking-widest transition-all flex items-center gap-3"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    <span>{t('settings.deleteAccount')}</span>
+                  </button>
+                </div>
               </div>
             </div>
           </>
         ) : (
-          <div className="flex flex-col items-center justify-center p-6 bg-dark-700 rounded-lg border border-dark-600">
-            <User className="w-12 h-12 text-dark-400 mb-4" />
-            <h3 className="text-lg font-medium text-white mb-2">{t('settings.accountAccess')}</h3>
-            <p className="text-dark-400 text-center mb-6 max-w-sm">
+          <div className="flex flex-col items-center justify-center p-16 bg-white/5 rounded-[3rem] border border-white/5 shadow-inner">
+            <div className="w-24 h-24 bg-nebula-500/10 rounded-[2rem] flex items-center justify-center mb-8 border border-nebula-500/20 shadow-2xl shadow-nebula-500/10">
+              <User className="w-10 h-10 text-nebula-400" />
+            </div>
+            <h3 className="text-3xl font-black text-white italic tracking-tighter mb-4">{t('settings.accountAccess')}</h3>
+            <p className="text-dark-500 text-center mb-10 max-w-sm font-medium italic leading-relaxed">
               {t('settings.luminakraftAccountHelp')}
             </p>
-            <div className="flex space-x-4 w-full max-w-xs">
+            <div className="flex gap-6 w-full max-w-md">
               <button
                 onClick={handleSignInToLuminaKraft}
-                className="flex-1 btn-primary"
+                className="flex-1 px-8 py-5 bg-nebula-500 hover:bg-nebula-600 text-white rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all shadow-xl shadow-nebula-500/20 active:scale-95"
               >
                 {t('auth.signIn')}
               </button>
               <button
                 onClick={handleSignUpToLuminaKraft}
-                className="flex-1 btn-secondary"
+                className="flex-1 px-8 py-5 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all border border-white/5 active:scale-95"
               >
                 {t('auth.signUp')}
               </button>

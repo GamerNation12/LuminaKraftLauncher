@@ -7,7 +7,7 @@ use std::sync::Mutex;
 pub struct CoreState(pub Mutex<Option<ChildStdin>>);
 
 #[tauri::command]
-pub async fn start_lumina_core(app: AppHandle, state: State<'_, CoreState>) -> Result<String, String> {
+pub async fn start_nebula_core(app: AppHandle, state: State<'_, CoreState>) -> Result<String, String> {
     // The exact path built by Qt Creator
     let exe_path = r"C:\Users\minec\Documents\GitHub\LuminaKraftLauncher\cpp-core\build_final\NebulaCore.exe";
     
@@ -16,7 +16,7 @@ pub async fn start_lumina_core(app: AppHandle, state: State<'_, CoreState>) -> R
         .stdout(Stdio::piped())
         .spawn() {
             Ok(c) => c,
-            Err(e) => return Err(format!("Failed to spawn LuminaCore: {}", e)),
+            Err(e) => return Err(format!("Failed to spawn NebulaCore: {}", e)),
         };
 
     let stdin = child.stdin.take().expect("Failed to open stdin");
@@ -30,18 +30,18 @@ pub async fn start_lumina_core(app: AppHandle, state: State<'_, CoreState>) -> R
         let reader = BufReader::new(stdout);
         for line in reader.lines() {
             if let Ok(line_content) = line {
-                println!("LuminaCore Output: {}", line_content);
+                println!("NebulaCore Output: {}", line_content);
                 // Emit event to React Frontend!
-                let _ = app_handle.emit("lumina-core-event", line_content);
+                let _ = app_handle.emit("nebula-core-event", line_content);
             }
         }
     });
 
-    Ok("LuminaCore connected".to_string())
+    Ok("NebulaCore connected".to_string())
 }
 
 #[tauri::command]
-pub async fn send_lumina_command(command_json: String, state: State<'_, CoreState>) -> Result<(), String> {
+pub async fn send_nebula_command(command_json: String, state: State<'_, CoreState>) -> Result<(), String> {
     let mut stdin_guard = state.0.lock().unwrap();
     if let Some(stdin) = stdin_guard.as_mut() {
         if let Err(e) = writeln!(stdin, "{}", command_json) {
@@ -49,6 +49,6 @@ pub async fn send_lumina_command(command_json: String, state: State<'_, CoreStat
         }
         Ok(())
     } else {
-        Err("LuminaCore is not running".to_string())
+        Err("NebulaCore is not running".to_string())
     }
 }

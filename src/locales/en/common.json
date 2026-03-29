@@ -509,12 +509,12 @@
     "partnerRole": "Partner Role",
     "canPublishPartnerModpacks": "You can publish partner modpacks",
     "rolesNeedSync": "Your roles haven't been synced in a while. Click 'Sync Roles' to refresh.",
-    "discordLinkDescription": "Link your Discord account to access exclusive features and publish modpacks to the LuminaKraft community.",
+    "discordLinkDescription": "Link your Discord account to access exclusive features and publish modpacks to the Nebula community.",
     "whyLinkDiscord": "Why link Discord?",
     "discordBenefit1": "Publish your own modpacks to the community",
     "discordBenefit2": "Get partner benefits and special roles",
     "discordBenefit3": "Join our community and get support",
-    "confirmSignOut": "Are you sure you want to sign out of your LuminaKraft account?",
+    "confirmSignOut": "Are you sure you want to sign out of your Nebula account?",
     "confirmDeleteAccount": "Are you sure you want to delete your account? This action cannot be undone.",
     "accountDeleted": "Account deleted successfully",
     "deleteAccountFailed": "Failed to delete account",
@@ -640,7 +640,7 @@
     "alphaDesc": "This alpha version may contain bugs and is intended for early testing. Use with caution.",
     "betaDesc": "This beta version is more stable than alpha but may still contain issues.",
     "rcDesc": "This release candidate is near final quality but should still be tested before production use.",
-    "newVersionDesc": "A new version of LuminaKraft Launcher is available!",
+    "newVersionDesc": "A new version of Nebula Launcher is available!",
     "currentVersion": "Current Version:",
     "latestVersion": "Latest Version:",
     "whatsNew": "What's New:",
@@ -694,7 +694,7 @@
     "linkDiscordDesc": "Increase your limit by linking Discord.",
     "linkDiscordAuthDesc": "Sign in and link Discord for more downloads.",
     "joinDiscord": "Join Discord Server",
-    "joinDiscordDesc": "Join the LuminaKraft Discord server to unlock 50 downloads per hour! You've linked your Discord account, now join our community to get the full benefits.",
+    "joinDiscordDesc": "Join the Nebula Discord server to unlock 50 downloads per hour! You've linked your Discord account, now join our community to get the full benefits.",
     "limitReached": "You've reached your download limit of {{limit}} downloads per hour.",
     "benefit1": "50 downloads per hour (vs 3 for anonymous)",
     "benefit2": "Publish your own modpacks",
@@ -708,7 +708,7 @@
     "loading": "Loading...",
     "auth": {
       "title": "Publish Modpacks",
-      "description": "Share your custom modpacks with the entire LuminaKraft community. Publish, manage, and track your modpacks all in one place.",
+      "description": "Share your custom modpacks with the entire Nebula community. Publish, manage, and track your modpacks all in one place.",
       "required": "Discord Account Required",
       "requiredDesc": "To publish and manage modpacks, you need to link your Discord account and join our Discord server. This ensures you're part of our community and allows you to manage your published content.",
       "benefits": {
@@ -721,7 +721,7 @@
       "goToMyModpacks": "Go to My Modpacks →",
       "joinServer": {
         "title": "Join Our Discord Server",
-        "description": "You must be a member of the LuminaKraft Discord server to publish modpacks.",
+        "description": "You must be a member of the Nebula Discord server to publish modpacks.",
         "descriptionCta": "Join our community to unlock publishing features!",
         "button": "Join Discord Server",
         "refreshButton": "I've Joined - Refresh Status"
@@ -865,7 +865,7 @@
     "category": {
       "title": "Category",
       "official": "Official Modpack",
-      "officialDesc": "Official LuminaKraft modpacks managed by the team.",
+      "officialDesc": "Official Nebula modpacks managed by the team.",
       "partner": "Partner Modpack",
       "partnerDesc": "Exclusive modpacks from verified partners.",
       "partnerInfo": "Partner: {{name}}",
@@ -1069,7 +1069,7 @@
       "discordRequired": "Discord Account Required",
       "discordRequiredDesc": "You need to link your Discord account to publish modpacks.",
       "joinServer": "Join Our Discord Server",
-      "joinServerDesc": "You must be a member of the LuminaKraft Discord server to publish modpacks.",
+      "joinServerDesc": "You must be a member of the Nebula Discord server to publish modpacks.",
       "comingSoonTitle": "Community Publishing Coming Soon",
       "comingSoonDesc": "Community modpack publishing is currently disabled while we finalize the feature.",
       "comingSoonNote": "Currently, only <strong>Partners</strong> and <strong>Admins</strong> can publish modpacks. Stay tuned for updates!"

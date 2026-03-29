@@ -11,7 +11,7 @@ interface ScreenshotGalleryProps {
 
 const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, modpackName, variant = 'default' }) => {
   const { t } = useTranslation();
-  const { getAnimationClass, getAnimationStyle, withDelay } = useAnimation();
+  const { getAnimationStyle, withDelay } = useAnimation();
   const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [imageModalOpen, setImageModalOpen] = useState(false);
@@ -121,45 +121,43 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
     <>
       {/* PC-Friendly Screenshots Carousel */}
       <div
-        className={`bg-dark-800 rounded-xl p-6 border border-dark-700 mb-8 transition-all duration-75 ${getAnimationClass('', 'hover:border-lumina-400/30')}`}
+        className="bg-white/[0.02] backdrop-blur-xl rounded-[2rem] p-8 border border-white/5 mb-8 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
         style={{
           animation: 'fadeInUp 0.15s ease-out 0.05s backwards',
           ...getAnimationStyle({}),
         }}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
           <div>
-            <h2 className="text-xl font-bold text-white mb-2">{t('modpacks.screenshots')}</h2>
-            <p className="text-dark-400 text-sm">
+            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-1">{t('modpacks.screenshots')}</h2>
+            <p className="text-dark-500 text-[10px] font-black uppercase tracking-widest italic px-1">
               {images.length} {t('modpacks.imagesAvailable')}
             </p>
           </div>
 
           {/* Navigation controls */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center sm:justify-end space-x-3">
+            <div className="flex items-center justify-center sm:justify-end gap-4">
               <button
                 onClick={prevCarouselPage}
                 disabled={currentCarouselIndex === 0}
-                className={`w-10 h-10 bg-dark-700 hover:bg-lumina-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center transition-colors duration-150 ${getAnimationClass('', 'hover:scale-105')}`}
+                className="w-12 h-12 bg-white/5 hover:bg-nebula-500 border border-white/5 hover:border-nebula-400 disabled:opacity-20 disabled:cursor-not-allowed text-white rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl"
                 style={getAnimationStyle({})}
-                title="Página anterior"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-6 h-6" />
               </button>
 
               {/* Page indicators */}
-              <div className="flex space-x-2">
+              <div className="flex gap-2">
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button
                     key={i}
                     onClick={() => goToCarouselPage(i)}
-                    className={`w-3 h-3 rounded-full transition-all duration-200 ${i === currentCarouselIndex
-                        ? 'bg-lumina-400 scale-125'
-                        : 'bg-dark-600 hover:bg-dark-500 hover:scale-110'
-                      } ${getAnimationClass('', '')}`}
+                    className={`h-1.5 rounded-full transition-all duration-500 ${i === currentCarouselIndex
+                        ? 'bg-nebula-400 w-8 shadow-[0_0_10px_rgba(139,92,246,0.5)]'
+                        : 'bg-white/10 w-4 hover:bg-white/20'
+                      }`}
                     style={getAnimationStyle({})}
-                    title={`Página ${i + 1}`}
                   />
                 ))}
               </div>
@@ -167,11 +165,10 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
               <button
                 onClick={nextCarouselPage}
                 disabled={currentCarouselIndex === totalPages - 1}
-                className={`w-10 h-10 bg-dark-700 hover:bg-lumina-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center transition-colors duration-150 ${getAnimationClass('', 'hover:scale-105')}`}
+                className="w-12 h-12 bg-white/5 hover:bg-nebula-500 border border-white/5 hover:border-nebula-400 disabled:opacity-20 disabled:cursor-not-allowed text-white rounded-2xl flex items-center justify-center transition-all duration-300 shadow-xl"
                 style={getAnimationStyle({})}
-                title="Página siguiente"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-6 h-6" />
               </button>
             </div>
           )}
@@ -179,7 +176,7 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
 
         {/* Images grid - dynamic columns based on actual images */}
         <div
-          className={`grid gap-4 ${(() => {
+          className={`grid gap-6 ${(() => {
             const currentPageImages = images.slice(
               currentCarouselIndex * imagesPerPage,
               (currentCarouselIndex + 1) * imagesPerPage,
@@ -198,27 +195,27 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
               return (
                 <div
                   key={actualIndex}
-                  className={`group relative aspect-video bg-dark-700/50 rounded-lg overflow-hidden cursor-pointer transition-all duration-200 ${getAnimationClass('', 'hover:scale-[1.02]')}`}
+                  className="group relative aspect-video bg-white/5 rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:ring-2 hover:ring-nebula-500/20 border border-white/5"
                   style={getAnimationStyle({})}
                   onClick={() => openImageModal(actualIndex)}
                 >
                   <img
                     src={image}
                     alt={`${modpackName} screenshot ${actualIndex + 1}`}
-                    className={`w-full h-full object-cover transition-transform duration-200 ${getAnimationClass('', 'group-hover:scale-105')}`}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
 
                   {/* Hover overlay */}
                   <div
-                    className={`absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-200 flex items-center justify-center ${getAnimationClass('', 'group-hover:opacity-100')}`}
+                    className="absolute inset-0 bg-nebula-900/40 backdrop-blur-[2px] opacity-0 transition-opacity duration-500 flex items-center justify-center group-hover:opacity-100"
                   >
-                    <div className="bg-lumina-600 rounded-full p-2">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="bg-nebula-500 text-white rounded-full p-4 shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={2}
+                          strokeWidth={2.5}
                           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                         />
                       </svg>
@@ -231,8 +228,8 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
 
         {/* Navigation hint */}
         {totalPages > 1 && (
-          <div className="mt-4 text-center">
-            <p className="text-dark-400 text-xs">{t('modpacks.carouselHint')}</p>
+          <div className="mt-8 text-center">
+            <p className="text-dark-500 text-[10px] font-black uppercase tracking-[0.2em] italic opacity-50">{t('modpacks.carouselHint')}</p>
           </div>
         )}
       </div>
@@ -240,7 +237,7 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
       {/* Image Modal - Properly Centered */}
       {imageModalOpen && selectedImageIndex !== null && (
         <div
-          className={`fixed inset-0 z-[9999] flex items-center justify-center p-6 ${getAnimationClass('backdrop-blur-md transition-all duration-75 ease-out', '')} ${imageModalAnimating ? 'bg-black/40 opacity-100' : 'bg-black/0 opacity-0'}`}
+          className={`fixed inset-0 z-[9999] flex items-center justify-center p-6 bg-nebula-950/80 backdrop-blur-2xl transition-all duration-500 ease-out ${imageModalAnimating ? 'opacity-100' : 'opacity-0'}`}
           style={{
             position: 'fixed',
             top: 0,
@@ -248,19 +245,16 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
             right: 0,
             bottom: 0,
             zIndex: 9999,
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            ...getAnimationStyle({}),
           }}
           onClick={closeImageModal}
         >
           {/* Close button */}
           <button
             onClick={closeImageModal}
-            className={`absolute top-4 right-4 md:top-6 md:right-6 z-[10000] w-10 h-10 bg-white/15 backdrop-blur-sm text-white/90 rounded-full flex items-center justify-center border border-white/30 ${getAnimationClass('hover:bg-white/25 hover:text-white transition-all duration-75', '')} ${imageModalAnimating ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 -translate-y-2'}`}
+            className={`absolute top-8 right-8 z-[10000] w-14 h-14 bg-white/5 backdrop-blur-xl text-white rounded-full flex items-center justify-center border border-white/10 shadow-2xl transition-all duration-300 hover:bg-red-500/20 hover:border-red-500/40 ${imageModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-90 translate-y-4'}`}
             style={getAnimationStyle({})}
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
 
           {/* Navigation buttons */}
@@ -271,27 +265,27 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
                   e.stopPropagation();
                   navigateImage('prev');
                 }}
-                className={`absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-[10000] w-12 h-12 bg-white/15 backdrop-blur-sm text-white/80 rounded-full flex items-center justify-center border border-white/30 ${getAnimationClass('hover:bg-white/25 hover:text-white transition-all duration-75', '')} ${imageModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
+                className={`absolute left-8 top-1/2 -translate-y-1/2 z-[10000] w-16 h-16 bg-white/5 backdrop-blur-xl text-white rounded-full flex items-center justify-center border border-white/10 shadow-2xl transition-all duration-300 hover:bg-nebula-500/20 hover:border-nebula-500/40 ${imageModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
                 style={getAnimationStyle({})}
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-8 h-8" />
               </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   navigateImage('next');
                 }}
-                className={`absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-[10000] w-12 h-12 bg-white/15 backdrop-blur-sm text-white/80 rounded-full flex items-center justify-center border border-white/30 ${getAnimationClass('hover:bg-white/25 hover:text-white transition-all duration-75', '')} ${imageModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
+                className={`absolute right-8 top-1/2 -translate-y-1/2 z-[10000] w-16 h-16 bg-white/5 backdrop-blur-xl text-white rounded-full flex items-center justify-center border border-white/10 shadow-2xl transition-all duration-300 hover:bg-nebula-500/20 hover:border-nebula-500/40 ${imageModalAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
                 style={getAnimationStyle({})}
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="w-8 h-8" />
               </button>
             </>
           )}
 
           {/* Centered image container - smaller size */}
           <div
-            className={`relative max-w-[75vw] max-h-[75vh] flex items-center justify-center ${getAnimationClass('transition-all duration-75 ease-out', '')} ${imageModalAnimating ? (isChangingImage ? 'scale-95 opacity-50' : 'scale-100 opacity-100') : 'scale-90 opacity-0'}`}
+            className={`relative max-w-[85vw] max-h-[85vh] flex items-center justify-center transition-all duration-500 ease-out ${imageModalAnimating ? (isChangingImage ? 'scale-95 opacity-50 blur-sm' : 'scale-100 opacity-100 blur-0') : 'scale-90 opacity-0 blur-2xl'}`}
             style={getAnimationStyle({})}
             onClick={(e) => e.stopPropagation()}
           >
@@ -299,12 +293,12 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
               key={selectedImageIndex}
               src={images[selectedImageIndex]}
               alt={`${modpackName} screenshot ${selectedImageIndex + 1}`}
-              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
+              className="max-w-full max-h-full object-contain rounded-[2rem] shadow-[0_0_100px_rgba(139,92,246,0.3)] ring-1 ring-white/20"
               onClick={(e) => e.stopPropagation()}
               draggable={false}
               style={{
-                maxWidth: '75vw',
-                maxHeight: '75vh',
+                maxWidth: '85vw',
+                maxHeight: '85vh',
               }}
             />
           </div>
@@ -312,9 +306,9 @@ const ModpackScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ images, mo
           {/* Image counter */}
           {images.length > 1 && (
             <div
-              className={`absolute bottom-6 left-1/2 -translate-x-1/2 z-[10000] px-4 py-2 bg-black/40 backdrop-blur-sm text-white text-sm rounded-full border border-white/20 ${getAnimationClass('transition-all duration-75', '')} ${imageModalAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
+              className={`absolute bottom-8 left-1/2 -translate-x-1/2 z-[10000] px-6 py-3 bg-white/5 backdrop-blur-xl text-white text-xs font-black uppercase tracking-[0.3em] italic rounded-full border border-white/10 shadow-2xl transition-all duration-500 ${imageModalAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
-              {selectedImageIndex + 1} / {images.length}
+              SIGNAL {selectedImageIndex + 1} // {images.length}
             </div>
           )}
         </div>

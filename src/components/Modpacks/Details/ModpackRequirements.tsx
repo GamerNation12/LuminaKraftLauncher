@@ -10,7 +10,7 @@ interface ModpackRequirementsProps {
 
 const ModpackRequirements: React.FC<ModpackRequirementsProps> = ({ modpack }) => {
   const { t } = useTranslation();
-  const { getAnimationClass, getAnimationStyle } = useAnimation();
+  const { getAnimationStyle } = useAnimation();
 
   // Convert MB to GB for display
   const recommendedRamGB = modpack.recommendedRam
@@ -19,26 +19,30 @@ const ModpackRequirements: React.FC<ModpackRequirementsProps> = ({ modpack }) =>
 
   return (
     <div
-      className={`bg-dark-800 rounded-xl p-6 border border-dark-700 transition-all duration-75 ${getAnimationClass('', 'hover:border-lumina-400/30')
-        }`}
+      className="bg-white/[0.02] backdrop-blur-xl rounded-[2rem] p-8 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/20"
       style={{
         animation: 'fadeInUp 0.15s ease-out 0.1s backwards',
         ...getAnimationStyle({})
       }}
     >
-      <h3 className="text-xl font-bold text-white mb-4">{t('modpacks.requirements')}</h3>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2.5 bg-nebula-500/10 rounded-xl border border-nebula-500/20">
+          <Shield className="w-5 h-5 text-nebula-400" />
+        </div>
+        <h3 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('modpacks.requirements')}</h3>
+      </div>
+      
       <div className="space-y-4">
         <div>
-          <div className="flex items-center space-x-2 text-dark-300 mb-2">
-            <Shield className="w-4 h-4" />
-            <span>{t('modpacks.recommendedRAM')}</span>
+          <div className="text-[10px] font-black text-dark-500 uppercase tracking-widest italic mb-2 px-1">
+            {t('modpacks.recommendedRAM')}
           </div>
-          <p className="text-white bg-dark-900 px-3 py-2 rounded-lg">
+          <div className="text-white bg-white/5 border border-white/5 px-4 py-3 rounded-2xl font-black text-lg italic tracking-tighter shadow-inner">
             {recommendedRamGB
               ? `${recommendedRamGB} GB`
               : t('modpacks.ramMinRecommended', { min: 4, recommended: 8 })
             }
-          </p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Home, Settings, Info, AlertCircle, Pin, PinOff, FolderOpen, UploadCloud, User, Compass } from 'lucide-react';
+import { Home, Settings, UploadCloud, Compass, Download, LayoutGrid } from 'lucide-react';
 import { useLauncher } from '../../contexts/LauncherContext';
 import PlayerHeadLoader from '../PlayerHeadLoader';
 import { check } from '@tauri-apps/plugin-updater';
-import MinecraftAccountDropdown from './AccountDropdown'; // Using the file we just refactored
+import MinecraftAccountDropdown from './AccountDropdown';
 
 interface SidebarProps {
   activeSection: string;
@@ -14,24 +14,12 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => {
   const { t } = useTranslation();
   const { userSettings, updateUserSettings } = useLauncher(); // Added updateUserSettings
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isPinned, setIsPinned] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('sidebarPinned') === '1';
-  });
   const [hasUpdate, setHasUpdate] = useState(false);
   const [latestVersion, setLatestVersion] = useState<string>('');
 
   // Minecraft Account Dropdown State
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const playerSectionRef = useRef<HTMLDivElement>(null);
-
-  // Persist pin state
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('sidebarPinned', isPinned ? '1' : '0');
-    }
-  }, [isPinned]);
 
   // Check for updates (respecting experimental updates setting)
   useEffect(() => {
@@ -60,50 +48,38 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
   }, [userSettings?.enablePrereleases]);
 
   // Version is automatically updated by release.js
-  const currentVersion = "0.1.7";
+
 
   const menuItems = [
     {
       id: 'home',
       label: t('navigation.home'),
       icon: Home,
-      description: t('navigation.homeDesc')
+    },
+    {
+      id: 'my-modpacks',
+      label: t('navigation.myModpacks'),
+      icon: LayoutGrid,
     },
     {
       id: 'explore',
       label: t('navigation.explore'),
       icon: Compass,
-      description: t('navigation.exploreDesc')
-    },
-    {
-      id: 'my-modpacks',
-      label: t('navigation.myModpacks'),
-      icon: FolderOpen,
-      description: t('navigation.myModpacksDesc')
     },
     {
       id: 'published-modpacks',
       label: t('navigation.publishedModpacks'),
       icon: UploadCloud,
-      description: t('navigation.publishedModpacksDesc')
     },
     {
-      id: 'account',
-      label: t('navigation.account'),
-      icon: User,
-      description: t('navigation.accountDesc')
+      id: 'downloads',
+      label: t('navigation.downloads'),
+      icon: Download,
     },
     {
       id: 'settings',
       label: t('navigation.settings'),
       icon: Settings,
-      description: 'Ajustes del launcher'
-    },
-    {
-      id: 'about',
-      label: t('navigation.about'),
-      icon: Info,
-      description: 'Información del launcher'
     }
   ];
 
@@ -113,14 +89,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
 
   return (
     <div
-      className={`${isExpanded ? 'w-64' : 'w-20'} bg-dark-800 border-r border-dark-700 flex flex-col transition-all duration-200 ease-in-out select-none relative`}
+      className="w-20 bg-white/[0.01] backdrop-blur-3xl border-r border-white/5 flex flex-col transition-all duration-500 select-none relative z-50 shadow-2xl"
       style={{
-        animation: 'fadeInLeft 0.4s ease-out'
-      }}
-      onMouseLeave={() => {
-        if (!isPinned) {
-          setIsExpanded(false);
-        }
+        animation: 'fadeInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
       }}
     >
       {/* Minecraft Account Dropdown */}
@@ -133,146 +104,103 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
         onNavigateToAccount={() => onSectionChange('account')}
       />
 
-      {/* Header - consistent positioning */}
-      <div ref={playerSectionRef} className="p-4 h-20 border-b border-dark-700 flex items-center">
-        <div className="flex items-center space-x-3 w-full pl-[0.25rem]">
-          {/* Player info when logged in with Microsoft */}
+      {/* Header - Avatar Section */}
+      <div ref={playerSectionRef} className="p-4 h-24 flex flex-col items-center justify-center border-b border-white/5">
+        <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-tr from-nebula-500 to-blue-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
           {userSettings.authMethod === 'microsoft' && userSettings.microsoftAccount ? (
-            <>
-              <div
-                className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center cursor-pointer relative group"
-                role="button"
-                tabIndex={0}
-                onClick={handleAvatarClick}
-                onMouseEnter={() => {
-                  if (!isPinned) setIsExpanded(true);
+            <div
+              className="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center cursor-pointer relative z-10 ring-1 ring-white/10 hover:ring-nebula-500/50 transition-all duration-300 bg-white/5 shadow-2xl group-hover:scale-110 active:scale-95"
+              role="button"
+              tabIndex={0}
+              onClick={handleAvatarClick}
+            >
+              <img
+                src={`https://mc-heads.net/avatar/${userSettings.microsoftAccount.uuid}/48`}
+                alt={`${userSettings.microsoftAccount.username}'s head`}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (!target.src.includes('crafatar')) {
+                    target.src = `https://crafatar.com/avatars/${userSettings.microsoftAccount!.uuid}?size=48&overlay`;
+                  }
                 }}
-              >
-                <img
-                  src={`https://mc-heads.net/avatar/${userSettings.microsoftAccount.uuid}/40`}
-                  alt={`${userSettings.microsoftAccount.username}'s head`}
-                  className="w-full h-full object-cover transition-all duration-200 group-hover:scale-105 group-active:scale-110"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    if (!target.src.includes('crafatar')) {
-                      target.src = `https://crafatar.com/avatars/${userSettings.microsoftAccount!.uuid}?size=40&overlay`;
-                    }
-                  }}
-                />
-                {/* Glow effect */}
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-tr from-lumina-400/20 to-lumina-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"></div>
-              </div>
-              <div className={`min-w-0 transition-opacity duration-200 ${isExpanded ? 'opacity-100 ml-3' : 'opacity-0 w-0 ml-0'}`}>
-                <h1 className="text-white font-bold text-lg truncate">{userSettings.microsoftAccount.username}</h1>
-                <p className="text-lumina-400 text-sm truncate whitespace-nowrap">{t('auth.microsoftAccount')}</p>
-              </div>
-            </>
+              />
+              {/* Status Indicator */}
+              <div className="absolute bottom-1 right-1 w-3 h-3 bg-nebula-500 border-2 border-dark-950 rounded-full animate-pulse shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
+            </div>
           ) : (
             /* Offline mode - show loader */
-            <>
-              <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center cursor-pointer group relative" role="button" tabIndex={0} onClick={handleAvatarClick} onMouseEnter={() => { if (!isPinned) setIsExpanded(true); }}>
-                <div className="transition-all duration-200 group-hover:scale-105 group-active:scale-110">
-                  <PlayerHeadLoader />
-                </div>
-                {/* Glow effect */}
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-tr from-gray-400/20 to-gray-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"></div>
+            <div className="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center cursor-pointer group relative z-10 bg-white/5 border border-white/10 shadow-2xl hover:scale-110 active:scale-95 transition-all" role="button" tabIndex={0} onClick={handleAvatarClick}>
+              <div className="transition-all duration-300 group-hover:scale-105">
+                <PlayerHeadLoader />
               </div>
-              <div className={`min-w-0 transition-opacity duration-200 ${isExpanded ? 'opacity-100 ml-3' : 'opacity-0 w-0 ml-0'}`}>
-                <h1 className="text-white font-bold text-lg truncate">{userSettings.username}</h1>
-                <p className="text-dark-400 text-sm truncate whitespace-nowrap">{t('auth.offlineMode')}</p>
-              </div>
-            </>
+            </div>
           )}
         </div>
       </div>
 
-      {/* Update notification */}
-      {hasUpdate && isExpanded && (
-        <div className="m-4 p-3 bg-yellow-600/20 border border-yellow-600/30 rounded-lg">
-          <div className="flex items-center space-x-2">
-            <AlertCircle className="w-4 h-4 text-yellow-500" />
-            <span className="text-yellow-400 text-sm font-medium">
-              {t('notifications.updateAvailable')}
-            </span>
-          </div>
-          <p className="text-yellow-300 text-xs mt-1">
-            {t('about.updateAvailable', { version: latestVersion })}
-          </p>
-        </div>
-      )}
-
       {/* Navigation */}
-      <nav className="flex-1 p-4">
-        <div className="space-y-2" onMouseEnter={() => { if (!isPinned) setIsExpanded(true); }}>
-          {menuItems.map((item, index) => {
-            const Icon = item.icon;
-            // Treat publish-modpack and edit-modpack as sub-sections of published-modpacks
-            const isActive = activeSection === item.id ||
-              (item.id === 'published-modpacks' && (activeSection === 'publish-modpack' || activeSection === 'edit-modpack'));
+      <nav className="flex-1 px-3 py-8 flex flex-col items-center gap-6">
+        {menuItems.map((item, index) => {
+          const Icon = item.icon;
+          const isActive = activeSection === item.id ||
+            (item.id === 'published-modpacks' && (activeSection === 'publish-modpack' || activeSection === 'edit-modpack'));
 
-            return (
-              <button
-                key={item.id}
-                onClick={() => onSectionChange(item.id)}
-                className={`sidebar-item w-full flex items-center pl-[0.875rem] ${isActive ? 'active' : ''} transition-all duration-200 group`}
-                style={{
-                  animation: `fadeInLeft 0.4s ease-out ${index * 0.05 + 0.1}s backwards`
-                }}
-                title={!isExpanded ? item.label : undefined}
-              >
-                <Icon className={`w-5 h-5 flex-shrink-0 transition-all duration-200 ${isActive ? 'text-white' : ''} group-hover:text-lumina-300`} />
-                <span className={`font-medium truncate transition-all duration-150 ${isExpanded ? 'opacity-100 ml-3' : 'opacity-0 w-0 ml-0'} ${isActive ? 'text-white' : ''} group-hover:text-lumina-200`}>
-                  {item.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+          return (
+            <button
+              key={item.id}
+              onClick={() => onSectionChange(item.id)}
+              className={`w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-500 relative group/nav
+                ${isActive 
+                  ? 'bg-nebula-500 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)] scale-110' 
+                  : 'text-dark-500 hover:text-white hover:bg-white/5 hover:translate-x-1'}`}
+              style={{
+                animation: `fadeInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.05 + 0.1}s backwards`
+              }}
+            >
+              <Icon className={`w-6 h-6 z-10 transition-transform duration-500 ${isActive ? 'scale-110' : 'group-hover/nav:scale-110'}`} />
+              
+              {/* Tooltip */}
+              <div className="absolute left-20 bg-white/5 backdrop-blur-2xl border border-white/10 px-4 py-2 rounded-xl opacity-0 translate-x-[-10px] pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-x-0 transition-all duration-300 whitespace-nowrap text-[10px] font-black uppercase italic tracking-[0.2em] z-50 shadow-2xl text-white">
+                {item.label}
+                <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-white/5 rotate-45 border-l border-b border-white/10"></div>
+              </div>
+
+              {/* Active Indicator */}
+              {isActive && (
+                <div className="absolute -left-3 w-1.5 h-8 bg-nebula-400 rounded-full shadow-[0_0_15px_rgba(139,92,246,0.8)] animate-pulse"></div>
+              )}
+            </button>
+          );
+        })}
       </nav>
 
-      {/* Footer - consistent height to prevent jumping */}
-      <div className="p-4">
-        {/* Border with opacity transition */}
-        <div className={`border-t border-dark-700 mb-4 transition-opacity duration-150 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}></div>
-
-        {/* Copyright and version - fade in/out with opacity */}
-        <div className={`text-center mb-4 transition-opacity duration-150 ${isExpanded ? 'opacity-100' : 'opacity-0'}`}>
-          <p className="text-dark-400 text-xs truncate whitespace-nowrap">
-            © 2025 LuminaKraft Studios
-          </p>
-          <p className="text-dark-500 text-xs mt-1 truncate whitespace-nowrap">
-            {t('app.version', { version: currentVersion })}
-          </p>
-        </div>
-
-        {/* Pin Button with better UX */}
-        <button
-          onClick={() => {
-            const newPinned = !isPinned;
-            setIsPinned(newPinned);
-          }}
-          className={`w-full flex items-center justify-center p-3 rounded-lg transition-all duration-200 border group relative ${isPinned
-              ? 'text-lumina-400 bg-lumina-600/10 border-lumina-500/40 hover:bg-lumina-600/20 hover:border-lumina-400/60'
-              : 'text-dark-400 hover:text-lumina-400 hover:bg-lumina-600/10 border-dark-600 hover:border-lumina-500/30'
-            }`}
-          style={{
-            animation: 'fadeInUp 0.4s ease-out 0.3s backwards'
-          }}
-          title={isPinned ? t('sidebar.unpin') : t('sidebar.pin')}
+      {/* Footer - Branding */}
+      <div className="p-4 flex flex-col items-center gap-4 border-t border-white/5 relative">
+        <button 
+          className="w-12 h-12 rounded-[1.25rem] bg-gradient-to-br from-nebula-500 via-indigo-600 to-nebula-700 flex items-center justify-center cursor-pointer group hover:shadow-[0_0_25px_rgba(139,92,246,0.5)] transition-all duration-500 hover:scale-110 active:scale-95 border-2 border-white/10 relative"
+          onClick={() => onSectionChange('about')}
+          title={hasUpdate ? t('notifications.updateAvailable', { version: latestVersion }) : undefined}
         >
-          {isPinned ? (
-            <PinOff className="w-5 h-5 transform group-hover:rotate-12 transition-transform duration-200" />
-          ) : (
-            <Pin className="w-5 h-5 transform group-hover:-rotate-12 transition-transform duration-200" />
+          <span className="text-white font-black text-xl italic tracking-tighter drop-shadow-lg">N</span>
+          
+          {/* Update Badge */}
+          {hasUpdate && (
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-dark-950 shadow-[0_0_10px_rgba(239,68,68,0.5)] animate-bounce z-20">
+              <div className="absolute inset-0 bg-red-400 rounded-full animate-ping opacity-75"></div>
+            </div>
           )}
 
-          {/* Tooltip indicator */}
-          <div className={`absolute -top-2 -right-1 w-2 h-2 rounded-full transition-all duration-200 ${isPinned ? 'bg-green-500 opacity-100' : 'bg-gray-500 opacity-40'
-            }`} />
+          {/* Subtle spinning glow on hover */}
+          <div className="absolute inset-0 rounded-[1.25rem] bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity animate-[spin_3s_linear_infinite]"></div>
         </button>
+        
+        {/* Version marker */}
+        <span className="text-[8px] font-bold text-dark-500 uppercase tracking-widest opacity-40">V1.0.0</span>
       </div>
     </div>
   );
 };
 
-export default Sidebar; 
+export default Sidebar;

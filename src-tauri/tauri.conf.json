@@ -24,7 +24,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self' https://iytnvsdsqvbdoqesyweo.supabase.co; img-src 'self' data: https: file: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://iytnvsdsqvbdoqesyweo.supabase.co https://cdn.luminakraft.com https://*.r2.cloudflarestorage.com file:"
+      "csp": "default-src 'self' https://iytnvsdsqvbdoqesyweo.supabase.co; img-src 'self' data: https: file: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://iytnvsdsqvbdoqesyweo.supabase.co https://cdn.nebula-launcher.com https://*.r2.cloudflarestorage.com file:"
     },
     "trayIcon": null,
     "withGlobalTauri": true
@@ -76,8 +76,8 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://raw.githubusercontent.com/LuminaKraft/LuminakraftLauncher/main/latest.json",
-        "https://github.com/LuminaKraft/LuminakraftLauncher/releases/latest/download/latest.json"
+        "https://raw.githubusercontent.com/Nebula/NebulaLauncher/main/latest.json",
+        "https://github.com/Nebula/NebulaLauncher/releases/latest/download/latest.json"
       ],
       "dialog": false,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEMxOTdFMkYzMDE2QkFFMjYKUldRbXJtc0I4K0tYd2J2elpMQXhLNmN3S3R1Q3c0REVMczdiQTAxRzhDRzg4Z1VocTlVdGxYV1UK"

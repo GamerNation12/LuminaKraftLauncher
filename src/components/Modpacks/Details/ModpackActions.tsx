@@ -18,12 +18,12 @@ const ErrorMessageClickable: React.FC<{ error: string; modpackId: string }> = ({
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="p-3 bg-red-600/20 border border-red-600/30 rounded-lg w-full text-left hover:bg-red-600/30 transition-colors cursor-pointer group"
+        className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl w-full text-left hover:bg-red-500/20 transition-all cursor-pointer group shadow-xl"
       >
-        <div className="flex items-center space-x-2">
-          <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0" />
-          <span className="text-red-400 text-sm flex-1 line-clamp-2">{error}</span>
-          <Info className="w-4 h-4 text-red-400 opacity-50 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+        <div className="flex items-center gap-3">
+          <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0" />
+          <span className="text-red-400 text-xs font-black uppercase tracking-widest flex-1 line-clamp-2">{error}</span>
+          <Info className="w-5 h-5 text-red-400 opacity-50 group-hover:opacity-100 transition-opacity flex-shrink-0" />
         </div>
       </button>
       <UnknownErrorModal
@@ -56,7 +56,7 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
 }) => {
   const { t } = useTranslation();
   const { installModpack, updateModpack, launchModpack, repairModpack, removeModpack, stopInstance } = useLauncher();
-  const { getAnimationClass, getAnimationStyle } = useAnimation();
+  const { getAnimationStyle } = useAnimation();
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -98,8 +98,8 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: Loader2,
           label: labels[state.status] || t('modpacks.installing'),
-          bgColor: 'bg-lumina-500/50 cursor-not-allowed',
-          textColor: 'text-white/70',
+          bgColor: 'bg-white/5 border border-white/5',
+          textColor: 'text-dark-500',
           spinning: true,
           disabled: true
         };
@@ -111,8 +111,8 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
           return {
             icon: Wrench,
             label: t('modpacks.repair'),
-            bgColor: 'bg-orange-600 hover:bg-orange-700',
-            textColor: 'text-white',
+            bgColor: 'bg-red-500/20 hover:bg-red-500/30 border border-red-500/30',
+            textColor: 'text-red-400',
             action: () => repairModpack(modpack.id),
             disabled: false
           };
@@ -120,8 +120,8 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: Download,
           label: t('modpacks.installed'),
-          bgColor: 'bg-gray-600/50 cursor-not-allowed',
-          textColor: 'text-gray-400',
+          bgColor: 'bg-white/5 border border-white/5',
+          textColor: 'text-dark-500',
           action: () => { },
           disabled: true
         };
@@ -131,7 +131,7 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
       return {
         icon: Download,
         label: t('modpacks.install'),
-        bgColor: 'bg-lumina-500 hover:bg-lumina-600',
+        bgColor: 'bg-nebula-500 hover:bg-nebula-600 shadow-nebula-500/20 border border-nebula-400/30',
         textColor: 'text-white',
         action: async () => {
           // Save full modpack data to localStorage so MyModpacksPage can use it during installation
@@ -171,7 +171,7 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: Download,
           label: t('modpacks.install'),
-          bgColor: 'bg-lumina-500 hover:bg-lumina-600',
+          bgColor: 'bg-nebula-500 hover:bg-nebula-600 shadow-nebula-500/20 border border-nebula-400/30',
           textColor: 'text-white',
           action: () => installModpack(modpack.id)
         };
@@ -179,7 +179,7 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: Play,
           label: t('modpacks.play'),
-          bgColor: 'bg-green-600 hover:bg-green-700',
+          bgColor: 'bg-nebula-500 hover:bg-nebula-600 shadow-nebula-500/20 border border-nebula-400/30',
           textColor: 'text-white',
           action: () => launchModpack(modpack.id)
         };
@@ -188,7 +188,7 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: Play,
           label: t('modpacks.play'),
-          bgColor: 'bg-green-600 hover:bg-green-700',
+          bgColor: 'bg-nebula-500 hover:bg-nebula-600 shadow-nebula-500/20 border border-nebula-400/30',
           textColor: 'text-white',
           action: () => launchModpack(modpack.id)
         };
@@ -203,16 +203,16 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
           'reinstalling': t('modpacks.reinstalling')
         };
         const bgColors: Record<string, string> = {
-          'installing': 'bg-lumina-500/50 cursor-not-allowed',
-          'updating': 'bg-orange-600/50 cursor-not-allowed',
-          'repairing': 'bg-orange-600/50 cursor-not-allowed',
-          'reinstalling': 'bg-red-600/50 cursor-not-allowed'
+          'installing': 'bg-white/5 border border-white/5',
+          'updating': 'bg-white/5 border border-white/5',
+          'repairing': 'bg-white/5 border border-white/5',
+          'reinstalling': 'bg-white/5 border border-white/5'
         };
         return {
           icon: Loader2,
           label: labels[state.status] || t('modpacks.installing'),
-          bgColor: bgColors[state.status] || 'bg-lumina-500/50 cursor-not-allowed',
-          textColor: 'text-white/70',
+          bgColor: bgColors[state.status] || 'bg-white/5 border border-white/5',
+          textColor: 'text-dark-500',
           spinning: true,
           disabled: true
         };
@@ -221,8 +221,8 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: Loader2,
           label: t('modpacks.launching'),
-          bgColor: 'bg-green-600/50 cursor-not-allowed',
-          textColor: 'text-white/70',
+          bgColor: 'bg-nebula-500/20 border border-nebula-500/30',
+          textColor: 'text-nebula-400',
           spinning: true,
           disabled: true
         };
@@ -230,8 +230,8 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: StopCircle,
           label: t('modpacks.stop'),
-          bgColor: 'bg-red-600 hover:bg-red-700',
-          textColor: 'text-white',
+          bgColor: 'bg-red-500/20 hover:bg-red-500/30 border border-red-500/30',
+          textColor: 'text-red-400',
           action: () => stopInstance(modpack.id),
           disabled: false
         };
@@ -239,8 +239,8 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: Loader2,
           label: t('modpacks.stopping'),
-          bgColor: 'bg-red-600/50 cursor-not-allowed',
-          textColor: 'text-white/70',
+          bgColor: 'bg-red-500/10 border border-red-500/20',
+          textColor: 'text-red-500/60',
           spinning: true,
           disabled: true
         };
@@ -248,8 +248,8 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: Wrench,
           label: t('modpacks.repair'),
-          bgColor: 'bg-orange-600 hover:bg-orange-700',
-          textColor: 'text-white',
+          bgColor: 'bg-red-500/20 hover:bg-red-500/30 border border-red-500/30',
+          textColor: 'text-red-400',
           action: () => repairModpack(modpack.id)
         };
 
@@ -260,7 +260,7 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
           return {
             icon: Globe,
             label: `${t('modpacks.connect')} ${modpack.ip}`,
-            bgColor: 'bg-blue-600 hover:bg-blue-700',
+            bgColor: 'bg-nebula-500 hover:bg-nebula-600 shadow-nebula-500/20 border border-nebula-400/30',
             textColor: 'text-white',
             action: () => copyToClipboard(modpack.ip!),
             disabled: false
@@ -272,8 +272,8 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
           return {
             icon: AlertTriangle,
             label: t('modpacks.notAvailable'),
-            bgColor: 'bg-gray-600/50 cursor-not-allowed',
-            textColor: 'text-gray-400',
+            bgColor: 'bg-white/5 border border-white/5',
+            textColor: 'text-dark-500',
             action: () => { },
             disabled: true
           };
@@ -283,7 +283,7 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         return {
           icon: Download,
           label: t('modpacks.install'),
-          bgColor: 'bg-lumina-500 hover:bg-lumina-600',
+          bgColor: 'bg-nebula-500 hover:bg-nebula-600 shadow-nebula-500/20 border border-nebula-400/30',
           textColor: 'text-white',
           action: () => installModpack(modpack.id)
         };
@@ -358,15 +358,14 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
   return (
     <>
       {/* Main Action Button */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         <button
           onClick={statusInfo.action}
           disabled={statusInfo.disabled}
-          className={`w-full flex items-center justify-center space-x-3 px-6 py-4 rounded-xl font-semibold text-lg transition-all duration-75 ${getAnimationClass('', 'hover:scale-[1.02] active:scale-[0.98]')
-            } ${statusInfo.bgColor} ${statusInfo.textColor} shadow-lg disabled:opacity-50 disabled:cursor-not-allowed`}
+          className={`w-full flex items-center justify-center gap-4 px-8 py-5 rounded-[2rem] font-black text-xl italic uppercase tracking-tighter transition-all duration-300 shadow-2xl hover:scale-[1.02] active:scale-[0.98] ${statusInfo.bgColor} ${statusInfo.textColor} disabled:opacity-50 disabled:cursor-not-allowed`}
           style={getAnimationStyle({})}
         >
-          <Icon className={`w-6 h-6 ${statusInfo.spinning ? 'animate-spin' : ''}`} />
+          <Icon className={`w-7 h-7 ${statusInfo.spinning ? 'animate-spin' : ''}`} />
           <span>{statusInfo.label}</span>
         </button>
 
@@ -374,28 +373,28 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
         {!isReadOnly && state.status === 'outdated' && (
           <button
             onClick={() => updateModpack(modpack.id)}
-            className={`w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl font-medium text-base transition-all duration-75 bg-orange-600/10 hover:bg-orange-600/20 text-orange-400 border border-orange-600/30 hover:border-orange-600/50`}
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-black text-sm italic uppercase tracking-widest transition-all duration-300 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 hover:shadow-xl shadow-yellow-500/5"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="w-5 h-5 animate-spin-slow" />
             <span>{t('modpacks.updateAvailable')}</span>
           </button>
         )}
 
         {/* Progress Display */}
         {['installing', 'updating', 'repairing', 'reinstalling', 'launching'].includes(state.status) && state.progress && (
-          <div className="space-y-3">
+          <div className="space-y-4 px-2">
             {/* Progress header */}
-            <div className="flex justify-between text-sm text-dark-300 mb-2">
+            <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-dark-500 px-1">
               <span className="truncate">
                 {state.progress.generalMessage || getStepMessage(state.progress.step) || statusInfo.label}
               </span>
-              <span className="font-mono">{Math.round(displayedPercentage)}%</span>
+              <span className="text-nebula-400 underline decoration-nebula-500/30 underline-offset-4">{Math.round(displayedPercentage)}%</span>
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-dark-700 rounded-full h-2 overflow-hidden shadow-inner">
+            <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden p-0.5 border border-white/5">
               <div
-                className="bg-gradient-to-r from-lumina-600 to-lumina-500 h-2 rounded-full transition-all duration-75 ease-out shadow-[0_0_10px_rgba(59,130,246,0.3)]"
+                className="bg-nebula-400 h-full rounded-full transition-all duration-500 ease-out shadow-[0_0_15px_rgba(139,92,246,0.5)]"
                 style={{ width: `${displayedPercentage}%` }}
               />
             </div>
@@ -409,40 +408,34 @@ const ModpackActions: React.FC<ModpackActionsProps> = ({
 
         {/* Secondary Actions - only in full management mode */}
         {!isReadOnly && ['installed', 'outdated', 'error'].includes(state.status) && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3 pt-4 border-t border-white/5">
             {/* Profile Options Button (Full Width) */}
             <button
               onClick={() => setShowProfileOptions(true)}
-              className={`w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-lg bg-lumina-600 hover:bg-lumina-700 text-white transition-all duration-75 ${getAnimationClass('', 'hover:scale-[1.02]')
-                } group`}
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-nebula-500/10 hover:bg-nebula-500/20 text-nebula-400 border border-nebula-500/20 transition-all font-black text-xs uppercase tracking-widest italic group/btn"
               style={getAnimationStyle({})}
             >
-              <Settings className={`w-4 h-4 flex-shrink-0 transition-transform duration-75 ${getAnimationClass('', 'group-hover:rotate-90')
-                }`} />
-              <span className="text-sm font-medium">{t('profileOptions.button')}</span>
+              <Settings className="w-4 h-4 flex-shrink-0 transition-transform duration-500 group-hover/btn:rotate-90" />
+              <span>{t('profileOptions.button')}</span>
             </button>
 
             {/* Other Actions Row */}
-            <div className="flex gap-2">
+            <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => LauncherService.getInstance().openInstanceFolder(modpack.id)}
-                className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2.5 rounded-lg bg-dark-700 hover:bg-dark-600 text-dark-300 hover:text-white transition-all duration-75 ${getAnimationClass('', 'hover:scale-[1.02]')
-                  } min-w-0 group`}
+                className="flex items-center justify-center gap-3 px-4 py-4 rounded-2xl bg-white/5 hover:bg-white/10 text-dark-400 hover:text-white border border-white/5 transition-all font-black text-[10px] uppercase tracking-widest italic min-w-0 group/btn"
                 style={getAnimationStyle({})}
               >
-                <FolderOpen className={`w-4 h-4 flex-shrink-0 transition-transform duration-75 ${getAnimationClass('', 'group-hover:scale-110')
-                  }`} />
-                <span className="truncate text-sm">{t('modpacks.openFolder')}</span>
+                <FolderOpen className="w-4 h-4 flex-shrink-0 transition-transform duration-500 group-hover/btn:scale-110" />
+                <span className="truncate">ORBITAL FILES</span>
               </button>
               <button
                 onClick={() => setShowRemoveDialog(true)}
-                className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-all duration-75 ${getAnimationClass('', 'hover:scale-[1.02]')
-                  } min-w-0 group`}
+                className="flex items-center justify-center gap-3 px-4 py-4 rounded-2xl bg-red-500/5 hover:bg-red-500/10 text-red-500/50 hover:text-red-500 border border-red-500/10 hover:border-red-500/20 transition-all font-black text-[10px] uppercase tracking-widest italic min-w-0 group/btn"
                 style={getAnimationStyle({})}
               >
-                <Trash2 className={`w-4 h-4 flex-shrink-0 transition-transform duration-75 ${getAnimationClass('', 'group-hover:scale-110')
-                  }`} />
-                <span className="truncate text-sm">{t('modpacks.remove')}</span>
+                <Trash2 className="w-4 h-4 flex-shrink-0 transition-transform duration-500 group-hover/btn:scale-110" />
+                <span className="truncate">DECOMMISSION</span>
               </button>
             </div>
           </div>

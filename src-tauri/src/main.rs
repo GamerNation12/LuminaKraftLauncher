@@ -14,7 +14,7 @@ mod modpack;
 mod utils;
 mod oauth;
 mod parallel_download;
-mod lumina_core;
+mod nebula_core;
 
 use crate::launcher::launch_modpack_action;
 
@@ -1284,6 +1284,31 @@ async fn add_mods_to_instance(modpack_id: String, file_paths: Vec<String>) -> Re
 }
 
 #[tauri::command]
+async fn list_mods_in_instance(modpack_id: String) -> Result<Vec<String>, String> {
+    let instance_dir = filesystem::get_instance_dir(&modpack_id)
+        .map_err(|e| format!("Failed to get instance directory: {}", e))?;
+
+    let mods_dir = instance_dir.join("mods");
+
+    if !mods_dir.exists() {
+        return Ok(Vec::new());
+    }
+
+    let mut mods = Vec::new();
+    let mut entries = tokio::fs::read_dir(mods_dir).await
+        .map_err(|e| format!("Failed to read mods directory: {}", e))?;
+
+    while let Some(entry) = entries.next_entry().await.map_err(|e| e.to_string())? {
+        let file_name = entry.file_name().to_string_lossy().to_string();
+        if file_name.ends_with(".jar") || file_name.ends_with(".jar.disabled") {
+            mods.push(file_name);
+        }
+    }
+
+    Ok(mods)
+}
+
+#[tauri::command]
 async fn install_modpack_from_local_zip(
     app: tauri::AppHandle,
     zip_path: String,
@@ -1532,6 +1557,7 @@ fn main() {
             list_minecraft_versions,
             update_refreshed_microsoft_token,
             stop_instance,
+            list_mods_in_instance,
             add_mods_to_instance,
             create_modpack_with_overrides,
             install_modpack_from_local_zip,
@@ -1542,10 +1568,11 @@ fn main() {
             list_instance_mods,
             toggle_mod_status,
             list_instance_worlds,
+            backup_instance_world,
             list_instance_screenshots,
             delete_instance_world,
-            lumina_core::start_lumina_core,
-            lumina_core::send_lumina_command,
+            nebula_core::start_nebula_core,
+            nebula_core::send_nebula_command,
         ])
         .setup(|app| {
             // Initialize app data directory

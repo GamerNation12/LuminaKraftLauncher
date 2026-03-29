@@ -39,7 +39,7 @@ void DownloadManager::processNext() {
     QNetworkRequest request(item.url);
     
     // Some endpoints may require User-Agent, etc.
-    request.setHeader(QNetworkRequest::UserAgentHeader, "LuminaKraftLauncher/0.1.0");
+    request.setHeader(QNetworkRequest::UserAgentHeader, "NebulaLauncher/0.1.0");
 
     QNetworkReply *reply = manager->get(request);
     

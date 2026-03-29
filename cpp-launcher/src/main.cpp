@@ -6,7 +6,7 @@ int main(int argc, char *argv[]) {
 
     MainWindow window;
     window.resize(1000, 650);
-    window.setWindowTitle("LuminaKraft Launcher (C++)");
+    window.setWindowTitle("Nebula Launcher (C++)");
     window.show();
 
     return app.exec();

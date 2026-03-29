@@ -19,7 +19,7 @@ MainWindow::~MainWindow() {}
 
 void MainWindow::setupUi() {
     this->resize(1200, 800);
-    this->setWindowTitle("LuminaKraft");
+    this->setWindowTitle("Nebula Launcher");
     this->setStyleSheet("QMainWindow { background-color: #020617; }");
 
     centralWidget = new QWidget(this);

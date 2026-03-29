@@ -1,8 +1,8 @@
 [package]
-name = "luminakraft-launcher"
+name = "nebula-launcher"
 version = "0.1.7"
-description = "LuminaKraft Studios Official Modpack Launcher"
-authors = ["LuminaKraft Studios"]
+description = "Nebula Studios Official Modpack Launcher"
+authors = ["Nebula Studios"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

@@ -149,30 +149,30 @@ const MinecraftAccountDropdown: React.FC<MinecraftAccountDropdownProps> = ({
 
   return (
     <div
-      className="minecraft-account-dropdown w-72 bg-dark-800 border border-dark-600 rounded-lg shadow-xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-100"
+      className="minecraft-account-dropdown w-80 bg-white/[0.01] backdrop-blur-3xl border border-white/10 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-300 z-[1001]"
       style={style}
     >
-      <div className="p-4 border-b border-dark-700 bg-dark-900/30">
-        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">{t('auth.microsoftAccount')}</h3>
-        <p className="text-xs text-gray-500">{t('auth.minecraftAccountDesc')}</p>
+      <div className="p-6 border-b border-white/5 bg-white/[0.02]">
+        <h3 className="text-[10px] font-black text-nebula-400 uppercase tracking-[0.2em] italic mb-1">{t('auth.microsoftAccount')}</h3>
+        <p className="text-[10px] text-dark-500 font-bold uppercase italic tracking-wider opacity-60">{t('auth.minecraftAccountDesc')}</p>
       </div>
 
-      <div className="p-4 space-y-4">
+      <div className="p-6 space-y-6">
         {/* Current Status */}
-        <div className={`p-3 rounded-lg border ${isMicrosoft ? 'bg-green-900/10 border-green-800/30' : 'bg-dark-700 border-dark-600'}`}>
-          <div className="flex items-center space-x-3">
-            <div className={`w-10 h-10 rounded flex items-center justify-center ${isMicrosoft ? 'bg-green-600/20 text-green-400' : 'bg-dark-600 text-gray-400'}`}>
+        <div className={`p-4 rounded-2xl border transition-all duration-300 ${isMicrosoft ? 'bg-nebula-500/10 border-nebula-500/30 shadow-lg shadow-nebula-500/5' : 'bg-white/5 border-white/10'}`}>
+          <div className="flex items-center space-x-4">
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 ${isMicrosoft ? 'bg-nebula-500/20 text-nebula-400 shadow-[0_0_15px_rgba(139,92,246,0.2)]' : 'bg-white/5 text-dark-500'}`}>
               {isMicrosoft ? <Gamepad2 className="w-6 h-6" /> : <WifiOff className="w-6 h-6" />}
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               {isMicrosoft ? (
-                <p className="text-white font-medium">
+                <p className="text-white font-black uppercase italic tracking-tighter truncate text-lg leading-[0.9]">
                   {userSettings.microsoftAccount?.username}
                 </p>
               ) : (
                 <>
-                  <p className="text-white font-medium">{t('auth.offlineMode')}</p>
-                  <p className="text-xs text-gray-400">{userSettings.username}</p>
+                  <p className="text-white font-black uppercase italic tracking-tighter text-lg leading-[0.9]">{t('auth.offlineMode')}</p>
+                  <p className="text-[10px] text-dark-500 font-bold uppercase italic tracking-[0.1em] truncate opacity-60">{userSettings.username}</p>
                 </>
               )}
             </div>
@@ -181,90 +181,95 @@ const MinecraftAccountDropdown: React.FC<MinecraftAccountDropdownProps> = ({
 
         {/* Actions */}
         {!isMicrosoft ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {/* Offline Username Editor */}
             <div>
-              <label className="block text-xs text-gray-400 mb-1">{t('settings.username')}</label>
-              <div className="flex space-x-2">
+              <label className="block text-[9px] font-black text-dark-500 uppercase tracking-[0.2em] italic mb-2 ml-1">{t('settings.username')}</label>
+              <div className="flex gap-2">
                 <input
                   type="text"
                   value={offlineUsername}
                   onChange={(e) => setOfflineUsername(e.target.value)}
-                  className="flex-1 bg-dark-900 border border-dark-600 rounded px-2 py-1 text-sm text-white focus:ring-1 focus:ring-lumina-500 outline-none"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder:text-dark-600 focus:ring-2 focus:ring-nebula-500/30 outline-none font-bold italic uppercase tracking-wider transition-all"
                   placeholder={t('settings.usernamePlaceholder')}
                 />
                 <button
                   onClick={handleSaveOfflineUsername}
-                  className="px-3 py-1 bg-dark-600 hover:bg-dark-500 text-white text-xs rounded transition-colors"
+                  className="px-5 py-3 bg-white/10 hover:bg-white/20 text-white text-[10px] font-black uppercase italic rounded-xl border border-white/5 transition-all active:scale-95"
                 >
                   {t('app.save')}
                 </button>
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative py-2">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-dark-600"></div>
+                <div className="w-full border-t border-white/5"></div>
               </div>
-              <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-dark-800 text-gray-500">OR</span>
+              <div className="relative flex justify-center text-[8px] font-black tracking-[0.3em] italic">
+                <span className="px-3 bg-transparent text-dark-600">OR_REACH_STARS</span>
               </div>
             </div>
 
             <button
               onClick={handleMicrosoftLogin}
               disabled={isAuthenticating}
-              className="w-full btn-primary flex items-center justify-center space-x-2 py-2"
+              className="w-full h-14 bg-nebula-500 hover:bg-nebula-400 text-white flex items-center justify-center gap-3 rounded-2xl shadow-lg shadow-nebula-500/30 transition-all duration-300 disabled:opacity-40 active:scale-95 group/ms-btn"
             >
               {isAuthenticating ? (
-                <span className="animate-pulse">{t('auth.signing')}</span>
+                <span className="animate-pulse font-black uppercase italic text-xs tracking-widest">{t('auth.signing')}</span>
               ) : (
                 <>
-                  <svg className="w-4 h-4" viewBox="0 0 21 21" fill="currentColor">
+                  <svg className="w-5 h-5 transition-transform duration-500 group-hover/ms-btn:rotate-12" viewBox="0 0 21 21" fill="currentColor">
                     <path d="M0 0h10v10H0V0zm11 0h10v10H11V0zM0 11h10v10H0V11zm11 0h10v10H11V11z" />
                   </svg>
-                  <span>{t('auth.signInMicrosoft')}</span>
+                  <span className="font-black uppercase italic text-xs tracking-widest">{t('auth.signInMicrosoft')}</span>
                 </>
               )}
             </button>
-            <p className="text-[10px] text-center text-gray-500">
+            <p className="text-[10px] text-center text-dark-500 font-bold italic uppercase tracking-tighter opacity-40">
               {t('auth.microsoftDescription')}
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             <button
               onClick={handleSwitchToOffline}
-              className="w-full btn-secondary flex items-center justify-center space-x-2 text-sm"
+              className="w-full h-14 bg-white/5 hover:bg-red-500/10 text-dark-400 hover:text-red-500 border border-white/5 hover:border-red-500/20 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 active:scale-95 group/off-btn"
             >
-              <LogOut className="w-4 h-4" />
-              <span>{t('auth.offlineMode')}</span>
+              <LogOut className="w-5 h-5 transition-transform duration-500 group-hover/off-btn:-translate-x-1" />
+              <span className="font-black uppercase italic text-xs tracking-widest">{t('auth.offlineMode')}</span>
             </button>
-            <p className="text-[10px] text-center text-gray-500">
+            <p className="text-[10px] text-center text-dark-500 font-bold italic uppercase tracking-tighter opacity-40">
               {t('auth.offlineModeDescription')}
             </p>
           </div>
         )}
 
         {/* LuminaKraft Account Section */}
-        <div className="pt-3 border-t border-dark-700">
-          <div className="flex items-center justify-between mb-2">
-            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">LuminaKraft Account</h4>
+        <div className="pt-6 border-t border-white/5">
+          <div className="flex items-center justify-between mb-4 px-1">
+            <h4 className="text-[10px] font-black text-dark-500 uppercase tracking-[0.2em] italic">NEBULA_PROFILE</h4>
           </div>
           {luminaKraftUser ? (
-            <div className="flex items-center justify-between p-2 bg-lumina-900/10 border border-lumina-800/30 rounded">
-              <div className="flex items-center space-x-2">
-                <UserIcon className="w-4 h-4 text-lumina-400" />
-                <span className="text-sm text-white">{luminaKraftUser.user_metadata?.display_name || luminaKraftUser.email}</span>
+            <div className="flex items-center justify-between p-4 bg-nebula-500/5 border border-nebula-500/20 rounded-2xl group/profile">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-nebula-500/10 flex items-center justify-center text-nebula-400 shadow-inner">
+                  <UserIcon className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <span className="text-xs text-white font-black uppercase italic tracking-tighter truncate block">{luminaKraftUser.user_metadata?.display_name || luminaKraftUser.email}</span>
+                  <span className="text-[8px] text-nebula-400/60 font-black uppercase tracking-widest">AUTHENTICATED</span>
+                </div>
               </div>
               <button
                 onClick={() => {
                   onNavigateToAccount?.();
                   onClose();
                 }}
-                className="text-xs px-2 py-1 text-lumina-400 hover:text-lumina-300 hover:bg-lumina-400/10 rounded transition-colors"
+                className="w-10 h-10 flex items-center justify-center text-dark-500 hover:text-nebula-400 bg-white/5 hover:bg-white/10 rounded-xl transition-all active:scale-90"
               >
-                <Settings className="w-3 h-3" />
+                <Settings className="w-4 h-4" />
               </button>
             </div>
           ) : (
@@ -273,10 +278,10 @@ const MinecraftAccountDropdown: React.FC<MinecraftAccountDropdownProps> = ({
                 onNavigateToAccount?.();
                 onClose();
               }}
-              className="w-full btn-secondary text-sm py-2 flex items-center justify-center space-x-2"
+              className="w-full h-14 bg-white/5 hover:bg-nebula-500/10 text-dark-500 hover:text-nebula-400 border border-white/10 hover:border-nebula-500/30 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 active:scale-95"
             >
-              <LogIn className="w-4 h-4" />
-              <span>Sign In</span>
+              <LogIn className="w-5 h-5" />
+              <span className="font-black uppercase italic text-xs tracking-widest">CONNECT_PROFILE</span>
             </button>
           )}
         </div>

@@ -23,16 +23,16 @@ import ModpackScreenshotGallery from './Details/ModpackScreenshotGallery';
 import ProfileOptionsModal from './ProfileOptionsModal';
 
 const markdownComponents = {
-  h1: ({ children }: any) => <h1 className="text-2xl font-bold text-white mb-4 mt-6">{children}</h1>,
-  h2: ({ children }: any) => <h2 className="text-xl font-bold text-white mb-3 mt-5">{children}</h2>,
-  h3: ({ children }: any) => <h3 className="text-lg font-bold text-white mb-2 mt-4">{children}</h3>,
-  p: ({ children }: any) => <div className="text-dark-200 mb-4 leading-relaxed whitespace-pre-wrap">{children}</div>,
-  ul: ({ children }: any) => <ul className="list-disc list-inside space-y-1 mb-4 text-dark-300 pl-4">{children}</ul>,
-  ol: ({ children }: any) => <ol className="list-decimal list-inside space-y-1 mb-4 text-dark-300 pl-4">{children}</ol>,
-  li: ({ children }: any) => <li className="mb-0.5">{children}</li>,
-  a: ({ node, ...props }: any) => <a {...props} className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2" target="_blank" rel="noopener noreferrer" />,
-  img: ({ node, ...props }: any) => <img {...props} className="rounded-lg max-w-full my-4 border border-dark-700/50" />,
-  code: ({ children }: any) => <code className="bg-dark-800 px-1.5 py-0.5 rounded text-lumina-400 text-xs font-mono">{children}</code>
+  h1: ({ children }: any) => <h1 className="text-3xl font-black text-white mb-6 mt-10 uppercase italic tracking-tighter">{children}</h1>,
+  h2: ({ children }: any) => <h2 className="text-2xl font-black text-white mb-4 mt-8 uppercase italic tracking-tighter">{children}</h2>,
+  h3: ({ children }: any) => <h3 className="text-xl font-black text-white mb-3 mt-6 uppercase italic tracking-tighter">{children}</h3>,
+  p: ({ children }: any) => <div className="text-dark-300 mb-6 leading-relaxed font-medium">{children}</div>,
+  ul: ({ children }: any) => <ul className="list-disc list-inside space-y-2 mb-6 text-dark-300 pl-6 border-l-2 border-nebula-500/20">{children}</ul>,
+  ol: ({ children }: any) => <ol className="list-decimal list-inside space-y-2 mb-6 text-dark-300 pl-6 border-l-2 border-nebula-500/20">{children}</ol>,
+  li: ({ children }: any) => <li className="pl-2">{children}</li>,
+  a: ({ node, ...props }: any) => <a {...props} className="text-nebula-400 hover:text-nebula-300 underline underline-offset-4 decoration-nebula-500/30" target="_blank" rel="noopener noreferrer" />,
+  img: ({ node, ...props }: any) => <img {...props} className="rounded-3xl max-w-full my-8 border border-white/5 shadow-2xl" />,
+  code: ({ children }: any) => <code className="bg-white/5 px-2 py-1 rounded text-nebula-400 text-xs font-mono border border-white/5">{children}</code>
 };
 
 interface ModpackDetailsProps {
@@ -220,14 +220,14 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
     // Priority: New > Coming Soon (don't show Active if it's New or Coming Soon)
     if (modpack.isNew) {
       return (
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-600/40 text-green-300 border border-green-600/60">
+        <span className="inline-flex items-center px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-green-500/20 text-green-400 border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
           {t('modpacks.status.new')}
         </span>
       );
     }
     if (modpack.isComingSoon) {
       return (
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-600/40 text-blue-300 border border-blue-600/60">
+        <span className="inline-flex items-center px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-nebula-500/20 text-nebula-400 border border-nebula-500/30 shadow-[0_0_15px_rgba(139,92,246,0.3)]">
           {t('modpacks.status.coming_soon')}
         </span>
       );
@@ -273,23 +273,20 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
   const renderContentTab = () => (
     <>
       {/* Quick Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-3 gap-6 mb-10">
         {statsDisplay.map((stat, index) => (
           <div
             key={index}
-            className={`bg-dark-800/40 backdrop-blur-md rounded-xl p-4 border border-white/5 group shadow-lg ${getAnimationClass('hover:border-lumina-400/30 hover:bg-dark-800/60 transition-all duration-150', 'hover:scale-105')
-              }`}
+            className="bg-white/[0.03] backdrop-blur-xl rounded-[2rem] p-6 border border-white/5 group shadow-2xl hover:border-nebula-500/30 hover:bg-white/[0.05] transition-all duration-300"
             style={getAnimationStyle({
-              animation: `fadeInUp 0.15s ease-out ${index * 0.02}s backwards`
+              animation: `fadeInUp 0.15s ease-out ${index * 0.05}s backwards`
             })}
           >
-            <stat.icon className={`w-5 h-5 text-lumina-400 mb-2 ${getAnimationClass('transition-transform duration-150', 'group-hover:scale-105')
-              }`} />
-            <div className={`text-2xl font-bold text-white ${getAnimationClass('transition-colors duration-150', 'group-hover:text-lumina-300')
-              }`}>
+            <stat.icon className="w-6 h-6 text-nebula-400 mb-3 group-hover:scale-110 transition-transform duration-300" />
+            <div className="text-3xl font-black text-white italic uppercase tracking-tighter group-hover:text-nebula-300 transition-colors">
               {stat.value}
             </div>
-            <div className="text-sm text-dark-400">{stat.label}</div>
+            <div className="text-[10px] font-black text-dark-500 uppercase tracking-widest mt-1">{stat.label}</div>
           </div>
         ))}
       </div>
@@ -336,12 +333,10 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
       {/* Back button - Fixed position */}
       <button
         onClick={onBack}
-        className={`absolute top-6 left-6 z-40 flex items-center space-x-2 px-3 py-2 bg-dark-800/80 backdrop-blur-sm text-dark-400 hover:text-white rounded-lg border border-dark-700/50 ${getAnimationClass('transition-all duration-75', 'hover:scale-105 hover:bg-dark-700/90')
-          }`}
-        style={getAnimationStyle({})}
+        className="absolute top-8 left-8 z-40 flex items-center gap-2 px-5 py-3 bg-dark-900/60 backdrop-blur-xl text-dark-400 hover:text-white rounded-2xl border border-white/5 hover:border-white/10 transition-all font-bold uppercase text-xs tracking-widest shadow-2xl group"
       >
-        <ArrowLeft className="w-4 h-4" />
-        <span className="text-sm font-medium">{t('navigation.backToList')}</span>
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+        <span>BACK</span>
       </button>
 
       {/* Scrollable content */}
@@ -349,7 +344,7 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
 
         {/* Hero Section with banner or fallback gradient */}
         <div
-          className={`relative h-80 flex flex-col justify-end p-8 text-white ${!modpack.backgroundImage ? 'bg-gradient-to-br from-blue-500 to-purple-600' : ''
+          className={`relative h-[650px] flex flex-col justify-end p-12 text-white ${!modpack.backgroundImage ? 'bg-gradient-to-br from-indigo-900 via-nebula-900 to-dark-950' : ''
             }`}
         >
           {/* Banner / fallback image */}
@@ -358,29 +353,26 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
               className="absolute inset-0 bg-center bg-cover"
               style={{
                 backgroundImage: `url(${modpack.backgroundImage || modpack.images?.[0] || modpack.logo})`,
-                opacity: 0.12
+                opacity: 0.2
               }}
             />
           )}
           {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/40 to-transparent" />
 
           {/* Logo and Content */}
-          <div className="relative z-10 flex items-start space-x-6">
+          <div className="relative z-10 flex flex-col md:flex-row items-center md:items-end gap-12 max-w-[1600px] mx-auto w-full">
             {/* Logo */}
             <div className="flex-shrink-0">
               <div
-                className={`w-40 h-40 rounded-lg overflow-hidden flex items-center justify-center ${!modpack.logo || (modpack.logo && modpack.logo.length === 1)
-                  ? 'bg-gradient-to-br from-blue-500 to-purple-600'
-                  : ''
-                  }`}
+                className="w-56 h-56 rounded-[3rem] overflow-hidden flex items-center justify-center bg-dark-900 border-2 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] group ring-1 ring-white/5"
                 style={getAnimationStyle({
                   animation: `fadeInUp 0.15s ease-out 0.02s backwards`
                 })}
               >
                 {modpack.logo && modpack.logo.length === 1 ? (
                   // Show first letter for local modpacks
-                  <div className="text-7xl font-bold text-white opacity-30">
+                  <div className="text-8xl font-black text-white/10 italic">
                     {modpack.logo}
                   </div>
                 ) : modpack.logo ? (
@@ -388,58 +380,70 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
                   <img
                     src={modpack.logo}
                     alt={displayName}
-                    className="w-full h-full object-contain object-top"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.style.display = 'none';
-                      target.parentElement!.innerHTML = `<div class="text-7xl font-bold text-white opacity-30">${displayName.charAt(0).toUpperCase()}</div>`;
+                      target.parentElement!.innerHTML = `<div class="text-8xl font-black text-white/10 italic">${displayName.charAt(0).toUpperCase()}</div>`;
                     }}
                   />
                 ) : (
                   // Show first letter when no logo
-                  <div className="text-7xl font-bold text-white opacity-30">
+                  <div className="text-8xl font-black text-white/10 italic">
                     {displayName.charAt(0).toUpperCase()}
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                <div className="min-w-0 flex-1">
-                  <h1
-                    className={`text-4xl font-bold text-white mb-2 ${getAnimationClass('transition-all duration-75')
-                      }`}
-                    style={getAnimationStyle({
-                      animation: `fadeInUp 0.15s ease-out 0.05s backwards`
-                    })}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <span>{displayName}</span>
-                      {isLoadingDetails && (
-                        <Loader2 className="w-5 h-5 text-lumina-400 animate-spin" />
-                      )}
-                    </div>
-                  </h1>
-                  <p
-                    className={`text-lg text-dark-300 leading-relaxed ${getAnimationClass('transition-all duration-75')
-                      }`}
-                    style={getAnimationStyle({
-                      animation: `fadeInUp 0.15s ease-out 0.1s backwards`
-                    })}
-                  >
-                    {displayDescription}
-                  </p>
-                </div>
+            <div className="flex-1 min-w-0 text-center md:text-left">
+              <div className="space-y-4">
                 <div
-                  className="flex-shrink-0"
+                  className="flex flex-wrap items-center justify-center md:justify-start gap-3"
+                  style={getAnimationStyle({
+                    animation: `fadeInUp 0.15s ease-out 0.05s backwards`
+                  })}
+                >
+                  <span className="px-3 py-1 rounded-full bg-nebula-500/20 text-nebula-400 text-[10px] font-black uppercase tracking-widest border border-nebula-500/30">
+                    {modpack.category || 'Mission Profile'}
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-white/5 text-dark-300 text-[10px] font-black uppercase tracking-widest border border-white/5">
+                    MC {modpack.minecraftVersion}
+                  </span>
+                </div>
+
+                <h1
+                  className="text-7xl font-black text-white italic uppercase tracking-tighter leading-none"
+                  style={getAnimationStyle({
+                    animation: `fadeInUp 0.15s ease-out 0.1s backwards`
+                  })}
+                >
+                  <div className="flex items-center justify-center md:justify-start gap-4">
+                    <span>{displayName}</span>
+                    {isLoadingDetails && (
+                      <Loader2 className="w-8 h-8 text-nebula-400 animate-spin" />
+                    )}
+                  </div>
+                </h1>
+                
+                <p
+                  className="text-xl text-dark-300 font-medium italic max-w-2xl leading-relaxed"
                   style={getAnimationStyle({
                     animation: `fadeInUp 0.15s ease-out 0.15s backwards`
                   })}
                 >
-                  {getServerStatusBadge()}
-                </div>
+                  {displayDescription}
+                </p>
               </div>
+            </div>
+            
+            <div
+              className="flex-shrink-0"
+              style={getAnimationStyle({
+                animation: `fadeInUp 0.15s ease-out 0.2s backwards`
+              })}
+            >
+              {getServerStatusBadge()}
             </div>
           </div>
         </div>
@@ -468,35 +472,34 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
             <div className="lg:col-span-2 space-y-8">
               {/* Tab Navigation */}
               <div
-                className={`flex space-x-1 bg-dark-800/40 backdrop-blur-md border border-white/5 p-1.5 rounded-xl ${getAnimationClass('transition-all duration-75')
-                  }`}
+                className="flex space-x-1 bg-white/[0.02] backdrop-blur-xl border border-white/5 p-2 rounded-2xl shadow-2xl"
                 style={getAnimationStyle({
                   animation: `fadeInUp 0.15s ease-out 0.05s backwards`
                 })}
               >
                 <button
                   onClick={() => setActiveTab('content')}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-150 ${activeTab === 'content'
-                    ? 'bg-lumina-600 text-white shadow-lg'
-                    : 'text-dark-300 hover:text-white hover:bg-white/5'
+                  className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === 'content'
+                    ? 'bg-nebula-500 text-white shadow-lg shadow-nebula-500/20'
+                    : 'text-dark-400 hover:text-white hover:bg-white/5'
                     }`}
                 >
                   <Info className="w-4 h-4" />
-                  <span>Description</span>
+                  <span>Overview</span>
                 </button>
                 {/* Screenshots Tab Button - Only show in read-only mode */}
                 {isReadOnly && (
                   <button
                     onClick={() => setActiveTab('screenshots')}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-150 ${activeTab === 'screenshots'
-                      ? 'bg-lumina-600 text-white shadow-lg'
-                      : 'text-dark-300 hover:text-white hover:bg-white/5'
+                    className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === 'screenshots'
+                      ? 'bg-nebula-500 text-white shadow-lg shadow-nebula-500/20'
+                      : 'text-dark-400 hover:text-white hover:bg-white/5'
                       }`}
                   >
                     <Image className="w-4 h-4" />
                     <span>Gallery</span>
                     {modpack.images && modpack.images.length > 0 && (
-                      <span className="bg-emerald-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                      <span className="bg-nebula-400 text-dark-900 text-[10px] px-2 py-0.5 rounded-full font-black">
                         {modpack.images.length}
                       </span>
                     )}
@@ -506,15 +509,15 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
                 {!isReadOnly && (
                   <button
                     onClick={() => setActiveTab('logs')}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-150 ${activeTab === 'logs'
-                      ? 'bg-lumina-600 text-white shadow-lg'
-                      : 'text-dark-300 hover:text-white hover:bg-white/5'
+                    className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === 'logs'
+                      ? 'bg-nebula-500 text-white shadow-lg shadow-nebula-500/20'
+                      : 'text-dark-400 hover:text-white hover:bg-white/5'
                       }`}
                   >
                     <Terminal className="w-4 h-4" />
                     <span>{t('modpacks.logs')}</span>
                     {logs.length > 0 && (
-                      <span className="bg-green-500 text-black text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                      <span className="bg-nebula-400 text-dark-900 text-[10px] px-2 py-0.5 rounded-full font-black">
                         {logs.length}
                       </span>
                     )}
@@ -525,9 +528,9 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
                   <>
                     <button
                       onClick={() => setActiveTab('mods')}
-                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-150 ${activeTab === 'mods'
-                        ? 'bg-lumina-600 text-white shadow-lg'
-                        : 'text-dark-300 hover:text-white hover:bg-white/5'
+                      className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === 'mods'
+                        ? 'bg-nebula-500 text-white shadow-lg shadow-nebula-500/20'
+                        : 'text-dark-400 hover:text-white hover:bg-white/5'
                         }`}
                     >
                       <Package className="w-4 h-4" />
@@ -535,9 +538,9 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
                     </button>
                     <button
                       onClick={() => setActiveTab('worlds')}
-                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-150 ${activeTab === 'worlds'
-                        ? 'bg-lumina-600 text-white shadow-lg'
-                        : 'text-dark-300 hover:text-white hover:bg-white/5'
+                      className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === 'worlds'
+                        ? 'bg-nebula-500 text-white shadow-lg shadow-nebula-500/20'
+                        : 'text-dark-400 hover:text-white hover:bg-white/5'
                         }`}
                     >
                       <Globe className="w-4 h-4" />
@@ -545,9 +548,9 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
                     </button>
                     <button
                       onClick={() => setActiveTab('screenshots')}
-                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-150 ${activeTab === 'screenshots'
-                        ? 'bg-lumina-600 text-white shadow-lg'
-                        : 'text-dark-300 hover:text-white hover:bg-white/5'
+                      className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === 'screenshots'
+                        ? 'bg-nebula-500 text-white shadow-lg shadow-nebula-500/20'
+                        : 'text-dark-400 hover:text-white hover:bg-white/5'
                         }`}
                     >
                       <Image className="w-4 h-4" />
@@ -559,9 +562,9 @@ const ModpackDetailsRefactored: React.FC<ModpackDetailsProps> = ({ modpack, stat
                 {isReadOnly && (
                   <button
                     onClick={() => setActiveTab('versions')}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all duration-75 ${activeTab === 'versions'
-                      ? 'bg-lumina-600 text-white shadow-lg'
-                      : 'text-dark-300 hover:text-white hover:bg-dark-700'
+                    className={`flex items-center space-x-3 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 ${activeTab === 'versions'
+                      ? 'bg-nebula-500 text-white shadow-lg shadow-nebula-500/20'
+                      : 'text-dark-400 hover:text-white hover:bg-white/5'
                       }`}
                   >
                     <History className="w-4 h-4" />

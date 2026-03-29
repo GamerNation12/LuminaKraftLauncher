@@ -327,14 +327,14 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
   };
 
   return createPortal(
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-8 overflow-hidden pointer-events-auto" onClick={(e) => e.stopPropagation()}>
-      <div className="bg-dark-800 rounded-lg p-6 max-w-2xl w-full border border-dark-600 max-h-[90vh] overflow-y-auto pointer-events-auto">
+    <div className="fixed inset-0 bg-nebula-950/40 backdrop-blur-2xl z-[100] flex items-center justify-center p-8 overflow-hidden pointer-events-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white/[0.02] backdrop-blur-3xl rounded-[2.5rem] p-10 max-w-2xl w-full border border-white/10 max-h-[90vh] overflow-y-auto pointer-events-auto shadow-[0_0_100px_rgba(139,92,246,0.1)] custom-scrollbar">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-white">{t('profileOptions.title')}</h2>
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">{t('profileOptions.title')}</h2>
           <button
             onClick={onClose}
-            className="text-dark-400 hover:text-white transition-colors"
+            className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-dark-500 hover:text-white hover:bg-white/10 transition-all border border-white/5"
             disabled={isSaving}
           >
             <X className="w-5 h-5" />
@@ -343,22 +343,22 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
 
         {/* Name Section - Only for local modpacks */}
         {isLocalModpack && (
-          <div className="mb-6">
-            <label className="block text-dark-300 text-sm font-medium mb-2">
-              {t('profileOptions.name')} {!editingName && <span className="text-xs text-lumina-400">(Click para editar)</span>}
+          <div className="mb-10">
+            <label className="block text-[10px] font-black text-dark-500 uppercase tracking-widest italic mb-4 px-1">
+              {t('profileOptions.name')} {!editingName && <span className="text-nebula-400 opacity-50 ml-2">(TRANSMISSION IDENTIFIER)</span>}
             </label>
             {editingName ? (
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <input
                   type="text"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  className="input-field w-full flex-1"
+                  className="w-full flex-1 bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white font-black italic tracking-tighter outline-none focus:border-nebula-500/50 transition-all"
                   autoFocus
                 />
                 <button
                   onClick={() => setEditingName(false)}
-                  className="px-3 py-2 bg-lumina-600 hover:bg-lumina-700 text-white rounded-lg text-sm transition-colors"
+                  className="px-6 py-4 bg-nebula-500 hover:bg-nebula-600 text-white rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all shadow-xl shadow-nebula-500/20"
                 >
                   {t('app.confirm')}
                 </button>
@@ -366,9 +366,9 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
             ) : (
               <div
                 onClick={() => setEditingName(true)}
-                className="input-field w-full transition-colors cursor-pointer hover:border-lumina-400/50 bg-dark-700 hover:bg-dark-600 p-2"
+                className="w-full transition-all cursor-pointer border border-white/5 hover:border-nebula-500/30 bg-white/5 hover:bg-white/[0.08] p-4 rounded-2xl flex items-center shadow-inner"
               >
-                <span className="text-white">{displayName}</span>
+                <span className="text-white font-black text-lg italic tracking-tighter">{displayName}</span>
               </div>
             )}
           </div>
@@ -376,44 +376,44 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
 
         {/* Image Settings for Local Modpacks */}
         {isLocalModpack && (
-          <div className="mb-6">
-            <label className="block text-dark-300 text-sm font-medium mb-3">
-              {t('profileOptions.images', 'Imágenes personalizadas')}
+          <div className="mb-10">
+            <label className="block text-[10px] font-black text-dark-500 uppercase tracking-widest italic mb-6 px-1">
+              {t('profileOptions.images', 'Profile Holographics')}
             </label>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               {/* Logo */}
               <div
-                className="relative w-16 h-16 rounded-lg bg-dark-700 flex-shrink-0 cursor-pointer overflow-hidden hover-group"
+                className="relative w-20 h-20 rounded-[1.5rem] bg-white/5 flex-shrink-0 cursor-pointer overflow-hidden group/img border border-white/5 transition-all hover:border-nebula-500/30 shadow-xl"
                 onClick={() => logoInputRef.current?.click()}
               >
                 {logoPreviewUrl ? (
-                  <img src={logoPreviewUrl} alt="Logo Preview" className="w-full h-full object-cover" />
+                  <img src={logoPreviewUrl} alt="Logo Preview" className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110" />
                 ) : logoUrl ? (
-                  <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" />
+                  <img src={logoUrl} alt="Logo" className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110" />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
+                  <div className="w-full h-full bg-gradient-to-br from-nebula-600 to-nebula-400 flex items-center justify-center text-white text-2xl font-black italic">
                     {displayName.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="text-white text-xs font-medium">Cambiar</span>
+                <div className="absolute inset-0 bg-nebula-900/60 backdrop-blur-[2px] opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-white text-[10px] font-black uppercase italic tracking-widest">Update</span>
                 </div>
               </div>
 
               {/* Banner */}
               <div
-                className="relative flex-1 h-16 rounded-lg bg-dark-700 cursor-pointer overflow-hidden hover-group"
+                className="relative flex-1 h-20 rounded-[1.5rem] bg-white/5 cursor-pointer overflow-hidden group/img border border-white/5 transition-all hover:border-nebula-500/30 shadow-xl"
                 onClick={() => bannerInputRef.current?.click()}
               >
                 {bannerPreviewUrl ? (
-                  <img src={bannerPreviewUrl} alt="Banner Preview" className="w-full h-full object-cover" />
+                  <img src={bannerPreviewUrl} alt="Banner Preview" className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110" />
                 ) : bannerUrl ? (
-                  <img src={bannerUrl} alt="Banner" className="w-full h-full object-cover" />
+                  <img src={bannerUrl} alt="Banner" className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110" />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-r from-purple-500 to-pink-600"></div>
+                  <div className="w-full h-full bg-gradient-to-r from-nebula-900/40 to-nebula-500/20"></div>
                 )}
-                <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="text-white text-xs font-medium">Cambiar</span>
+                <div className="absolute inset-0 bg-nebula-900/60 backdrop-blur-[2px] opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-white text-[10px] font-black uppercase italic tracking-widest">Update Core Surface</span>
                 </div>
               </div>
 
@@ -444,80 +444,82 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
 
         {/* Protection Mode Section (Official/Partner only) */}
         {!isLocalModpack && metadata?.category && (metadata.category === 'official' || metadata.category === 'partner' || metadata.category === 'community') && (
-          <div className="mb-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <Shield className="w-5 h-5 text-lumina-500" />
-              <h3 className="text-white text-lg font-semibold">{t('profileOptions.stability.title')}</h3>
+          <div className="mb-10">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-2.5 bg-nebula-500/10 rounded-xl border border-nebula-500/20">
+                <Shield className="w-5 h-5 text-nebula-400" />
+              </div>
+              <h3 className="text-lg font-black text-white uppercase italic tracking-tighter">{t('profileOptions.stability.title')}</h3>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="grid grid-cols-2 gap-4 mb-6">
               {/* Protected (Recommended) - Now Read-Only */}
               <div
-                className={`flex flex-col items-start p-4 rounded-lg border transition-all text-left cursor-not-allowed ${isProtected
-                  ? 'border-lumina-500 bg-lumina-500/10'
-                  : 'border-dark-600 bg-dark-700/50 opacity-50'
+                className={`flex flex-col items-start p-6 rounded-[1.5rem] border transition-all text-left cursor-not-allowed shadow-xl ${isProtected
+                  ? 'border-nebula-500/40 bg-nebula-500/10'
+                  : 'border-white/5 bg-white/5 opacity-40'
                   }`}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <Shield className={`w-4 h-4 ${isProtected ? 'text-lumina-400' : 'text-dark-400'}`} />
-                  <span className={`font-semibold ${isProtected ? 'text-white' : 'text-dark-300'}`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <Shield className={`w-5 h-5 ${isProtected ? 'text-nebula-400' : 'text-dark-500'}`} />
+                  <span className={`font-black text-xs uppercase italic tracking-widest ${isProtected ? 'text-white' : 'text-dark-500'}`}>
                     {t('profileOptions.stability.protected')}
                   </span>
                 </div>
-                <p className="text-xs text-dark-400 leading-relaxed">
+                <p className="text-[10px] text-dark-400 font-medium leading-relaxed italic">
                   {t('profileOptions.stability.protectedDesc')}
                 </p>
               </div>
 
               {/* Open - Now Read-Only */}
               <div
-                className={`flex flex-col items-start p-4 rounded-lg border transition-all text-left cursor-not-allowed ${isFullyOpen
-                  ? 'border-emerald-500 bg-emerald-500/10'
-                  : 'border-dark-600 bg-dark-700/50 opacity-50'
+                className={`flex flex-col items-start p-6 rounded-[1.5rem] border transition-all text-left cursor-not-allowed shadow-xl ${isFullyOpen
+                  ? 'border-nebula-400/40 bg-nebula-400/10'
+                  : 'border-white/5 bg-white/5 opacity-40'
                   }`}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <ShieldOff className={`w-4 h-4 ${isFullyOpen ? 'text-emerald-400' : 'text-dark-400'}`} />
-                  <span className={`font-semibold ${isFullyOpen ? 'text-white' : 'text-dark-300'}`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <ShieldOff className={`w-5 h-5 ${isFullyOpen ? 'text-nebula-400' : 'text-dark-500'}`} />
+                  <span className={`font-black text-xs uppercase italic tracking-widest ${isFullyOpen ? 'text-white' : 'text-dark-500'}`}>
                     {t('profileOptions.stability.open')}
                   </span>
                 </div>
-                <p className="text-xs text-dark-400 leading-relaxed">
+                <p className="text-[10px] text-dark-400 font-medium leading-relaxed italic">
                   {t('profileOptions.stability.openDesc')}
                 </p>
               </div>
             </div>
 
             {/* Advanced Toggle */}
-            <div className="border-t border-dark-600 pt-3">
+            <div className="border-t border-white/5 pt-4">
               <button
                 type="button"
                 onClick={() => setShowAdvancedProtection(!showAdvancedProtection)}
-                className="flex items-center justify-between w-full text-dark-400 hover:text-white transition-colors text-sm"
+                className="flex items-center justify-between w-full text-dark-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-widest italic"
               >
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-3">
                   <Shield className="w-4 h-4" />
                   {t('profileOptions.stability.advancedMode')}
-                  {isCustomMode && <span className="text-lumina-400 text-[10px] uppercase font-bold px-1.5 py-0.5 bg-lumina-500/10 rounded ml-2">Custom</span>}
+                  {isCustomMode && <span className="text-nebula-400 px-2 py-0.5 bg-nebula-500/10 rounded-full ml-3 border border-nebula-500/20">CUSTOM</span>}
                 </span>
-                {showAdvancedProtection ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                {showAdvancedProtection ? <ChevronUp className="w-4 h-4 text-nebula-400" /> : <ChevronDown className="w-4 h-4" />}
               </button>
 
               {showAdvancedProtection && (
-                <div className="mt-4 space-y-3 bg-dark-900/40 p-4 rounded-lg border border-dark-700/50">
-                  <table className="w-full text-sm">
+                <div className="mt-6 space-y-4 bg-white/5 p-6 rounded-2xl border border-white/5 shadow-inner">
+                  <table className="w-full text-[10px] font-black uppercase tracking-widest italic">
                     <thead>
-                      <tr className="text-dark-500 border-b border-dark-700">
-                        <th className="text-left font-medium pb-2">{t('profileOptions.stability.foldersTable.folder')}</th>
-                        <th className="text-right font-medium pb-2">{t('profileOptions.stability.foldersTable.status')}</th>
+                      <tr className="text-dark-500 border-b border-white/5">
+                        <th className="text-left pb-3">{t('profileOptions.stability.foldersTable.folder')}</th>
+                        <th className="text-right pb-3">{t('profileOptions.stability.foldersTable.status')}</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-dark-700/50">
+                    <tbody className="divide-y divide-white/5">
                       <tr>
-                        <td className="py-2.5 text-white">/mods</td>
-                        <td className="py-2.5 text-right">
+                        <td className="py-4 text-white">/mods</td>
+                        <td className="py-4 text-right">
                           <div
-                            className={`text-xs px-2 py-1 rounded transition-colors ${!allowCustomMods ? 'bg-lumina-500/20 text-lumina-400' : 'bg-dark-700 text-dark-400'
+                            className={`px-3 py-1 rounded-full inline-block transition-all ${!allowCustomMods ? 'bg-nebula-500/10 text-nebula-400 border border-nebula-500/20' : 'bg-white/5 text-dark-500 border border-white/5'
                               }`}
                           >
                             {!allowCustomMods ? t('profileOptions.stability.protected') : t('profileOptions.stability.foldersTable.unprotected')}
@@ -525,10 +527,10 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-2.5 text-white">/resourcepacks</td>
-                        <td className="py-2.5 text-right">
+                        <td className="py-4 text-white">/resourcepacks</td>
+                        <td className="py-4 text-right">
                           <div
-                            className={`text-xs px-2 py-1 rounded transition-colors ${!allowCustomResourcepacks ? 'bg-lumina-500/20 text-lumina-400' : 'bg-dark-700 text-dark-400'
+                            className={`px-3 py-1 rounded-full inline-block transition-all ${!allowCustomResourcepacks ? 'bg-nebula-500/10 text-nebula-400 border border-nebula-500/20' : 'bg-white/5 text-dark-500 border border-white/5'
                               }`}
                           >
                             {!allowCustomResourcepacks ? t('profileOptions.stability.protected') : t('profileOptions.stability.foldersTable.unprotected')}
@@ -537,9 +539,9 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
                       </tr>
                     </tbody>
                   </table>
-                  <div className="mt-3 p-2 bg-blue-500/10 border border-blue-500/20 rounded text-[10px] text-blue-400 flex items-center gap-2">
-                    <Shield className="w-3 h-3" />
-                    <span>{t('profileOptions.stability.managedByCreator', 'These settings are managed by the modpack creator to ensure stability.')}</span>
+                  <div className="mt-4 p-4 bg-nebula-500/5 border border-nebula-500/10 rounded-2xl text-[10px] text-nebula-400 flex items-center gap-3 font-black uppercase tracking-widest italic">
+                    <Shield className="w-4 h-4 flex-shrink-0" />
+                    <span>{t('profileOptions.stability.managedByCreator', 'Operational parameters preserved by mission control.')}</span>
                   </div>
                 </div>
               )}
@@ -548,10 +550,12 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
         )}
 
         {/* Memory Settings */}
-        <div className="mb-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <HardDrive className="w-5 h-5 text-lumina-500" />
-            <h3 className="text-white text-lg font-semibold">{t('profileOptions.memorySettings')}</h3>
+        <div className="mb-10">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="p-2.5 bg-nebula-500/10 rounded-xl border border-nebula-500/20">
+              <HardDrive className="w-5 h-5 text-nebula-400" />
+            </div>
+            <h3 className="text-lg font-black text-white uppercase italic tracking-tighter">{t('profileOptions.memorySettings')}</h3>
           </div>
 
           <div className="space-y-3">
@@ -565,9 +569,11 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
               const isUnsafe = recommendedMB > safeLimitMB;
 
               return (
-                <label className={`flex items-start space-x-3 p-4 rounded-lg border transition-colors ${isUnsafe
-                  ? 'border-red-900/50 bg-red-900/10 opacity-75 cursor-not-allowed'
-                  : 'border-dark-600 hover:border-lumina-500/50 cursor-pointer'
+                <label className={`flex items-start gap-4 p-5 rounded-[1.5rem] border transition-all cursor-pointer shadow-xl ${isUnsafe
+                  ? 'border-red-900/10 bg-red-900/5 opacity-50 cursor-not-allowed'
+                  : ramMode === 'recommended'
+                    ? 'border-nebula-500/40 bg-nebula-500/10 shadow-nebula-500/5'
+                    : 'border-white/5 bg-white/5 hover:border-white/10'
                   }`}>
                   <input
                     type="radio"
@@ -578,21 +584,21 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
                       if (!isUnsafe) setRamMode(e.target.value as 'recommended');
                     }}
                     disabled={isUnsafe}
-                    className="mt-1 w-4 h-4 text-lumina-600 bg-dark-700 border-dark-600 focus:ring-lumina-500 focus:ring-2 disabled:opacity-50"
+                    className="mt-1.5 w-5 h-5 text-nebula-500 bg-white/5 border-white/10 accent-nebula-500"
                   />
                   <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className={`font-medium ${isUnsafe ? 'text-red-400' : 'text-white'}`}>
+                    <div className="flex items-center gap-3">
+                      <span className={`text-sm font-black uppercase italic tracking-widest ${isUnsafe ? 'text-red-400' : 'text-white'}`}>
                         {t('profileOptions.recommendedByAuthor')} - {recommendedMB}MB
                       </span>
-                      {ramMode === 'recommended' && !isUnsafe && <span className="text-lumina-400 ml-2">{t('profileOptions.default')}</span>}
+                      {ramMode === 'recommended' && !isUnsafe && <span className="text-[10px] font-black uppercase tracking-widest italic text-nebula-400 bg-nebula-500/10 px-2 py-0.5 rounded-full border border-nebula-500/20 ml-2">SELECTED</span>}
                     </div>
 
-                    <div className="text-dark-300 text-sm mt-1">
+                    <div className="text-[10px] font-medium text-dark-500 italic mt-2 leading-relaxed">
                       {isUnsafe ? (
-                        <span className="text-red-400 flex items-center gap-1">
+                        <span className="text-red-400 flex items-center gap-2">
                           <AlertTriangle className="w-4 h-4" />
-                          {t('profileOptions.unsafeRamWarning', 'Excede memoria segura. Se usará Global.')}
+                          {t('profileOptions.unsafeRamWarning', 'Critical: Core memory overflow. Switching to global telemetry.')}
                         </span>
                       ) : (
                         t('profileOptions.recommendedDescription')
@@ -604,42 +610,48 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
             })()}
 
             {/* Global Settings Option */}
-            <label className="flex items-start space-x-3 p-4 rounded-lg border border-dark-600 hover:border-lumina-500/50 transition-colors cursor-pointer">
+            <label className={`flex items-start gap-4 p-5 rounded-[1.5rem] border transition-all cursor-pointer shadow-xl ${ramMode === 'global'
+              ? 'border-nebula-500/40 bg-nebula-500/10 shadow-nebula-500/5'
+              : 'border-white/5 bg-white/5 hover:border-white/10'
+              }`}>
               <input
                 type="radio"
                 name="ramMode"
                 value="global"
                 checked={ramMode === 'global'}
                 onChange={(e) => setRamMode(e.target.value as 'global')}
-                className="mt-1 w-4 h-4 text-lumina-600 bg-dark-700 border-dark-600 focus:ring-lumina-500 focus:ring-2"
+                className="mt-1.5 w-5 h-5 text-nebula-500 bg-white/5 border-white/10 accent-nebula-500"
               />
               <div className="flex-1">
-                <div className="text-white font-medium">
+                <div className="text-sm font-black uppercase italic tracking-widest text-white">
                   {t('profileOptions.globalSettings')} - {userSettings.allocatedRam}MB
                 </div>
-                <div className="text-dark-300 text-sm">{t('profileOptions.globalDescription')}</div>
+                <div className="text-[10px] font-medium text-dark-500 italic mt-2 leading-relaxed">{t('profileOptions.globalDescription')}</div>
               </div>
             </label>
 
             {/* Custom RAM Allocation Option */}
-            <div className="p-4 rounded-lg border border-dark-600 hover:border-lumina-500/50 transition-colors">
-              <label className="flex items-start space-x-3 cursor-pointer">
+            <div className={`p-5 rounded-[1.5rem] border transition-all shadow-xl ${ramMode === 'custom'
+              ? 'border-nebula-500/40 bg-nebula-500/10 shadow-nebula-500/5'
+              : 'border-white/5 bg-white/5 hover:border-white/10'
+              }`}>
+              <label className="flex items-start gap-4 cursor-pointer">
                 <input
                   type="radio"
                   name="ramMode"
                   value="custom"
                   checked={ramMode === 'custom'}
                   onChange={(e) => setRamMode(e.target.value as 'custom')}
-                  className="mt-1 w-4 h-4 text-lumina-600 bg-dark-700 border-dark-600 focus:ring-lumina-500 focus:ring-2"
+                  className="mt-1.5 w-5 h-5 text-nebula-500 bg-white/5 border-white/10 accent-nebula-500"
                 />
                 <div className="flex-1">
-                  <div className="text-white font-medium mb-3">{t('profileOptions.customAllocation')}</div>
+                  <div className="text-sm font-black uppercase italic tracking-widest text-white mb-6">{t('profileOptions.customAllocation')}</div>
 
                   {/* Custom RAM Slider */}
-                  <div className="space-y-2">
+                  <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                      <span className="text-dark-300 text-sm">{t('profileOptions.memory')}:</span>
-                      <div className="flex items-center space-x-2">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] italic text-dark-500">{t('profileOptions.memory')}:</span>
+                      <div className="flex items-center gap-3">
                         <input
                           type="number"
                           min={MIN_RAM}
@@ -652,48 +664,46 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
                             }
                           }}
                           disabled={ramMode !== 'custom'}
-                          className="bg-dark-700 border border-dark-600 text-white text-sm rounded px-3 py-1 w-24 text-right disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="bg-white/5 border border-white/10 text-white font-black italic text-lg rounded-2xl px-5 py-2 w-32 text-right outline-none focus:border-nebula-500/50 disabled:opacity-30 transition-all shadow-inner"
                         />
-                        <span className="text-white text-sm font-medium">MB</span>
+                        <span className="text-dark-500 text-[10px] font-black italic uppercase tracking-widest">MEGA_BYTES</span>
                       </div>
                     </div>
 
-                    {/* Snap point markers */}
-                    <div className={`relative h-2 mb-1 ${ramMode !== 'custom' ? 'opacity-50' : ''}`}>
-                      <div className="absolute inset-0" style={{ marginLeft: '4px', marginRight: '4px' }}>
-                        {snapPoints.map((point) => (
-                          <div
-                            key={point}
-                            className={`absolute w-1 h-2 rounded-sm transition-colors ${point <= customRamValue ? 'bg-blue-500' : 'bg-dark-500'
-                              }`}
-                            style={{
-                              left: `${((point - MIN_RAM) / (maxAllocatableRam - MIN_RAM)) * 100}%`,
-                              transform: 'translateX(-50%)'
-                            }}
-                            title={`${point} MB (${(point / 1024).toFixed(0)} GB)`}
-                          />
-                        ))}
+                    <div className="px-1">
+                      {/* Snap point markers */}
+                      <div className={`relative h-2 mb-4 ${ramMode !== 'custom' ? 'opacity-30' : ''}`}>
+                        <div className="absolute inset-0" style={{ marginLeft: '4px', marginRight: '4px' }}>
+                          {snapPoints.map((point) => (
+                            <div
+                              key={point}
+                              className={`absolute w-1 h-3 rounded-full transition-all duration-500 ${point <= customRamValue ? 'bg-nebula-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]' : 'bg-white/10'
+                                }`}
+                              style={{
+                                left: `${((point - MIN_RAM) / (maxAllocatableRam - MIN_RAM)) * 100}%`,
+                                transform: 'translateX(-50%)'
+                              }}
+                              title={`${point} MB (${(point / 1024).toFixed(0)} GB)`}
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
 
-                    <input
-                      type="range"
-                      min={MIN_RAM}
-                      max={maxAllocatableRam}
-                      step="64"
-                      value={customRamValue}
-                      onChange={(e) => handleCustomRamSliderChange(parseInt(e.target.value))}
-                      disabled={ramMode !== 'custom'}
-                      className="w-full h-2 bg-dark-600 rounded-lg appearance-none cursor-pointer slider disabled:opacity-50 disabled:cursor-not-allowed"
-                      style={{
-                        background: ramMode === 'custom'
-                          ? `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((customRamValue - MIN_RAM) / (maxAllocatableRam - MIN_RAM)) * 100}%, #374151 ${((customRamValue - MIN_RAM) / (maxAllocatableRam - MIN_RAM)) * 100}%, #374151 100%)`
-                          : '#374151'
-                      }}
-                    />
-                    <div className="flex justify-between text-xs text-dark-400">
-                      <span>{MIN_RAM} MB</span>
-                      <span>{maxAllocatableRam} MB</span>
+                      <input
+                        type="range"
+                        min={MIN_RAM}
+                        max={maxAllocatableRam}
+                        step="64"
+                        value={customRamValue}
+                        onChange={(e) => handleCustomRamSliderChange(parseInt(e.target.value))}
+                        disabled={ramMode !== 'custom'}
+                        className="w-full h-3 bg-white/5 rounded-full appearance-none cursor-pointer accent-nebula-500 border border-white/5 transition-all hover:bg-white/10 disabled:opacity-30"
+                      />
+                      <div className="flex justify-between text-[10px] font-black italic text-dark-500 uppercase tracking-widest mt-4">
+                        <span>{MIN_RAM} MB</span>
+                        <span className="text-nebula-400 opacity-50 underline decoration-nebula-500/30 underline-offset-4">DYNAMIC OVERRIDE</span>
+                        <span>{maxAllocatableRam} MB</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -703,38 +713,42 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
         </div>
 
         {/* Repair Section - Safe action (green) - Only reinstalls Minecraft deps */}
-        <div className="mb-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <Wrench className="w-5 h-5 text-green-500" />
-            <h3 className="text-white text-lg font-semibold">{t('profileOptions.repair.title', 'Repair Instance')}</h3>
+        <div className="mb-10">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="p-2.5 bg-green-500/10 rounded-xl border border-green-500/20">
+              <Wrench className="w-5 h-5 text-green-400" />
+            </div>
+            <h3 className="text-lg font-black text-white uppercase italic tracking-tighter">{t('profileOptions.repair.title', 'Instance Restoration')}</h3>
           </div>
 
           {!showRepairConfirm ? (
             <button
               onClick={() => setShowRepairConfirm(true)}
-              className="w-full px-4 py-3 bg-green-600/20 hover:bg-green-600/30 text-green-400 border border-green-600/30 rounded-lg transition-colors text-left"
+              className="w-full p-6 bg-green-500/5 hover:bg-green-500/10 text-green-400 border border-green-500/10 rounded-[1.5rem] transition-all text-left group/repair shadow-xl"
               disabled={isRepairing || isSaving}
             >
-              <div className="font-medium">{t('profileOptions.repair.button', 'Repair instance...')}</div>
-              <div className="text-sm text-green-300/70 mt-1">
-                {t('profileOptions.repair.hint', 'Reinstalls Minecraft dependencies and checks for corruption')}
+              <div className="font-black text-sm uppercase italic tracking-widest mb-2 group-hover/repair:text-green-300 transition-colors">{t('profileOptions.repair.button', 'INITIALIZE REPAIR SEQUENCE...')}</div>
+              <div className="text-[10px] text-green-500/50 font-medium italic leading-relaxed">
+                {t('profileOptions.repair.hint', 'Synchronizes Minecraft engine assets and validates structural integrity.')}
               </div>
             </button>
           ) : (
-            <div className="p-4 rounded-lg border border-green-600/50 bg-green-900/20">
-              <div className="flex items-start gap-3 mb-4">
-                <Wrench className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+            <div className="p-8 rounded-[1.5rem] border border-green-500/20 bg-green-500/5 shadow-2xl">
+              <div className="flex items-start gap-5 mb-8">
+                <div className="p-3 bg-green-500/10 rounded-2xl border border-green-500/20">
+                  <Wrench className="w-6 h-6 text-green-400 flex-shrink-0" />
+                </div>
                 <div>
-                  <h4 className="text-white font-medium mb-2">
-                    {t('profileOptions.repair.confirmTitle', 'Repair instance?')}
+                  <h4 className="text-white font-black text-base uppercase italic tracking-tighter mb-3">
+                    {t('profileOptions.repair.confirmTitle', 'CONFIRM TELEMETRY REPAIR?')}
                   </h4>
-                  <p className="text-dark-300 text-sm">
-                    {t('profileOptions.repair.confirmDescription', 'Repairing reinstalls Minecraft dependencies and checks for corruption. This may resolve issues if your game is not launching due to launcher-related errors, but will not resolve issues or crashes related to installed mods.')}
+                  <p className="text-[10px] text-dark-500 font-medium italic leading-relaxed">
+                    {t('profileOptions.repair.confirmDescription', 'Restoration sequence will re-download core engine components. This process handles missing dependencies but preserves your custom tactical modifications (mods/config).')}
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-4">
                 <button
                   onClick={async () => {
                     setIsRepairing(true);
@@ -743,21 +757,21 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
                     await repairModpack(modpackId);
                     setIsRepairing(false);
                   }}
-                  className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
+                  className="flex-1 px-8 py-4 bg-green-500 hover:bg-green-600 text-white rounded-2xl transition-all font-black text-xs uppercase italic tracking-widest shadow-xl shadow-green-500/20"
                   disabled={isRepairing}
                 >
                   {isRepairing ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      {t('profileOptions.repair.repairing', 'Repairing...')}
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white"></div>
+                      {t('profileOptions.repair.repairing', 'REPAIRING...')}
                     </div>
                   ) : (
-                    t('profileOptions.repair.confirm', 'Repair')
+                    t('profileOptions.repair.confirm', 'CONFIRM')
                   )}
                 </button>
                 <button
                   onClick={() => setShowRepairConfirm(false)}
-                  className="px-4 py-2 bg-dark-600 hover:bg-dark-500 text-white rounded-lg transition-colors"
+                  className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl transition-all font-black text-xs uppercase italic tracking-widest border border-white/5"
                   disabled={isRepairing}
                 >
                   {t('profileOptions.cancel')}
@@ -768,38 +782,42 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
         </div>
 
         {/* Reinstall Section */}
-        <div className="mb-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <RefreshCcw className="w-5 h-5 text-red-500" />
-            <h3 className="text-white text-lg font-semibold">{t('profileOptions.reinstall.title', 'Reinstall Modpack')}</h3>
+        <div className="mb-10">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="p-2.5 bg-red-500/10 rounded-xl border border-red-500/20">
+              <RefreshCcw className="w-5 h-5 text-red-500" />
+            </div>
+            <h3 className="text-lg font-black text-white uppercase italic tracking-tighter">{t('profileOptions.reinstall.title', 'Instance Decommission')}</h3>
           </div>
 
           {!showReinstallConfirm ? (
             <button
               onClick={() => setShowReinstallConfirm(true)}
-              className="w-full px-4 py-3 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-600/30 rounded-lg transition-colors text-left"
+              className="w-full p-6 bg-red-500/5 hover:bg-red-500/10 text-red-500/60 hover:text-red-500 border border-red-500/10 rounded-[1.5rem] transition-all text-left group/reinstall shadow-xl"
               disabled={isReinstalling || isSaving || isRepairing}
             >
-              <div className="font-medium">{t('profileOptions.reinstall.button', 'Reinstall modpack...')}</div>
-              <div className="text-sm text-red-300/70 mt-1">
-                {t('profileOptions.reinstall.hint', 'Resets the instance to its original state, removing any mods you have added')}
+              <div className="font-black text-sm uppercase italic tracking-widest mb-2 group-hover/reinstall:text-red-500 transition-colors">{t('profileOptions.reinstall.button', 'PURGE AND RESYNC...')}</div>
+              <div className="text-[10px] text-red-500/40 font-medium italic leading-relaxed">
+                {t('profileOptions.reinstall.hint', 'Factory reset. Reverts entire instance configuration to baseline. Warning: Local tactical additions will be lost.')}
               </div>
             </button>
           ) : (
-            <div className="p-4 rounded-lg border border-red-600/50 bg-red-900/20">
-              <div className="flex items-start gap-3 mb-4">
-                <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <div className="p-8 rounded-[1.5rem] border border-red-500/20 bg-red-500/5 shadow-2xl">
+              <div className="flex items-start gap-5 mb-8">
+                <div className="p-3 bg-red-500/10 rounded-2xl border border-red-500/20">
+                  <AlertTriangle className="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" />
+                </div>
                 <div>
-                  <h4 className="text-white font-medium mb-2">
-                    {t('profileOptions.reinstall.confirmTitle', 'Are you sure you want to reinstall this instance?')}
+                  <h4 className="text-white font-black text-base uppercase italic tracking-tighter mb-3">
+                    {t('profileOptions.reinstall.confirmTitle', 'CONFIRM SIGNAL PURGE?')}
                   </h4>
-                  <p className="text-dark-300 text-sm">
-                    {t('profileOptions.reinstall.confirmDescription', 'Reinstalling will reset all installed or modified content to what is provided by the modpack, removing any mods or content you have added on top of the original installation. This may fix unexpected behavior if changes have been made to the instance, but if your worlds now depend on additional installed content, it may break existing worlds.')}
+                  <p className="text-[10px] text-dark-500 font-medium italic leading-relaxed">
+                    {t('profileOptions.reinstall.confirmDescription', 'Total reinstallation sequence. All secondary modifications, custom mods, and configurations will be neutralized. Signal baseline will be restored from source. World data remains on disk but compatibility is not guaranteed after reset.')}
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-4">
                 <button
                   onClick={async () => {
                     setIsReinstalling(true);
@@ -808,21 +826,21 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
                     await reinstallModpack(modpackId);
                     setIsReinstalling(false);
                   }}
-                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
+                  className="flex-1 px-8 py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl transition-all font-black text-xs uppercase italic tracking-widest shadow-xl shadow-red-500/20"
                   disabled={isReinstalling}
                 >
                   {isReinstalling ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      {t('profileOptions.reinstall.reinstalling', 'Reinstalling...')}
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white"></div>
+                      {t('profileOptions.reinstall.reinstalling', 'PURGING...')}
                     </div>
                   ) : (
-                    t('profileOptions.reinstall.confirm', 'Reinstall modpack')
+                    t('profileOptions.reinstall.confirm', 'CONFIRM PURGE')
                   )}
                 </button>
                 <button
                   onClick={() => setShowReinstallConfirm(false)}
-                  className="px-4 py-2 bg-dark-600 hover:bg-dark-500 text-white rounded-lg transition-colors"
+                  className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl transition-all font-black text-xs uppercase italic tracking-widest border border-white/5"
                   disabled={isReinstalling}
                 >
                   {t('profileOptions.cancel')}
@@ -833,22 +851,22 @@ const ProfileOptionsModal: React.FC<ProfileOptionsModalProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end space-x-3">
+        <div className="flex justify-end gap-4 mt-12 pt-8 border-t border-white/5">
           <button
             onClick={onClose}
-            className="btn-secondary"
+            className="px-8 py-4 bg-white/5 hover:bg-white/10 text-dark-500 hover:text-white rounded-2xl transition-all font-black text-xs uppercase italic tracking-widest border border-white/5"
             disabled={isSaving}
           >
             {t('profileOptions.cancel')}
           </button>
           <button
             onClick={handleSave}
-            className="btn-primary inline-flex items-center"
+            className="px-10 py-4 bg-nebula-500 hover:bg-nebula-600 text-white rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all shadow-xl shadow-nebula-500/20 flex items-center"
             disabled={isSaving}
           >
             {isSaving ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white mr-3"></div>
                 {t('profileOptions.saving')}
               </>
             ) : (

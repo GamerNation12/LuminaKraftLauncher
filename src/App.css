@@ -32,8 +32,47 @@
 
   /* Selection styling */
   ::selection {
-    background-color: theme('colors.lumina.600/30');
+    background-color: theme('colors.nebula.600/30');
     color: theme('colors.white');
+  }
+
+  /* Starry Space Background */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    z-index: -2;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)),
+      radial-gradient(1.5px 1.5px at 150px 50px, #fff, rgba(0,0,0,0)),
+      radial-gradient(1px 1px at 100px 100px, #ddd, rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 200px 150px, #fff, rgba(0,0,0,0)),
+      radial-gradient(1px 1px at 300px 250px, #eee, rgba(0,0,0,0)),
+      radial-gradient(1.5px 1.5px at 250px 350px, #fff, rgba(0,0,0,0)),
+      radial-gradient(1px 1px at 450px 150px, #ddd, rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 500px 450px, #fff, rgba(0,0,0,0));
+    background-size: 550px 550px;
+    opacity: 0.15;
+    z-index: -1;
+    animation: starsRotate 200s linear infinite;
+  }
+
+  @keyframes starsRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
   /* Reduce motion for accessibility */
@@ -53,7 +92,7 @@
 
   /* Snappy easing for instant feedback */
   .btn-primary {
-    @apply bg-lumina-600 hover:bg-lumina-700 text-white font-medium py-2 px-4 rounded-lg hover:scale-[1.02] active:scale-95;
+    @apply bg-nebula-600 hover:bg-nebula-700 text-white font-medium py-2 px-4 rounded-lg hover:scale-[1.02] active:scale-95;
     transition: all 50ms cubic-bezier(0.2, 0, 0, 1);
   }
 
@@ -78,32 +117,32 @@
   }
 
   .card {
-    @apply bg-dark-800 border border-dark-700 rounded-lg p-4 hover:border-lumina-600/30;
+    @apply bg-dark-800/40 backdrop-blur-md border border-white/5 rounded-xl p-4 hover:border-nebula-500/30;
     transition: all 50ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   .card:hover {
     box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 10px -5px rgba(0, 0, 0, 0.2);
-    transform: translateY(-1px);
+    @apply -translate-y-1 bg-dark-800/60;
   }
 
   .input-field {
-    @apply bg-dark-800 border border-dark-600 rounded-lg px-3 py-2 text-white placeholder-dark-400 focus:border-lumina-500 focus:outline-none hover:border-lumina-600/50;
+    @apply bg-dark-900/60 border border-white/10 rounded-lg px-3 py-2 text-white placeholder-dark-400 focus:border-nebula-500 focus:outline-none hover:border-nebula-400/30;
     transition: all 50ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   /* Focus ring for accessibility */
   .focus-ring:focus-visible {
-    @apply outline-none ring-2 ring-lumina-500/50 ring-offset-2 ring-offset-dark-900;
+    @apply outline-none ring-2 ring-nebula-500/50 ring-offset-2 ring-offset-dark-900;
   }
 
   .sidebar-item {
-    @apply flex items-center p-3 rounded-lg cursor-pointer hover:bg-dark-700;
+    @apply flex items-center p-3 rounded-lg cursor-pointer hover:bg-white/5;
     transition: all 50ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   .sidebar-item.active {
-    @apply bg-lumina-600/20 text-lumina-400 border-l-[3px] border-lumina-500 rounded-r-lg rounded-l-none;
+    @apply bg-nebula-600/20 text-nebula-400 border-l-[3px] border-nebula-500 rounded-r-lg rounded-l-none;
   }
 
   /* Range slider styling */
@@ -259,6 +298,33 @@
     }
   }
 
+  /* Glassmorphism utility classes */
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-black/40 backdrop-blur-xl border border-white/5 shadow-2xl;
+  }
+
+  .glass-border {
+    @apply border border-white/10;
+  }
+
+  /* Compact card styling */
+  .card-compact {
+    @apply glass hover:bg-white/10 transition-all duration-75 rounded-xl cursor-pointer p-0 overflow-hidden flex flex-col items-center justify-center;
+    aspect-ratio: 1/1;
+  }
+
+  .card-compact:hover {
+    @apply border-white/20 -translate-y-1 shadow-white/5;
+  }
+
+  .card-compact.selected {
+    @apply bg-white/15 border-lumina-500/50 shadow-inner;
+  }
+
   /* Discord-like pulsing red highlight */
   .unsaved-changes-pulse {
     animation: unsaved-pulse 2s infinite;
@@ -377,11 +443,11 @@
 
   0%,
   100% {
-    box-shadow: 0 0 5px theme('colors.lumina.400/20');
+    box-shadow: 0 0 5px theme('colors.nebula.400/20');
   }
 
   50% {
-    box-shadow: 0 0 20px theme('colors.lumina.400/40'), 0 0 30px theme('colors.lumina.400/20');
+    box-shadow: 0 0 20px theme('colors.nebula.400/40'), 0 0 30px theme('colors.nebula.400/20');
   }
 }
 
@@ -526,7 +592,16 @@
 
 /* Compact card styles */
 .card-compact {
-  @apply bg-dark-800 border border-dark-700 rounded-lg p-3 transition-all duration-75 hover:border-lumina-600/30;
+  @apply glass hover:bg-white/10 transition-all duration-75 rounded-xl cursor-pointer p-0 overflow-hidden flex flex-col items-center justify-center;
+  aspect-ratio: 1/1;
+}
+
+.card-compact:hover {
+  @apply border-white/20 -translate-y-1 shadow-white/5;
+}
+
+.card-compact.selected {
+  @apply bg-white/15 border-nebula-500/50 shadow-inner;
 }
 
 /* Optimized hover effects */

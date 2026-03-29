@@ -1403,7 +1403,7 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
       }
 
       if (errorMessage.includes('429') || errorMessage.includes('rate limit') || errorMessage.includes('too many requests')) {
-        userFriendlyError = `Error during ${repairPrefix}: Rate limit reached. Create a LuminaKraft account to increase your limits.`;
+        userFriendlyError = `Error during ${repairPrefix}: Rate limit reached. Create a Nebula account to increase your limits.`;
       } else if (errorMessage.includes('failed to extract zip file') || errorMessage.includes('no such file or directory')) {
         userFriendlyError = `Error during ${repairPrefix}: Failed to extract ZIP file`;
       } else if (errorMessage.includes('java') || errorMessage.includes('No such file or directory') || errorMessage.includes('exec format error')) {
@@ -1793,8 +1793,8 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
     let unlisten: any = null;
     const setupCoreListener = async () => {
       try {
-        unlisten = await listen<string>('lumina-core-event', (event) => {
-          console.log('⚙️ LuminaCore C++ output:', event.payload);
+        unlisten = await listen<string>('nebula-core-event', (event) => {
+          console.log('⚙️ NebulaCore C++ output:', event.payload);
           try {
             const data = JSON.parse(event.payload);
             dispatch({ type: 'SET_CORE_MESSAGE', payload: data });
@@ -1855,12 +1855,12 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
     setupCoreListener();
 
     // Auto-connect to C++ Native Engine immediately on boot
-    invoke('start_lumina_core').then(() => {
+    invoke('start_nebula_core').then(() => {
       dispatch({ type: 'SET_CORE_CONNECTED', payload: true });
       // We don't toast the success silently so we don't spam the user every startup
-      console.log('✅ Auto-connected to LuminaCore C++ Engine.');
+      console.log('✅ Auto-connected to NebulaCore C++ Engine.');
     }).catch(e => {
-      console.error('⚠️ Auto-connect failed for LuminaCore:', e);
+      console.error('⚠️ Auto-connect failed for NebulaCore:', e);
     });
 
     return () => {
@@ -1871,7 +1871,7 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
   const startCore = async () => {
     if (state.isCoreConnected) return;
     try {
-      await invoke('start_lumina_core');
+      await invoke('start_nebula_core');
       dispatch({ type: 'SET_CORE_CONNECTED', payload: true });
       toast.success('Native C++ Backend Started!');
     } catch (e) {
@@ -1883,7 +1883,7 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
   const sendCoreCommand = async (action: string, payload: Record<string, any> = {}) => {
     try {
       const command = { action, ...payload };
-      await invoke('send_lumina_command', { commandJson: JSON.stringify(command) });
+      await invoke('send_nebula_command', { commandJson: JSON.stringify(command) });
     } catch (e) {
       console.error('Failed to send command to C++:', e);
       toast.error('C++ Engine is unreachable.');
@@ -1946,7 +1946,7 @@ export function LauncherProvider({ children }: { children: ReactNode }) {
           setRateLimitDialog(prev => ({ ...prev, isOpen: false }));
           setIsAuthenticating(true);
           try {
-            await AuthService.getInstance().signInToLuminaKraftAccount();
+            await AuthService.getInstance().signInToNebulaAccount();
           } catch (error) {
             console.error('Login failed:', error);
             setIsAuthenticating(false);

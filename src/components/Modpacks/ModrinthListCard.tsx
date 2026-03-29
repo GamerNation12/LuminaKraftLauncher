@@ -38,7 +38,7 @@ const ModrinthListCard: React.FC<ModrinthListCardProps> = memo(({ modpack, state
         text: t('modpacks.installing'),
         icon: Loader2,
         onClick: () => { },
-        className: 'bg-dark-700 text-dark-400 cursor-not-allowed border border-dark-600',
+        className: 'bg-white/5 text-dark-500 cursor-not-allowed border border-white/5',
         disabled: true
       };
     }
@@ -49,7 +49,7 @@ const ModrinthListCard: React.FC<ModrinthListCardProps> = memo(({ modpack, state
           text: t('modpacks.repair'),
           icon: Wrench,
           onClick: () => repairModpack(modpack.id),
-          className: 'bg-orange-600 hover:bg-orange-700 text-white',
+          className: 'bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30',
           disabled: false
         };
       }
@@ -57,7 +57,7 @@ const ModrinthListCard: React.FC<ModrinthListCardProps> = memo(({ modpack, state
         text: t('modpacks.installed'),
         icon: Download,
         onClick: () => { },
-        className: 'bg-dark-700 text-dark-400 cursor-not-allowed border border-dark-600',
+        className: 'bg-white/5 text-dark-500 cursor-not-allowed border border-white/5',
         disabled: true
       };
     }
@@ -66,7 +66,7 @@ const ModrinthListCard: React.FC<ModrinthListCardProps> = memo(({ modpack, state
       text: t('modpacks.install'),
       icon: Download,
       onClick: handleInstall,
-      className: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/10',
+      className: 'bg-nebula-500/90 hover:bg-nebula-500 text-white shadow-lg shadow-nebula-500/20 border border-nebula-400/30',
       disabled: false
     };
   };
@@ -85,58 +85,63 @@ const ModrinthListCard: React.FC<ModrinthListCardProps> = memo(({ modpack, state
   return (
     <div
       onClick={onSelect}
-      className={`p-4 flex flex-row items-center gap-4 bg-dark-800/40 hover:bg-dark-800/80 border border-dark-700/50 hover:border-dark-600/50 rounded-xl cursor-pointer group transition-all duration-75`}
+      className="p-6 flex flex-row items-center gap-8 bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 hover:border-white/10 rounded-[2rem] cursor-pointer group transition-all duration-500 shadow-xl active:scale-[0.99] backdrop-blur-3xl"
       style={{
         animation: `fadeInUp 0.15s ease-out ${index * 0.02 + 0.1}s backwards`,
         ...getAnimationStyle({})
       }}
     >
       {/* Icon */}
-      <div className="w-20 h-20 rounded-xl overflow-hidden bg-dark-800 border border-dark-700/80 flex-shrink-0 flex items-center justify-center p-2 relative group-hover:scale-105 transition-transform">
+      <div className="w-24 h-24 rounded-3xl overflow-hidden bg-nebula-950 border-2 border-white/5 flex-shrink-0 flex items-center justify-center p-0 relative transition-all duration-700 group-hover:scale-110 group-hover:-rotate-3 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-br from-nebula-500/10 to-indigo-500/10 opacity-40" />
         {modpack.logo ? (
           <img
             src={modpack.logo}
             alt={modpack.name}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-cover transition-transform duration-700"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzc0MTUxIi8+CjxwYXRoIGQ9Ik0yNCAyNEg0MFY0MEgyNFYyNFoiIGZpbGw9IiM2Mzc1ODMiLz4KPC9zdmc+';
             }}
           />
         ) : (
-          <div className="text-3xl font-bold text-white opacity-20">
-            {modpack.name.charAt(0).toUpperCase()}
+          <div className="text-5xl font-black text-white opacity-10 italic uppercase select-none">
+            {modpack.name.charAt(0)}
           </div>
         )}
       </div>
 
       {/* Center Info */}
-      <div className="flex-1 min-w-0 space-y-1.5">
-        <div className="flex items-center gap-2">
-          <h3 className="text-white font-bold text-base truncate group-hover:text-emerald-400 transition-colors">
+      <div className="flex-1 min-w-0 space-y-3">
+        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+          <h3 className="text-white font-black text-xl truncate uppercase italic tracking-tighter group-hover:text-nebula-400 transition-colors leading-[0.9]">
             {modpack.name}
           </h3>
           {modpack.authorName && (
-            <span className="text-dark-400 text-xs truncate">by {modpack.authorName}</span>
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-1 rounded-full bg-dark-500 hidden md:block" />
+              <span className="text-dark-500 text-[10px] font-black uppercase tracking-[0.2em] italic truncate opacity-60">BY {modpack.authorName}</span>
+            </div>
           )}
         </div>
 
-        <p className="text-dark-300 text-sm line-clamp-1">
+        <p className="text-dark-400 text-sm line-clamp-1 font-black uppercase italic tracking-wider opacity-60 group-hover:opacity-100 transition-opacity">
           {modpack.shortDescription || modpack.description}
         </p>
 
         {/* Tags Row */}
-        <div className="flex items-center space-x-2 text-xs text-dark-500">
-          <span className="bg-dark-700/40 px-2 py-0.5 rounded-full text-dark-300">
+        <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-[0.2em] italic text-dark-500">
+          <div className="bg-white/5 px-4 py-1.5 rounded-xl text-dark-400 border border-white/5 shadow-inner">
             {modpack.minecraftVersion}
-          </span>
-          <span className="capitalize bg-dark-700/40 px-2 py-0.5 rounded-full text-dark-300">
+          </div>
+          <div className="bg-white/5 px-4 py-1.5 rounded-xl text-dark-400 border border-white/5 shadow-inner">
             {modpack.modloader}
-          </span>
+          </div>
           {modpack.downloads && (
-            <span className="flex items-center gap-1 text-dark-400">
-              <Download className="w-3 h-3" /> {formatDownloads(modpack.downloads)}
-            </span>
+            <div className="flex items-center gap-2 text-nebula-400/80 bg-nebula-500/5 px-4 py-1.5 rounded-xl border border-nebula-500/10">
+              <Download className="w-3 h-3" /> 
+              {formatDownloads(modpack.downloads)}
+            </div>
           )}
         </div>
       </div>
@@ -149,9 +154,9 @@ const ModrinthListCard: React.FC<ModrinthListCardProps> = memo(({ modpack, state
             if (!buttonConfig.disabled) buttonConfig.onClick();
           }}
           disabled={buttonConfig.disabled}
-          className={`px-4 py-1.5 rounded-lg font-bold text-sm flex items-center gap-1.5 transition-all ${buttonConfig.className}`}
+          className={`h-14 px-10 rounded-2xl flex items-center justify-center gap-4 font-black text-xs uppercase italic tracking-[0.1em] transition-all shadow-xl active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed group/action-btn ${buttonConfig.className}`}
         >
-          <ButtonIcon className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+          <ButtonIcon className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''} group-hover/action-btn:scale-110 transition-transform`} />
           <span>{buttonConfig.text}</span>
         </button>
       </div>

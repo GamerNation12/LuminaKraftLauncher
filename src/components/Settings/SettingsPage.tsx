@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { invoke } from '@tauri-apps/api/core';
-import { User, HardDrive, Save, Wifi, WifiOff, RefreshCw, Trash2, Server, Languages, XCircle, Zap, Shield, Cpu, Terminal } from 'lucide-react';
+import { User, HardDrive, Save, Wifi, WifiOff, RefreshCw, Trash2, Server, Languages, XCircle, Zap, Shield, Cpu, Terminal, ChevronDown } from 'lucide-react';
 import { useLauncher } from '../../contexts/LauncherContext';
 import LauncherService from '../../services/launcherService';
 import MetaStorageSettings from './MetaStorageSettings';
 import toast from 'react-hot-toast';
 import { useLuminaCore } from '../../hooks/useLuminaCore';
+import { useAnimation } from '../../contexts/AnimationContext';
 
 interface SettingsPageProps {
   onNavigationBlocked?: () => void;
@@ -16,6 +17,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
   const { t } = useTranslation();
   const { userSettings, updateUserSettings, currentLanguage, changeLanguage, hasActiveOperations } = useLauncher();
   const { isConnected, lastMessage, startCore, sendCommand } = useLuminaCore();
+  const { getAnimationStyle, withDelay } = useAnimation();
 
   const [formData, setFormData] = useState(userSettings);
   const [hasChanges, setHasChanges] = useState(false);
@@ -291,96 +293,105 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
   };
 
   return (
-    <div className={`h-full overflow-auto ${getShakeClass()}`}>
-      <div className="p-6">
+    <div className={`h-full overflow-auto custom-scrollbar flex flex-col ${getShakeClass()}`}>
+      <div className="flex-1 p-10 max-w-5xl mx-auto w-full">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-white text-2xl font-bold mb-2">{t('settings.title')}</h1>
-          <p className="text-dark-400">
+        <div className="mb-12" style={getAnimationStyle({})}>
+          <h1 className="text-4xl font-black text-white uppercase italic tracking-tighter mb-3">{t('settings.title')}</h1>
+          <p className="text-dark-500 font-black text-[10px] uppercase tracking-[0.2em] italic px-1 opacity-60">
             {t('settings.settingsDescription')}
           </p>
         </div>
 
         <div className="space-y-8">
           {/* Language Settings */}
-          <div className="card">
-            <div className="flex items-center space-x-3 mb-6">
-              <Languages className="w-6 h-6 text-lumina-500" />
-              <h2 className="text-white text-xl font-semibold">{t('settings.language')}</h2>
+          <div
+            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
+            style={getAnimationStyle({})}
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+                <Languages className="w-6 h-6 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('settings.language')}</h2>
             </div>
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
-                  {t('settings.selectLanguage')}
-                </label>
-                <div className="relative">
-                  <select
-                    value={currentLanguage}
-                    onChange={(e) => handleLanguageChange(e.target.value)}
-                    disabled={hasActiveOperations}
-                    className={`input-field w-full appearance-none pr-10 ${hasActiveOperations
-                      ? 'cursor-not-allowed opacity-50'
-                      : 'cursor-pointer'
-                      }`}
-                  >
-                    {languageOptions.map(option => (
-                      <option key={option.value} value={option.value} className="bg-dark-800 text-white">
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <Languages className={`w-5 h-5 ${hasActiveOperations ? 'text-dark-500' : 'text-dark-400'}`} />
-                  </div>
+            <div className="max-w-md">
+              <label className="block text-[10px] font-black text-dark-500 uppercase tracking-widest italic mb-4 px-1">
+                {t('settings.selectLanguage')}
+              </label>
+              <div className="relative group">
+                <select
+                  value={currentLanguage}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                  disabled={hasActiveOperations}
+                  className={`w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white font-black italic tracking-tighter outline-none focus:border-nebula-500/50 appearance-none transition-all shadow-inner ${hasActiveOperations
+                    ? 'cursor-not-allowed opacity-30'
+                    : 'cursor-pointer'
+                    }`}
+                >
+                  {languageOptions.map(option => (
+                    <option key={option.value} value={option.value} className="bg-nebula-900 text-white">
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-5 flex items-center pointer-events-none text-dark-500 group-hover:text-nebula-400 transition-colors">
+                  <ChevronDown className="w-5 h-5" />
                 </div>
-                {hasActiveOperations && (
-                  <div className="mt-2 p-3 bg-orange-600/20 border border-orange-600/30 rounded-lg">
-                    <p className="text-orange-400 text-sm">
-                      {t('settings.languageDisabledDuringOperations')}
-                    </p>
-                  </div>
-                )}
               </div>
+              {hasActiveOperations && (
+                <div className="mt-6 p-4 bg-nebula-500/5 border border-nebula-500/10 rounded-2xl flex items-center gap-3">
+                  <RefreshCw className="w-4 h-4 text-nebula-400 animate-spin" />
+                  <p className="text-nebula-400 text-[10px] font-black uppercase italic tracking-widest">
+                    {t('settings.languageDisabledDuringOperations')}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
           {/* API Status */}
-          <div className="card">
-            <div className="flex items-center space-x-3 mb-6">
-              <Server className="w-6 h-6 text-lumina-500" />
-              <h2 className="text-white text-xl font-semibold">{t('settings.api')}</h2>
+          <div
+            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
+            style={getAnimationStyle({})}
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+                <Server className="w-6 h-6 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('settings.api')}</h2>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-dark-700 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  {getStatusIcon()}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between p-8 bg-white/5 border border-white/5 rounded-3xl shadow-inner group">
+                <div className="flex items-center gap-6">
+                  <div className={`p-4 rounded-2xl transition-all duration-500 ${apiStatus === 'online' ? 'bg-green-500/10 border-green-500/20 text-green-400' : apiStatus === 'offline' ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-white/5 border-white/10 text-dark-500'}`}>
+                    {getStatusIcon()}
+                  </div>
                   <div>
-                    <p className={`font-medium ${getStatusColor()}`}>
+                    <p className={`text-sm font-black uppercase italic tracking-widest mb-1 ${getStatusColor()}`}>
                       {getStatusText()}
                     </p>
-                    <p className="text-dark-400 text-sm">
-                      Servicios de LuminaKraft
+                    <p className="text-dark-500 text-[10px] font-black uppercase tracking-tighter italic">
+                      NEBULA_DEEP_SPACE_TELEMETRY
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={handleTestConnection}
                   disabled={isTestingConnection}
-                  className="btn-secondary inline-flex items-center space-x-2"
+                  className="px-6 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-[10px] uppercase italic tracking-widest transition-all border border-white/5 flex items-center gap-3 disabled:opacity-30"
                 >
-                  <RefreshCw className={`w-4 h-4 mr-2 ${isTestingConnection ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`w-4 h-4 ${isTestingConnection ? 'animate-spin' : ''}`} />
                   {t('settings.testConnection')}
                 </button>
               </div>
 
-              {/* Description & separate version box removed per design update */}
-
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center gap-4">
                 <button
                   onClick={handleClearCache}
-                  className="btn-secondary inline-flex items-center space-x-2"
+                  className="px-6 py-4 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-2xl font-black text-[10px] uppercase italic tracking-widest transition-all border border-red-500/10 flex items-center gap-3"
                 >
                   <Trash2 className="w-4 h-4" />
                   <span>{t('settings.clearCache')}</span>
@@ -390,55 +401,68 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
           </div>
 
           {/* User Settings */}
-          <div className="card">
-            <div className="flex items-center space-x-3 mb-6">
-              <User className="w-6 h-6 text-lumina-500" />
-              <h2 className="text-white text-xl font-semibold">{t('settings.general')}</h2>
+          <div
+            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
+            style={getAnimationStyle({})}
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+                <User className="w-6 h-6 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('settings.general')}</h2>
             </div>
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
-                  {t('settings.username')}
-                </label>
+            <div className="max-w-md">
+              <label className="block text-[10px] font-black text-dark-500 uppercase tracking-widest italic mb-4 px-1">
+                {t('settings.username')}
+              </label>
+              <div className="relative group/input">
                 <input
                   type="text"
                   value={formData.username}
                   onChange={(e) => handleInputChange('username', e.target.value)}
                   placeholder={t('settings.usernamePlaceholder')}
-                  className="input-field w-full"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white font-black italic tracking-tighter outline-none focus:border-nebula-500/50 transition-all shadow-inner disabled:opacity-30 disabled:cursor-not-allowed group-hover/input:border-white/20"
                   disabled={formData.authMethod === 'microsoft'}
                   maxLength={16}
                 />
-                <p className="text-dark-400 text-xs mt-1">
-                  {formData.authMethod === 'microsoft'
-                    ? t('auth.usernameFromMicrosoft')
-                    : t('settings.usernameDescription')
-                  }
-                </p>
-                {usernameError && (
-                  <p className="text-red-500 text-xs mt-1 flex items-center"><XCircle className="w-4 h-4 mr-1" /> {usernameError}</p>
-                )}
               </div>
+              <p className="text-dark-500 text-[10px] font-medium italic mt-3 px-1">
+                {formData.authMethod === 'microsoft'
+                  ? t('auth.usernameFromMicrosoft')
+                  : t('settings.usernameDescription')
+                }
+              </p>
+              {usernameError && (
+                <div className="mt-4 p-4 bg-red-500/5 border border-red-500/10 rounded-2xl flex items-center gap-3">
+                  <XCircle className="w-4 h-4 text-red-400" />
+                  <p className="text-red-400 text-[10px] font-black uppercase italic tracking-widest">{usernameError}</p>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Performance Settings */}
-          <div className="card">
-            <div className="flex items-center space-x-3 mb-6">
-              <HardDrive className="w-6 h-6 text-lumina-500" />
-              <h2 className="text-white text-xl font-semibold">{t('settings.performance')}</h2>
+          <div
+            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
+            style={getAnimationStyle({})}
+          >
+            <div className="flex items-center gap-4 mb-10">
+              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+                <HardDrive className="w-6 h-6 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('settings.performance')}</h2>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-10">
               <div>
-                <label className="block text-dark-300 text-sm font-medium mb-2">
+                <label className="block text-[10px] font-black text-dark-500 uppercase tracking-widest italic mb-6 px-1">
                   {t('settings.ramAllocationLabel')}
                 </label>
 
                 {/* RAM allocation display with inline editing */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-4">
                     <input
                       type="number"
                       min={MIN_RAM}
@@ -447,24 +471,23 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
                       value={formData.allocatedRam}
                       onChange={(e) => handleRamTextChange(e.target.value)}
                       onBlur={(e) => handleRamTextBlur(e.target.value)}
-                      className="bg-transparent border-0 text-white text-lg font-medium w-20 text-center focus:outline-none focus:bg-dark-700 rounded px-1"
+                      className="bg-white/5 border border-white/10 text-white font-black italic text-3xl rounded-3xl px-8 py-4 w-40 text-right outline-none focus:border-nebula-500/50 shadow-inner transition-all"
                     />
-                    <span className="text-white text-lg font-medium">MB</span>
+                    <span className="text-dark-500 font-black italic text-sm uppercase tracking-widest">MEGA_BYTES</span>
                   </div>
-                  <div className="text-dark-400 text-sm">
-                    <p>{t('settings.ramRecommended')}</p>
+                  <div className="p-4 bg-nebula-500/5 border border-nebula-500/10 rounded-2xl">
+                    <p className="text-nebula-400 text-[10px] font-black uppercase italic tracking-widest">{t('settings.ramRecommended')}</p>
                   </div>
                 </div>
 
                 {/* Slider with snap point markers */}
-                <div className="mb-4">
-                  {/* Snap point markers */}
-                  <div className="relative h-3 mb-1">
+                <div className="px-1">
+                  <div className="relative h-2 mb-6">
                     <div className="absolute inset-0" style={{ marginLeft: '6px', marginRight: '6px' }}>
                       {snapPoints.map((point) => (
                         <div
                           key={point}
-                          className={`absolute w-1 h-3 rounded-sm transition-colors ${point <= formData.allocatedRam ? 'bg-blue-500' : 'bg-dark-500'
+                          className={`absolute w-1 h-3 rounded-full transition-all duration-500 ${point <= formData.allocatedRam ? 'bg-nebula-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]' : 'bg-white/10'
                             }`}
                           style={{
                             left: `${((point - MIN_RAM) / (MAX_RAM - MIN_RAM)) * 100}%`,
@@ -482,13 +505,11 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
                     step={RAM_STEP}
                     value={formData.allocatedRam}
                     onChange={(e) => handleRamSliderChange(parseInt(e.target.value, 10))}
-                    className="w-full h-2 bg-dark-600 rounded-lg appearance-none cursor-pointer slider"
-                    style={{
-                      background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((formData.allocatedRam - MIN_RAM) / (MAX_RAM - MIN_RAM)) * 100}%, #374151 ${((formData.allocatedRam - MIN_RAM) / (MAX_RAM - MIN_RAM)) * 100}%, #374151 100%)`
-                    }}
+                    className="w-full h-3 bg-white/5 rounded-full appearance-none cursor-pointer accent-nebula-500 border border-white/5 transition-all hover:bg-white/10"
                   />
-                  <div className="flex justify-between text-xs text-dark-400 mt-1">
+                  <div className="flex justify-between text-[10px] font-black italic text-dark-500 uppercase tracking-widest mt-6">
                     <span>{MIN_RAM} MB</span>
+                    <span className="text-nebula-400 opacity-50 underline decoration-nebula-500/30 underline-offset-4">QUANTUM_LIMIT</span>
                     <span>{MAX_RAM} MB</span>
                   </div>
                 </div>
@@ -497,39 +518,46 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
           </div>
 
           {/* Native Engine Connection */}
-          <div className="card">
-            <div className="flex items-center space-x-3 mb-6">
-              <Cpu className="w-6 h-6 text-lumina-500" />
-              <h2 className="text-white text-xl font-semibold">Native C++ Engine</h2>
+          <div
+            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
+            style={getAnimationStyle({})}
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+                <Cpu className="w-6 h-6 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">NEBULA_CORE_V3</h2>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-dark-700 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <Terminal className={`w-5 h-5 ${isConnected ? 'text-green-500' : 'text-dark-400'}`} />
+            <div className="space-y-6">
+              <div className="flex items-center justify-between p-8 bg-white/5 border border-white/5 rounded-3xl shadow-inner group">
+                <div className="flex items-center gap-6">
+                  <div className={`p-4 rounded-2xl transition-all duration-500 ${isConnected ? 'bg-nebula-500/10 border-nebula-500/20 text-nebula-400' : 'bg-white/5 border-white/10 text-dark-500'}`}>
+                    <Terminal className="w-6 h-6" />
+                  </div>
                   <div>
-                    <p className={`font-medium ${isConnected ? 'text-green-400' : 'text-dark-400'}`}>
-                      {isConnected ? 'Connected to LuminaCore' : 'Disconnected'}
+                    <p className={`text-sm font-black uppercase italic tracking-widest mb-1 ${isConnected ? 'text-nebula-400' : 'text-dark-500'}`}>
+                      {isConnected ? 'SIGNAL_LOCKED' : 'LINK_OFFLINE'}
                     </p>
-                    <p className="text-dark-400 text-sm">
-                      {lastMessage ? `Last action: ${lastMessage.action || lastMessage.status}` : 'Waiting for connection...'}
+                    <p className="text-dark-500 text-[10px] font-black uppercase tracking-tighter italic">
+                      {lastMessage ? `LAST_PACKET: ${lastMessage.action || lastMessage.status}` : 'AWAITING_CORE_INITIALIZATION...'}
                     </p>
                   </div>
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex gap-4">
                   <button
                     onClick={startCore}
                     disabled={isConnected}
-                    className="btn-primary inline-flex items-center space-x-2 disabled:opacity-50"
+                    className="px-6 py-4 bg-nebula-500 hover:bg-nebula-600 text-white rounded-2xl font-black text-[10px] uppercase italic tracking-widest transition-all shadow-xl shadow-nebula-500/20 flex items-center gap-3 disabled:opacity-30"
                   >
-                    <span>Connect Engine</span>
+                    <span>INITIALIZE_LINK</span>
                   </button>
                   <button
                     onClick={() => sendCommand('ping')}
                     disabled={!isConnected}
-                    className="btn-secondary inline-flex items-center space-x-2 disabled:opacity-50"
+                    className="px-6 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-[10px] uppercase italic tracking-widest transition-all border border-white/5 flex items-center gap-3 disabled:opacity-30"
                   >
-                    <span>Ping Core</span>
+                    <span>COMMS_PING</span>
                   </button>
                 </div>
               </div>
@@ -537,154 +565,175 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
           </div>
 
           {/* Resource Management */}
-          <div className="card">
-            <div className="flex items-center space-x-3 mb-6">
-              <Zap className="w-6 h-6 text-lumina-500" />
-              <h2 className="text-white text-xl font-semibold">{t('settings.resourceManagement')}</h2>
+          <div
+            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
+            style={getAnimationStyle({})}
+          >
+            <div className="flex items-center gap-4 mb-10">
+              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+                <Zap className="w-6 h-6 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('settings.resourceManagement')}</h2>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-12">
               {/* Concurrent Downloads */}
               <div>
-                <div className="flex justify-between items-start mb-2">
-                  <div className="flex-1 pr-4">
-                    <label className="block text-dark-300 text-sm font-medium">
+                <div className="flex justify-between items-end mb-6">
+                  <div className="flex-1 pr-6">
+                    <label className="block text-[10px] font-black text-white uppercase tracking-widest italic mb-2">
                       {t('settings.maxConcurrentDownloads')}
                     </label>
-                    <p className="text-dark-400 text-xs mt-1">
+                    <p className="text-dark-500 text-[10px] font-medium italic leading-relaxed">
                       {t('settings.maxConcurrentDownloadsDesc')}
                     </p>
                   </div>
-                  <div className="bg-dark-700 px-3 py-1 rounded text-white font-mono text-sm min-w-[3rem] text-center">
+                  <div className="bg-white/5 border border-white/10 px-6 py-3 rounded-2xl text-nebula-400 font-black italic text-xl min-w-[5rem] text-center shadow-inner">
                     {formData.maxConcurrentDownloads || 10}
                   </div>
                 </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  step="1"
-                  value={formData.maxConcurrentDownloads || 10}
-                  onChange={(e) => handleInputChange('maxConcurrentDownloads', parseInt(e.target.value, 10))}
-                  className="w-full h-2 bg-dark-600 rounded-lg appearance-none cursor-pointer slider"
-                  style={{
-                    background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(((formData.maxConcurrentDownloads || 10) - 1) / 9) * 100}%, #374151 ${(((formData.maxConcurrentDownloads || 10) - 1) / 9) * 100}%, #374151 100%)`
-                  }}
-                />
-                <div className="flex justify-between text-xs text-dark-400 mt-1">
-                  <span>1</span>
-                  <span>10</span>
+                <div className="px-1">
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value={formData.maxConcurrentDownloads || 10}
+                    onChange={(e) => handleInputChange('maxConcurrentDownloads', parseInt(e.target.value, 10))}
+                    className="w-full h-3 bg-white/5 rounded-full appearance-none cursor-pointer accent-nebula-500 border border-white/5 transition-all hover:bg-white/10"
+                  />
+                  <div className="flex justify-between text-[10px] font-black italic text-dark-500 uppercase tracking-widest mt-4">
+                    <span>MIN_BANDWIDTH</span>
+                    <span>BURST_MODE</span>
+                  </div>
                 </div>
               </div>
 
               {/* Concurrent Writes */}
               <div>
-                <div className="flex justify-between items-start mb-2">
-                  <div className="flex-1 pr-4">
-                    <label className="block text-dark-300 text-sm font-medium">
+                <div className="flex justify-between items-end mb-6">
+                  <div className="flex-1 pr-6">
+                    <label className="block text-[10px] font-black text-white uppercase tracking-widest italic mb-2">
                       {t('settings.maxConcurrentWrites')}
                     </label>
-                    <p className="text-dark-400 text-xs mt-1">
+                    <p className="text-dark-500 text-[10px] font-medium italic leading-relaxed">
                       {t('settings.maxConcurrentWritesDesc')}
                     </p>
                   </div>
-                  <div className="bg-dark-700 px-3 py-1 rounded text-white font-mono text-sm min-w-[3rem] text-center">
+                  <div className="bg-white/5 border border-white/10 px-6 py-3 rounded-2xl text-nebula-400 font-black italic text-xl min-w-[5rem] text-center shadow-inner">
                     {formData.maxConcurrentWrites || 10}
                   </div>
                 </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="50"
-                  step="1"
-                  value={formData.maxConcurrentWrites || 10}
-                  onChange={(e) => handleInputChange('maxConcurrentWrites', parseInt(e.target.value, 10))}
-                  className="w-full h-2 bg-dark-600 rounded-lg appearance-none cursor-pointer slider"
-                  style={{
-                    background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(((formData.maxConcurrentWrites || 10) - 1) / 49) * 100}%, #374151 ${(((formData.maxConcurrentWrites || 10) - 1) / 49) * 100}%, #374151 100%)`
-                  }}
-                />
-                <div className="flex justify-between text-xs text-dark-400 mt-1">
-                  <span>1</span>
-                  <span>50</span>
+                <div className="px-1">
+                  <input
+                    type="range"
+                    min="1"
+                    max="50"
+                    step="1"
+                    value={formData.maxConcurrentWrites || 10}
+                    onChange={(e) => handleInputChange('maxConcurrentWrites', parseInt(e.target.value, 10))}
+                    className="w-full h-3 bg-white/5 rounded-full appearance-none cursor-pointer accent-nebula-500 border border-white/5 transition-all hover:bg-white/10"
+                  />
+                  <div className="flex justify-between text-[10px] font-black italic text-dark-500 uppercase tracking-widest mt-4">
+                    <span>IO_CONSERVATIVE</span>
+                    <span>FLASH_SYNC</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Animation Settings */}
-          <div className="card">
-            <div className="flex items-center space-x-3 mb-6">
-              <Zap className="w-6 h-6 text-lumina-500" />
-              <h2 className="text-white text-xl font-semibold">{t('settings.animations')}</h2>
+          <div
+            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
+            style={getAnimationStyle({})}
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+                <Zap className="w-6 h-6 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('settings.animations')}</h2>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <label className="block text-dark-300 text-sm font-medium mb-1">
-                    {t('settings.enableAnimations')}
-                  </label>
-                  <p className="text-dark-400 text-xs">
-                    {t('settings.enableAnimationsDesc')}
-                  </p>
-                </div>
-                <div className="flex items-center">
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.enableAnimations !== false}
-                      onChange={(e) => handleInputChange('enableAnimations', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-dark-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-lumina-300/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-lumina-600"></div>
-                  </label>
-                </div>
+            <div className="flex items-center justify-between p-6 bg-white/5 border border-white/5 rounded-3xl">
+              <div className="flex-1">
+                <label className="block text-sm font-black text-white uppercase italic tracking-widest mb-1">
+                  {t('settings.enableAnimations')}
+                </label>
+                <p className="text-dark-500 text-[10px] font-medium italic">
+                  {t('settings.enableAnimationsDesc')}
+                </p>
+              </div>
+              <div className="flex items-center">
+                <label className="relative inline-flex items-center cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={formData.enableAnimations !== false}
+                    onChange={(e) => handleInputChange('enableAnimations', e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-14 h-8 bg-white/10 rounded-full peer peer-checked:bg-nebula-500 transition-all duration-500 border border-white/5 shadow-inner"></div>
+                  <div className="absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-all duration-500 shadow-xl peer-checked:left-7 peer-checked:bg-white"></div>
+                </label>
               </div>
             </div>
           </div>
 
           {/* Meta Storage Settings */}
-          <div className="card">
-            <div className="flex items-center space-x-3 mb-6">
-              <HardDrive className="w-6 h-6 text-lumina-500" />
-              <h2 className="text-white text-xl font-semibold">{t('metaStorage.title')}</h2>
+          <div
+            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
+            style={getAnimationStyle({})}
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+                <HardDrive className="w-6 h-6 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('metaStorage.title')}</h2>
             </div>
 
             <MetaStorageSettings />
           </div>
 
           {/* Prereleases Settings */}
-          <div className="card">
-            <div className="flex items-center space-x-3 mb-6">
-              <Shield className="w-6 h-6 text-lumina-500" />
-              <h2 className="text-white text-xl font-semibold">{t('settings.prereleases')}</h2>
+          <div
+            className="bg-white/[0.02] backdrop-blur-xl rounded-[2.5rem] p-10 border border-white/5 shadow-2xl transition-all duration-300 hover:border-nebula-500/10"
+            style={getAnimationStyle({})}
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-nebula-500/10 rounded-2xl border border-nebula-500/20">
+                <Shield className="w-6 h-6 text-nebula-400" />
+              </div>
+              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">{t('settings.prereleases')}</h2>
             </div>
 
-            <div className="space-y-4">
-              <label className="flex items-center space-x-3 p-3 rounded-lg border border-dark-600 hover:border-dark-500 transition-colors cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={formData.autoUpdate !== false}
-                  onChange={(e) => setFormData(prev => ({ ...prev, autoUpdate: e.target.checked }))}
-                  className="w-5 h-5 text-lumina-600 bg-dark-700 border-dark-600 rounded focus:ring-lumina-500 focus:ring-2"
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <label className="flex items-start gap-4 p-6 bg-white/5 border border-white/5 rounded-3xl cursor-pointer hover:border-nebula-500/20 transition-all shadow-inner group">
+                <div className="mt-1">
+                  <input
+                    type="checkbox"
+                    checked={formData.autoUpdate !== false}
+                    onChange={(e) => setFormData(prev => ({ ...prev, autoUpdate: e.target.checked }))}
+                    className="w-6 h-6 rounded-lg bg-white/5 border-white/10 text-nebula-500 focus:ring-nebula-500 accent-nebula-500"
+                  />
+                </div>
                 <div className="flex-1">
-                  <div className="text-white font-medium">{t('settings.autoUpdate')}</div>
-                  <div className="text-dark-300 text-sm">{t('settings.autoUpdateDesc')}</div>
+                  <div className="text-xs font-black text-white uppercase italic tracking-widest mb-2 group-hover:text-nebula-400 transition-colors">{t('settings.autoUpdate')}</div>
+                  <div className="text-[10px] text-dark-500 font-medium italic leading-relaxed">{t('settings.autoUpdateDesc')}</div>
                 </div>
               </label>
 
-              <label className="flex items-center space-x-3 p-3 rounded-lg border border-dark-600 hover:border-dark-500 transition-colors cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={formData.enablePrereleases || false}
-                  onChange={(e) => setFormData(prev => ({ ...prev, enablePrereleases: e.target.checked }))}
-                  className="w-5 h-5 text-lumina-600 bg-dark-700 border-dark-600 rounded focus:ring-lumina-500 focus:ring-2"
-                />
+              <label className="flex items-start gap-4 p-6 bg-white/5 border border-white/5 rounded-3xl cursor-pointer hover:border-nebula-500/20 transition-all shadow-inner group">
+                <div className="mt-1">
+                  <input
+                    type="checkbox"
+                    checked={formData.enablePrereleases || false}
+                    onChange={(e) => setFormData(prev => ({ ...prev, enablePrereleases: e.target.checked }))}
+                    className="w-6 h-6 rounded-lg bg-white/5 border-white/10 text-nebula-500 focus:ring-nebula-500 accent-nebula-500"
+                  />
+                </div>
                 <div className="flex-1">
-                  <div className="text-white font-medium">{t('settings.enablePrereleases')}</div>
-                  <div className="text-dark-300 text-sm">{t('settings.enablePrereleasesDesc')}</div>
+                  <div className="text-xs font-black text-white uppercase italic tracking-widest mb-2 group-hover:text-nebula-400 transition-colors">{t('settings.enablePrereleases')}</div>
+                  <div className="text-[10px] text-dark-500 font-medium italic leading-relaxed">{t('settings.enablePrereleasesDesc')}</div>
                 </div>
               </label>
             </div>
@@ -692,21 +741,24 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigationBlocked }) => {
 
           {/* Save Button */}
           {hasChanges && (
-            <div className={`sticky bottom-0 bg-dark-900 border-t border-dark-700 p-4 -mx-6 ${isShaking ? 'unsaved-changes-pulse' : ''}`}>
+            <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 w-[calc(100%-4rem)] max-w-4xl bg-nebula-950/60 backdrop-blur-2xl border border-white/10 p-6 rounded-[2rem] shadow-[0_0_50px_rgba(139,92,246,0.2)] z-[60] transition-all animate-slideUp`}>
               <div className="flex justify-between items-center">
-                <p className="text-dark-400 text-sm">
-                  {t('settings.unsavedChanges')}
-                </p>
-                <div className="flex space-x-2">
+                <div className="flex flex-col">
+                  <p className="text-white font-black text-xs uppercase italic tracking-widest mb-1">
+                    {t('settings.unsavedChanges')}
+                  </p>
+                  <p className="text-dark-500 text-[10px] uppercase font-black italic tracking-tighter opacity-60">TELEMETRY_DATA_PENDING_SYNC</p>
+                </div>
+                <div className="flex gap-4">
                   <button
                     onClick={handleDiscard}
-                    className="btn-secondary inline-flex items-center space-x-2"
+                    className="px-6 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-[10px] uppercase italic tracking-widest transition-all border border-white/5"
                   >
                     {t('settings.discardChanges')}
                   </button>
                   <button
                     onClick={handleSave}
-                    className={`btn-primary inline-flex items-center space-x-2 ${isSaveDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`px-10 py-4 bg-nebula-500 hover:bg-nebula-600 text-white rounded-2xl font-black text-[10px] uppercase italic tracking-widest transition-all shadow-xl shadow-nebula-500/20 flex items-center gap-3 ${isSaveDisabled ? 'opacity-30 cursor-not-allowed' : ''}`}
                     disabled={isSaveDisabled}
                   >
                     <Save className="w-4 h-4" />

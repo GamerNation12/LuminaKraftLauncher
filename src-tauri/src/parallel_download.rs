@@ -490,7 +490,7 @@ where
                             }
                             tokio::time::sleep(std::time::Duration::from_millis(1000)).await;
                         }
-                        Err(e) if attempts < 5 => {
+                        Err(_e) if attempts < 5 => {
                             tokio::time::sleep(std::time::Duration::from_millis(1000)).await;
                         }
                         Err(e) => break Err(anyhow!("Download failed for {}: {}", file.url, e)),
