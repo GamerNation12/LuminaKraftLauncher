@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Launcher | The Next Generation of Modpacks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nebula-500: #8b5cf6;
+            --nebula-600: #7c3aed;
+            --dark-900: #0a0a0a;
+            --dark-800: #121212;
+            --dark-700: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-900);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Nebula Animated Background */
+        @keyframes nebulaPulse {
+            0%, 100% { background-position: 0% 50%; opacity: 0.8; }
+            50% { background-position: 100% 50%; opacity: 1; }
+        }
+
+        .nebula-glow-bg {
+            background: linear-gradient(-45deg, #1e1b4b, #2e1065, #4c1d95, #6d28d9, #db2777, #4c1d95, #1e1b4b);
+            background-size: 400% 400%;
+            animation: nebulaPulse 15s ease-in-out infinite;
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+        }
+
+        /* Star Field */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 3s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            box-shadow: 0 0 4px white;
+        }
+
+        /* Shooting Star */
+        @keyframes shootingStar {
+            0% { transform: translateX(0) translateY(0) rotate(-35deg) scale(0); opacity: 0; }
+            10% { transform: translateX(-100px) translateY(70px) rotate(-35deg) scale(1); opacity: 1; }
+            30% { transform: translateX(-1000px) translateY(700px) rotate(-35deg) scale(1); opacity: 0; }
+            100% { transform: translateX(-1000px) translateY(700px) rotate(-35deg) scale(0); opacity: 0; }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(-45deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+            filter: drop-shadow(0 0 8px white);
+            animation: shootingStar 4s ease-in infinite;
+            z-index: -5;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(139, 92, 246, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-4px);
+        }
+
+        /* Neon Text & Buttons */
+        .neon-text {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .neon-glow:hover {
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="nebula-glow-bg"></div>
+
+    <!-- Star Field Generator -->
+    <div id="star-field" class="fixed inset-0 pointer-events-none opacity-50 z-[-8]"></div>
+    <script>
+        const field = document.getElementById('star-field');
+        for(let i=0; i<150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            const size = Math.random() * 2 + 1 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+            star.style.setProperty('--delay', Math.random() * 5 + 's');
+            field.appendChild(star);
+        }
+    </script>
+
+    <!-- Shooting Stars -->
+    <div class="shooting-star" style="top: 10%; right: 5%; animation-delay: 0s;"></div>
+    <script>
+        // Add more shooting stars via JS for variety
+        setInterval(() => {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.top = Math.random() * 50 + '%';
+            star.style.right = Math.random() * 20 + '%';
+            star.style.animationIterationCount = '1';
+            document.body.appendChild(star);
+            setTimeout(() => star.remove(), 4000);
+        }, 8000);
+    </script>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 py-6 px-10 flex justify-between items-center backdrop-blur-md bg-dark-900/30 border-b border-white/5">
+        <div class="flex items-center gap-3 group pointer-events-auto cursor-pointer">
+            <img src="./assets/logo.png" alt="Nebula Logo" class="w-10 h-10 drop-shadow-[0_0_10px_rgba(139,92,246,0.6)] group-hover:scale-110 transition-transform">
+            <span class="text-2xl font-black italic uppercase tracking-tighter">Nebula<span class="text-nebula-500">Launcher</span></span>
+        </div>
+        <div class="hidden md:flex gap-10 items-center">
+            <a href="#features" class="text-dark-400 hover:text-white transition-colors uppercase font-bold text-xs tracking-widest italic">Features</a>
+            <a href="#community" class="text-dark-400 hover:text-white transition-colors uppercase font-bold text-xs tracking-widest italic">Community</a>
+            <a href="https://github.com/GamerNation12/Nebula-Launcher" class="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all uppercase font-black italic text-xs tracking-widest">GitHub</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-32 px-6 text-center">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-nebula-500/20 blur-[120px] rounded-full pointer-events-none opacity-40"></div>
+        
+        <div class="relative z-10 space-y-8 max-w-5xl">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-nebula-500/10 border border-nebula-500/20 rounded-full text-nebula-400 font-black italic uppercase tracking-widest text-[10px] shadow-lg shadow-nebula-500/5 mb-4">
+                <span class="w-1.5 h-1.5 rounded-full bg-nebula-400 animate-pulse"></span>
+                NEW VERSION 0.1.8 NOW LIVE
+            </div>
+            
+            <h1 class="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-[0.9] lg:px-20">
+                The Next <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-nebula-400 to-nebula-500 drop-shadow-sm">Generation</span> of Modpacks
+            </h1>
+            
+            <p class="text-dark-400 text-lg md:text-2xl font-medium tracking-tight max-w-3xl mx-auto leading-relaxed opacity-80 lg:px-28">
+                Nebula Launcher redefines how you play Minecraft. Experience unparalleled performance, beautiful space-themed aesthetics, and one-click modding.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center pt-10">
+                <a href="https://github.com/GamerNation12/Nebula-Launcher/releases" class="group px-12 py-6 bg-white text-dark-900 rounded-2xl font-black uppercase italic tracking-widest text-sm transition-all hover:bg-nebula-50 shadow-[0_20px_40px_-15px_rgba(255,255,255,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(139,92,246,0.5)] hover:-translate-y-1 active:scale-95 flex items-center gap-3">
+                    Download Nebula
+                    <svg class="w-5 h-5 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                </a>
+                <a href="https://discord.gg/UJZRrcUFMj" class="px-10 py-6 glass-card rounded-2xl font-black uppercase italic tracking-widest text-sm transition-all flex items-center gap-3">
+                    Join Community
+                </a>
+            </div>
+        </div>
+
+        <!-- Floating Mockup -->
+        <div class="mt-32 relative group lg:max-w-6xl mx-auto w-full px-4 overflow-hidden rounded-[3rem] border border-white/5 shadow-2xl shadow-nebula-500/10">
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10"></div>
+            <img src="https://images.unsplash.com/photo-1614728263952-84ea206f99b6?q=80&w=2000&auto=format&fit=crop" alt="Interface Showcase" class="w-full h-auto object-cover opacity-60 scale-105 group-hover:scale-100 transition-transform duration-700">
+            <div class="absolute inset-0 flex items-center justify-center z-20">
+                <div class="text-center">
+                    <div class="w-32 h-32 mx-auto bg-white/5 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform">
+                        <img src="./assets/logo.png" alt="Nebula" class="w-16 h-16 drop-shadow-[0_0_20px_rgba(139,92,246,0.8)] animate-float">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-32 px-10 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-24 space-y-4">
+                <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter">Engineered for <span class="text-nebula-400">Excellence</span></h2>
+                <p class="text-dark-400 text-lg uppercase tracking-widest font-bold italic opacity-60">High-Performance Modding Infrastructure</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-12 rounded-[2.5rem] space-y-8 group">
+                    <div class="w-16 h-16 bg-nebula-500/10 rounded-2xl flex items-center justify-center border border-nebula-500/20 group-hover:rotate-6 transition-transform">
+                        <svg class="w-8 h-8 text-nebula-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black italic uppercase tracking-tighter">Ultra Speed</h3>
+                    <p class="text-dark-500 font-medium leading-relaxed">Built on the custom Nebula-Core Native engine for blazing-fast modpack installation and optimized Minecraft launching.</p>
+                </div>
+
+                <div class="glass-card p-12 rounded-[2.5rem] space-y-8 group">
+                    <div class="w-16 h-16 bg-pink-500/10 rounded-2xl flex items-center justify-center border border-pink-500/20 group-hover:rotate-6 transition-transform">
+                        <svg class="w-8 h-8 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black italic uppercase tracking-tighter">Modern UI</h3>
+                    <p class="text-dark-500 font-medium leading-relaxed">A stunning glassmorphic interface inspired by deep space. Transparent cards, vibrant glows, and fluid animations for every action.</p>
+                </div>
+
+                <div class="glass-card p-12 rounded-[2.5rem] space-y-8 group">
+                    <div class="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/20 group-hover:rotate-6 transition-transform">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black italic uppercase tracking-tighter">Community First</h3>
+                    <p class="text-dark-500 font-medium leading-relaxed">Integrated Discord account management allows you to sync modpacks, track statistics, and publish your own creations live.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="py-32 px-10 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-nebula-500/10 blur-[150px] rounded-full pointer-events-none"></div>
+        
+        <div class="max-w-4xl mx-auto glass-card p-20 rounded-[4rem] text-center space-y-12">
+            <img src="./assets/logo.png" alt="Nebula" class="w-32 h-32 mx-auto drop-shadow-[0_0_30px_rgba(139,92,246,0.8)] animate-float">
+            
+            <h2 class="text-6xl font-black italic uppercase tracking-tighter">Join the <span class="text-nebula-400">Nebula</span> Hub</h2>
+            <p class="text-dark-400 text-lg font-medium leading-relaxed max-w-2xl mx-auto">
+                Connect with thousands of players, get instant support, and help shape the future of modding in our community Discord server.
+            </p>
+            
+            <a href="https://discord.gg/UJZRrcUFMj" class="inline-flex px-14 py-7 bg-[#5865F2] hover:bg-[#4752C4] text-white rounded-2xl font-black uppercase italic tracking-widest text-sm transition-all shadow-xl shadow-[#5865F2]/20 hover:-translate-y-1">
+                Enter Discord Server
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-20 px-10 border-t border-white/5 bg-dark-900/50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+            <div class="space-y-4 text-center md:text-left">
+                <div class="flex items-center gap-3 justify-center md:justify-start">
+                    <img src="./assets/logo.png" alt="Nebula" class="w-8 h-8 opacity-60">
+                    <span class="text-xl font-black italic uppercase tracking-tighter opacity-60">Nebula Launcher</span>
+                </div>
+                <p class="text-dark-500 text-[10px] uppercase font-black tracking-widest italic">&copy; 2025 Nebula Studios. Not an official Minecraft product.</p>
+            </div>
+            
+            <div class="flex gap-12 text-[10px] font-black italic uppercase tracking-[0.2em] text-dark-500">
+                <a href="https://github.com/GamerNation12/Nebula-Launcher" class="hover:text-nebula-400 transition-colors">GitHub</a>
+                <a href="https://discord.gg/UJZRrcUFMj" class="hover:text-nebula-400 transition-colors">Discord</a>
+                <a href="mailto:support@nebulastudios.com" class="hover:text-nebula-400 transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
