@@ -3,41 +3,21 @@ import { initReactI18next } from 'react-i18next';
 
 // Import language files
 import en from '../locales/en/common.json';
-import es from '../locales/es/common.json';
 
 const resources = {
   en: {
     common: en
-  },
-  es: {
-    common: es
   }
 };
 
-// Custom language detector for Spanish variants
+// Custom language detector (defaulting to English)
 const customLanguageDetector = {
   name: 'customDetector',
   lookup() {
-    // Check if user has manually set a language preference
-    const storedLanguage = localStorage.getItem('NebulaLauncher-language');
-    if (storedLanguage && ['es', 'en'].includes(storedLanguage)) {
-      return storedLanguage;
-    }
-
-    // Detect browser language
-    const browserLanguage = navigator.language || navigator.languages?.[0];
-    if (browserLanguage) {
-      // If any Spanish variant (es, es-ES, es-MX, es-AR, etc.), use Spanish
-      if (browserLanguage.toLowerCase().startsWith('es')) {
-        return 'es';
-      }
-    }
-
-    // Default to English for all other languages
     return 'en';
   },
   cacheUserLanguage(lng: string) {
-    localStorage.setItem('NebulaLauncher-language', lng);
+    localStorage.setItem('NebulaLauncher-language', 'en');
   }
 };
 
