@@ -275,7 +275,7 @@ class AuthService {
       );
 
       // 4. Open browser to sign in page
-      const url = `https://Nebula.com/auth/sign-in?launcher=true&port=${port}`;
+      const url = `https://gamernation12.github.io/Nebula-Launcher/auth/sign-in.html?launcher=true&port=${port}`;
       await invoke('open_url', { url });
 
       return true;
@@ -375,7 +375,7 @@ class AuthService {
       );
 
       // 4. Open browser to sign up page
-      const url = `https://Nebula.com/auth/sign-up?launcher=true&port=${port}`;
+      const url = `https://gamernation12.github.io/Nebula-Launcher/auth/sign-up.html?launcher=true&port=${port}`;
       await invoke('open_url', { url });
       console.log(`Opened browser to ${url}`);
 
@@ -511,7 +511,7 @@ class AuthService {
       console.log(`OAuth server started on port ${port}`);
 
       // Construct redirect URL with port
-      const redirectUrl = `https://Nebula.com/auth-callback?launcher=true&port=${port}`;
+      const redirectUrl = `https://gamernation12.github.io/Nebula-Launcher/auth-callback.html?launcher=true&port=${port}`;
 
       // 2. Set up event listener for oauth callback
       const unlisten = await listen<{

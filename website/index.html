@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./assets/logo.png">
     <title>Nebula Launcher | The Next Generation of Modpacks</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -106,6 +107,11 @@
         .animate-float {
             animation: float 6s ease-in-out infinite;
         }
+
+        /* Mobile Nav Toggle */
+        #mobile-menu-toggle:checked ~ #mobile-menu {
+            display: flex;
+        }
     </style>
 </head>
 <body>
@@ -150,10 +156,28 @@
             <img src="./assets/logo.png" alt="Nebula Logo" class="w-10 h-10 drop-shadow-[0_0_10px_rgba(139,92,246,0.6)] group-hover:scale-110 transition-transform">
             <span class="text-2xl font-black italic uppercase tracking-tighter">Nebula<span class="text-nebula-500">Launcher</span></span>
         </div>
+        
+        <!-- Desktop Nav -->
         <div class="hidden md:flex gap-10 items-center">
-            <a href="#features" class="text-dark-400 hover:text-white transition-colors uppercase font-bold text-xs tracking-widest italic">Features</a>
-            <a href="#community" class="text-dark-400 hover:text-white transition-colors uppercase font-bold text-xs tracking-widest italic">Community</a>
-            <a href="https://github.com/GamerNation12/Nebula-Launcher" class="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all uppercase font-black italic text-xs tracking-widest">GitHub</a>
+            <a href="#features" class="text-dark-400 hover:text-white transition-colors uppercase font-bold text-xs tracking-widest italic" id="nav-features">Features</a>
+            <a href="#community" class="text-dark-400 hover:text-white transition-colors uppercase font-bold text-xs tracking-widest italic" id="nav-community">Community</a>
+            <a href="https://github.com/GamerNation12/Nebula-Launcher" class="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all uppercase font-black italic text-xs tracking-widest" id="nav-github">GitHub</a>
+        </div>
+
+        <!-- Mobile Nav Toggle -->
+        <label for="mobile-menu-toggle" class="md:hidden flex flex-col gap-1.5 cursor-pointer z-50 relative">
+            <div class="w-8 h-1 bg-white rounded-full"></div>
+            <div class="w-8 h-1 bg-white rounded-full"></div>
+            <div class="w-8 h-1 bg-white rounded-full"></div>
+        </label>
+        <input type="checkbox" id="mobile-menu-toggle" class="hidden">
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden fixed inset-0 bg-dark-900/95 z-40 flex-col items-center justify-center gap-8 backdrop-blur-xl transition-all duration-500">
+            <a href="#features" onclick="document.getElementById('mobile-menu-toggle').checked = false" class="text-4xl font-black italic uppercase text-white hover:text-nebula-400 transition-colors">Features</a>
+            <a href="#community" onclick="document.getElementById('mobile-menu-toggle').checked = false" class="text-4xl font-black italic uppercase text-white hover:text-nebula-400 transition-colors">Community</a>
+            <a href="https://github.com/GamerNation12/Nebula-Launcher" class="text-4xl font-black italic uppercase text-white hover:text-nebula-400 transition-colors">GitHub</a>
+            <div class="absolute top-8 right-8 text-white/50 text-xs font-black uppercase tracking-[0.5em] italic">Nebula Launcher</div>
         </div>
     </nav>
 
@@ -167,11 +191,11 @@
                 NEW VERSION 0.1.8 NOW LIVE
             </div>
             
-            <h1 class="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-[0.9] lg:px-20">
+            <h1 class="text-5xl md:text-7xl lg:text-9xl font-black italic uppercase tracking-tighter leading-[0.9] lg:px-20">
                 The Next <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-nebula-400 to-nebula-500 drop-shadow-sm">Generation</span> of Modpacks
             </h1>
             
-            <p class="text-dark-400 text-lg md:text-2xl font-medium tracking-tight max-w-3xl mx-auto leading-relaxed opacity-80 lg:px-28">
+            <p class="text-dark-400 text-sm md:text-lg lg:text-2xl font-medium tracking-tight max-w-3xl mx-auto leading-relaxed opacity-80 lg:px-28">
                 Nebula Launcher redefines how you play Minecraft. Experience unparalleled performance, beautiful space-themed aesthetics, and one-click modding.
             </p>
 
@@ -189,7 +213,7 @@
         <!-- Floating Mockup -->
         <div class="mt-32 relative group lg:max-w-6xl mx-auto w-full px-4 overflow-hidden rounded-[3rem] border border-white/5 shadow-2xl shadow-nebula-500/10">
             <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10"></div>
-            <img src="https://images.unsplash.com/photo-1614728263952-84ea206f99b6?q=80&w=2000&auto=format&fit=crop" alt="Interface Showcase" class="w-full h-auto object-cover opacity-60 scale-105 group-hover:scale-100 transition-transform duration-700">
+            <img src="https://images.unsplash.com/photo-1627393100177-b4297e79a5be?q=80&w=2000&auto=format&fit=crop" alt="Interface Showcase" class="w-full h-auto object-cover opacity-60 scale-105 group-hover:scale-100 transition-transform duration-700">
             <div class="absolute inset-0 flex items-center justify-center z-20">
                 <div class="text-center">
                     <div class="w-32 h-32 mx-auto bg-white/5 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform">
